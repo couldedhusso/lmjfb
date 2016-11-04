@@ -11,6 +11,8 @@ use App\CourseTest;
 use App\Teacher;
 use App\ProfPrincipal;
 
+use LMJFB\Repositories\DbClassroomRepositories;
+
 // TODO : mettre la table à jour
 class HomeController extends Controller
 {
@@ -19,8 +21,10 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    private $DBRepository ;
+    public function __construct(DbClassroomRepositories $repos)
     {
+        $this->DBRepository = $repos ;
         $this->middleware('auth');
     }
 
@@ -31,6 +35,8 @@ class HomeController extends Controller
      */
     public function index()
     {
+        dd($this->DBRepository->getcurrentAYear());
+
         $dbData = $this->InitDataSession();
 
         return view('/home', [

@@ -179,8 +179,8 @@
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
     <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
     <!-- Semantic-ui core js     -->
