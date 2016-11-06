@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Teacher;
-use App\ProfPrincipal;
+use LMJFB\Entities\User;
+use LMJFB\Entities\Teacher;
+use LMJFB\Entities\Classes_pp;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -35,12 +35,10 @@ class TeacherController extends Controller
        */
       protected function validator(array $data)
       {
+
           return Validator::make($data, [
-              'userFirstName' => 'required|max:255',
-              'userLastName' => 'required|max:255',
-              'userContact' => 'required|max:255',
-              'email' => 'required|email|max:255|unique:users',
-              'password' => 'required|min:6|confirmed',
+              'user_first_name' => 'required|max:255',
+              'user_last_name' => 'required|max:255',
           ]);
       }
 
@@ -65,9 +63,9 @@ class TeacherController extends Controller
           }
 
           $user = User::create([
-              'userFirstName' => $reqdata['teacherFirstName'],
-              'userLastName' => $reqdata['teacherLastName'],
-              'userContact' => $reqdata['teacherContact'],
+              'user_name' => $reqdata['teacherFirstName'],
+              'user_last_name' => $reqdata['teacherLastName'],
+              'user_contact' => $reqdata['teacherContact'],
               'email' => $email,
               'password' => bcrypt('lmjf'),
           ]);
@@ -79,10 +77,10 @@ class TeacherController extends Controller
           foreach ($reqDataClassroom as $value) {
 
               $teacher = Teacher::create([
-                 'idTeacher' => $user->id,
-                 'CourseID' => $reqDataCourse,
-                 'classRoomID' => $value,
-                 'pp' => $pp
+                 'user_id' => $user->id,
+                 'course_id' => $reqDataCourse,
+                 'classroom_id' => $value,
+                 'prof_principal' => $pp
              ]);
           }
 
@@ -90,9 +88,9 @@ class TeacherController extends Controller
 
             foreach (Input::get('ClassRoomID-pp') as $value) {
 
-              $profprincipal = ProfPrincipal::create([
-                 'idTeacher' => $user->id,
-                 'classRoomID' => $value
+              $profprincipal = Classes_pp::create([
+                 'teacher_id' => $user->id,
+                 'classroom_id' => $value
              ]);
             }
 

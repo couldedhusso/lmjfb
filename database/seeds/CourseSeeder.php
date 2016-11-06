@@ -16,13 +16,14 @@ class CourseSeeder extends Seeder
     //  `courseCoeff` VARCHAR(45) NOT NULL,
     public function run()
     {
+
         $courses = [
           '1' => 'FRANÇAIS', '2' => 'ANGLAIS', '3'=> 'HISTOIRE-GÉOGRAPHIE',
           '4' => 'ALLEMAND', '5' => 'ESPAGNOL', '6' => 'PHILOSOPHIE',
           '7' => 'MATHÉMATIQUES', '8' => 'PHYSIQUE - CHIMIE',
           '9' => 'SCIENCES DE LA VIE ET DE LA TERRE',
           '10' => 'EDUCATION PHYSIQUE ET SPORTIVE',
-          '11' => 'Musique', '12' => 'Conduite', '13' => 'Education des Droits de l\'Homme'
+          '11' => 'MUSIQUE', '12' => 'CONDUITE', '13' => 'EDUCATION DES DROITS DE L\'HOMME'
         ];
 
         $coursesChild = [
@@ -31,24 +32,31 @@ class CourseSeeder extends Seeder
           '3'=> 'Orthographe'
         ];
 
+        DB::table('course_childs')->insert([
+          'course_id' => '1',
+          'label_course' => 'FRANÇAIS',
+        ]);
+
         // Discipline du premier cycle
         foreach ($courses as $key => $value) {
-          DB::table('Course')->insert([
-            'cycleID' => '1',
-            'courseName' => $value,
-            'courseCoeff' => '1'
+          DB::table('courses')->insert([
+            'course_name' => $value,
+            'course_description' => '-'
           ]);
 
           // ====== CourseChild
           if ($key == '1') {
             foreach ($coursesChild as $key => $value) {
-              DB::table('CourseChild')->insert([
-                'courseID' => '1',
-                'labelCourse' => $value,
+              DB::table('course_childs')->insert([
+                'course_id' => '1',
+                'label_course' => $value,
               ]);
             }
           }
         }
+
+
+
 
 
 

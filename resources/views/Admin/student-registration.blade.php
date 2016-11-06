@@ -19,7 +19,7 @@
     </div> --}}
   <div class="col-md-7 col-sm-10">
 
-         <input type="hidden" name="studentDatas[anneeScolaire]" value="{{$aYear->academicYear}}">
+         <input type="hidden" name="studentDatas[anneeScolaire]" value="{{$aYear->academic_year}}">
          <div class="field">
            <label>Données de l'élève </label>
            <div class="fields">
@@ -73,7 +73,7 @@
            </div>
            <div class="five wide field">
              <select name="studentDatas[doublant]">
-               <option value="">Doublant</option>
+               <option value="">Redoublant</option>
                    <option value="0">
                      NON
                    </option>
@@ -87,8 +87,8 @@
          <div class="two fields">
            <select name="studentDatas[classroom]">
              @foreach($classrooms as $classroom)
-                 <option value="{{$classroom->classRoomID}}">
-                   {{$classroom->ClassRoomName}}
+                 <option value="{{$classroom->id}}">
+                   {{$classroom->classroom_name}}
                  </option>
              @endforeach
             </select>

@@ -11,8 +11,8 @@ class AnneeScolaireSeeder extends Seeder
      */
     public function run()
     {
-      DB::table('anneeScolaire')->insert([
-        'academicYear' => '2016-2017',
+      DB::table('anneescolaire')->insert([
+        'academic_year' => '2016-2017',
       ]);
     }
 }

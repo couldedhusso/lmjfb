@@ -16,7 +16,7 @@ class CreateTableClassePp extends Migration
 
       Schema::create('classes_pp', function(Blueprint $table){
           $table->increments('id');
-          $table->integer('prof_principaux_id')->unsigned();
+          $table->integer('teacher_id')->unsigned();
           $table->integer('classroom_id')->unsigned();
           $table->timestamps();
       });

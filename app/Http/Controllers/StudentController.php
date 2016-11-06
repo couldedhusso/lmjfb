@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
-use App\Student;
-use App\Teacher;
-use App\Enrollment;
-use App\Parents;
+use LMJFB\Entities\Student;
+use LMJFB\Entities\Teacher;
+use LMJFB\Entities\Enrollment;
+use LMJFB\Entities\Parents;
 
 use DB;
 
@@ -46,8 +46,8 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-       $aYear = DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                         ->select('academicYear')->first();
+       $aYear = DB::table('anneescolaire')->orderBy('id', 'desc')
+                        ->first();
 
         //$avatar = Input::get()
         $reqdata = Input::get('studentDatas');
@@ -56,22 +56,21 @@ class StudentController extends Controller
       //  dd($reqdata['anneeScolaire']);
 
         $dParents =[
-            'parentFistName' => $studresp['nom']
-            ,'parentLastName'  => $studresp['prenom']
-            ,'parentTelephone'  => $studresp['contact']
-            ,'parentPassword' => ('lmjfb')
+            'parent_name' => $studresp['nom']
+            ,'parent_last_name'  => $studresp['prenom']
+            ,'parent_telephone'  => $studresp['contact']
         ];
 
         // create parent student
         $studentparent = Parents::create($dParents);
 
-        $studEnrol = DB::table('Enrollment')->where('classRoomID',
+        $studEnrol = DB::table('enrollments')->where('classroom_id',
                               $reqdata['classroom'])->count();
 
         if ($studEnrol == 0) {
             $newStudent = Enrollment::create([
-                'academicYear' => $aYear->academicYear,
-                'classRoomID'  => $reqdata['classroom']
+                'anneescolaire_id' => $aYear->id,
+                'classroom_id'  => $reqdata['classroom']
             ]);
 
        }
@@ -80,21 +79,20 @@ class StudentController extends Controller
 
         // save student in db
         $stud = [
-            'studentMatricule' => $reqdata['matricule']
-            ,'classRoomID' => $reqdata['classroom']
-            ,'studentName' => $reqdata['nom']
-            ,'studentLastName' => $reqdata['prenoms']
-            ,'studentBirthdate' => $reqdata['birthdate']
-            ,'studentSexe' => $reqdata['sexe']
-            ,'studentBirthPlace' => $reqdata['birthplace']
-            ,'studentRegime' => $reqdata['regime']
-            ,'studentInterne' => $reqdata['interne']
-            ,'studentAffecte' => $reqdata['affecte']
-            ,'studentRedoublant' => $reqdata['doublant']
-            ,'responsableStudent' => $studresp['nom'].' '.$studresp['prenom']
-            ,'contactresponsableStudent' => $studresp['contact']
-            ,'academicYear' => $reqdata['anneeScolaire']
-            ,'studentParentID' => $studentparent->id
+            'student_matricule' => $reqdata['matricule']
+            ,'classroom_id' => $reqdata['classroom']
+            ,'student_name' => $reqdata['nom']
+            ,'student_last_name' => $reqdata['prenoms']
+            ,'student_birthdate' => $reqdata['birthdate']
+            ,'student_sexe' => $reqdata['sexe']
+            ,'student_birthplace' => $reqdata['birthplace']
+            ,'student_regime' => $reqdata['regime']
+            ,'student_interne' => $reqdata['interne']
+            ,'student_affecte' => $reqdata['affecte']
+            ,'student_redoublant' => $reqdata['doublant']
+            ,'responsable_student' => $studresp['nom'].' '.$studresp['prenom']
+            ,'contact_responsable_student' => $studresp['contact']
+            ,'parents_id' => $studentparent->id
         ];
 
         $newStudent = Student::create($stud);

@@ -16,7 +16,7 @@ class CreateTableTests extends Migration
     Schema::create('tests', function(Blueprint $table){
         $table->increments('id');
         $table->integer('trimestre_id')->unsigned();
-        $table->integer('test_id')->unsigned();
+        $table->integer('course_childs_id')->unsigned();
         $table->integer('classroom_id')->unsigned();
         $table->integer('max_grade_value')->unsigned();
         $table->string('test_name')->nullable();

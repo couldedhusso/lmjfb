@@ -224,8 +224,8 @@ Route::group(['middleware' => 'auth'], function () {
   /// url de l espace Admin
 
   Route::get('ajouter-un-professeur', function () {
-      $classrooms = DB::select('select * from Classroom');
-      $courses = DB::select('select * from Course');
+      $classrooms = DB::select('select * from classrooms');
+      $courses = DB::select('select * from courses');
 
       return view('Admin.add-teacher', compact('classrooms', 'courses'));
   });
@@ -250,20 +250,21 @@ Route::group(['middleware' => 'auth'], function () {
 
 
   Route::get('ajouter-un-eleve', function () {
-      $idTeacher = Auth::user()->id;
+    //  $idTeacher = Auth::user()->id;
 
 
 
-      $aYear =  DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                              ->select('academicYear')
+      $aYear =  DB::table('anneescolaire')->orderBy('academic_year', 'desc')
+                              ->select('academic_year')
                               ->first();
 
 
 
-      $semestre = DB::table('Semestre')->where('academicYear', '=', $aYear->academicYear)
-                            ->where('semestreDescription', '=', '1er trimestre')
-                            ->first();
-      $classrooms = DB::select('select * from Classroom');
+      // $semestre = DB::table('Semestre')->where('academicYear', '=', $aYear->academicYear)
+      //                       ->where('semestreDescription', '=', '1er trimestre')
+      //                       ->first();
+
+      $classrooms = DB::select('select * from classrooms');
 
       return view('Admin.student-registration', compact('classrooms', 'aYear'));
       // return view('Admin.student-registration', compact('studentsCollection'));
@@ -325,7 +326,6 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::get('/', function () {
 
-
       // $listes = Storage::get('/listes.xlsx');
       // $disk = Storage::disk('local');
       // dd($disk);
@@ -352,72 +352,72 @@ Route::get('dumiesStudents', function(){
       // $test =   DB::table('courseTest')->where('semestreID', 1)->delete();
       // dd($test);
 
-      $disciplines = DB::table('CourseChild')->get();
-      $faker = Faker\Factory::create();
-
-      $students = DB::table('Student')->where('classRoomID',1)->get();
-      $num = $faker->randomElement([16, 27, 28]);
-
-
-      foreach ($disciplines as $discipline) {
-
-          $num = $faker->randomElement([16, 27, 28]);
-
-
-
-          for ($i=0; $i < 2 ; $i++) {
-            $Test = App\CourseTest::create([
-                'teacherID' => $num
-                ,'testName'  => 'evaluation'.$i
-                ,'testDescription'  => 'evaluation'.$i
-                ,'maxGradevalue'  => 10
-                ,'CourseChildID'  => $discipline->CourseChildID
-                ,'semestreID'  => 1
-                ,'classRoomID' => 1
-            ]);
-
-            foreach ($students as $student) {
-              $grde = [
-                  'studentMatricule' => $student->studentMatricule
-                  ,'semestreID' => 1
-                  ,'TestID' => $Test->id
-                  ,'Grade' => $faker->biasedNumberBetween($min = 0, $max = 10, $function = 'sqrt')
-                  ,'student_id' => $student->id
-              ];
-
-             $coursegrade = App\CourseGrade::create($grde);
-            }
-
-          }
-
-
-          for ($i=0; $i < 2 ; $i++) {
-            $Test = App\CourseTest::create([
-                'teacherID' => $num
-                ,'testName'  => 'evaluation'.$i
-                ,'testDescription'  => 'evaluation'.$i
-                ,'maxGradevalue'  =>  20
-                ,'CourseChildID'  => $discipline->CourseChildID
-                ,'semestreID'  => 1
-                ,'classRoomID' => 1
-            ]);
-
-            foreach ($students as $student) {
-              $grde = [
-                  'studentMatricule' => $student->studentMatricule
-                  ,'semestreID' => 1
-                  ,'TestID' => $Test->id
-                  ,'Grade' => $faker->biasedNumberBetween($min = 0, $max = 20, $function = 'sqrt')
-                  ,'student_id' => $student->id
-              ];
-
-             $coursegrade = App\CourseGrade::create($grde);
-            }
-
-          }
-
-
-      }
+      // $disciplines = DB::table('CourseChild')->get();
+      // $faker = Faker\Factory::create();
+      //
+      // $students = DB::table('Student')->where('classRoomID',1)->get();
+      // $num = $faker->randomElement([16, 27, 28]);
+      //
+      //
+      // foreach ($disciplines as $discipline) {
+      //
+      //     $num = $faker->randomElement([16, 27, 28]);
+      //
+      //
+      //
+      //     for ($i=0; $i < 2 ; $i++) {
+      //       $Test = App\CourseTest::create([
+      //           'teacherID' => $num
+      //           ,'testName'  => 'evaluation'.$i
+      //           ,'testDescription'  => 'evaluation'.$i
+      //           ,'maxGradevalue'  => 10
+      //           ,'CourseChildID'  => $discipline->CourseChildID
+      //           ,'semestreID'  => 1
+      //           ,'classRoomID' => 1
+      //       ]);
+      //
+      //       foreach ($students as $student) {
+      //         $grde = [
+      //             'studentMatricule' => $student->studentMatricule
+      //             ,'semestreID' => 1
+      //             ,'TestID' => $Test->id
+      //             ,'Grade' => $faker->biasedNumberBetween($min = 0, $max = 10, $function = 'sqrt')
+      //             ,'student_id' => $student->id
+      //         ];
+      //
+      //        $coursegrade = App\CourseGrade::create($grde);
+      //       }
+      //
+      //     }
+      //
+      //
+      //     for ($i=0; $i < 2 ; $i++) {
+      //       $Test = App\CourseTest::create([
+      //           'teacherID' => $num
+      //           ,'testName'  => 'evaluation'.$i
+      //           ,'testDescription'  => 'evaluation'.$i
+      //           ,'maxGradevalue'  =>  20
+      //           ,'CourseChildID'  => $discipline->CourseChildID
+      //           ,'semestreID'  => 1
+      //           ,'classRoomID' => 1
+      //       ]);
+      //
+      //       foreach ($students as $student) {
+      //         $grde = [
+      //             'studentMatricule' => $student->studentMatricule
+      //             ,'semestreID' => 1
+      //             ,'TestID' => $Test->id
+      //             ,'Grade' => $faker->biasedNumberBetween($min = 0, $max = 20, $function = 'sqrt')
+      //             ,'student_id' => $student->id
+      //         ];
+      //
+      //        $coursegrade = App\CourseGrade::create($grde);
+      //       }
+      //
+      //     }
+      //
+      //
+      // }
 
 
       // //
@@ -467,21 +467,24 @@ Route::get('dumiesStudents', function(){
     // $courses =
 
     // $teacher = [];
-    // $faker = Faker\Factory::create();
-    //
-    // for ($i = 0; $i <  1; $i++) {
-    //     $users = App\User::create([
-    //         'email' => $faker->randomNumber($nbDigits = 4),
-    //         'password' => bcrypt('lmjf'),
-    //         'userFirstName' => $faker->firstNameMale,
-    //         'userLastName' => $faker->name,
-    //         'userContact' => $faker->email
+    $faker = Faker\Factory::create();
 
+    for ($i = 0; $i <  4; $i++) {
+        $users = LMJFB\Entities\User::create([
+            'email' => $faker->randomNumber($nbDigits = 4),
+            'password' => bcrypt('lmjf'),
+            'user_name' => $faker->firstNameMale,
+            'user_last_name' => $faker->name,
+            'user_contact' => $faker->email
+            ]);
 
-            // $teacher[] = App\Teacher::create([
-            //     'ClassRoomName' => Auth::user()->id,
-            //     'CourseID' => $faker->randomDigit,
-            //     'classRoomID' => $faker->randomDigit
+            $teacher = LMJFB\Entities\Teacher::create([
+                'user_id' => $users->id,
+                'course_id' => $faker->randomDigit,
+                'classroom_id' => $faker->randomDigit
+            ]);
+
+        }
 
             // 'student_id', 'studentParentID', 'responsableStudent', 'contactresponsableStudent','classRoomID', 'studentName',
             // 'studentLastName','studentBirthdate', 'studentSexe', 'studentBirthPlace',

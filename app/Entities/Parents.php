@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +9,7 @@ class Parents extends Model
    *
    * @var string
    */
-  protected $table = 'Parent';
+  protected $table = 'parents';
 
   /**
    * The attributes that are mass assignable.
@@ -17,21 +17,21 @@ class Parents extends Model
    * @var array
    */
   protected $fillable = [
-     'parentID','parentPassword', 'parentFistName','parentLastName','parentTelephone'
+    'id','parent_name', 'parent_last_name','parent_telephone'
   ];
 
-  /**
-   * The attributes that should be hidden for arrays.
-   *
-   * @var array
-   */
-  protected $hidden = [
-      'parentPassword', 'remember_token',
-  ];
+  // /**
+  //  * The attributes that should be hidden for arrays.
+  //  *
+  //  * @var array
+  //  */
+  // protected $hidden = [
+  //     'parentPassword', 'remember_token',
+  // ];
 
   public function student()
   {
-     return $this->hasMany("App\Students");
+     return $this->hasMany("LMJFB\Entities\Students");
   }
 
   // public function emprole()

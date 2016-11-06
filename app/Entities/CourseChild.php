@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class CourseChild extends Model
      *
      * @var string
      */
-    protected $table = 'CourseChild';
+    protected $table = 'course_childs';
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +20,7 @@ class CourseChild extends Model
      */
 
     protected $fillable = [
-        'semestreID', 'teacherID', 'teacherID', 'CourseChildID', 'testDescription', 'maxGradevalue'
+        'id', 'course_id', 'label_course'
     ];
 
 
@@ -28,12 +28,17 @@ class CourseChild extends Model
 
     public function course()
     {
-      return $this->belongsTo('App\Teacher');
+      return $this->belongsTo('LMJFB\Entities\Course');
     }
 
     public function coursetest()
     {
-      return $this->hasMany('App\CourseTest');
+      return $this->hasMany('LMJFB\Entities\CourseTest');
+    }
+
+    public function averagegrade()
+    {
+      return $this->hasMany('LMJFB\Entities\AverageGrade');
     }
 
 }

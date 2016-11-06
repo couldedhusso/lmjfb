@@ -1,27 +1,29 @@
+
 <?php
 
-namespace App;
+namespace  LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
-class ProfPrincipal extends Model
+
+class Cycle extends Model
 {
-
-
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'ProfPrincipal';
+    protected $table = 'cycles';
+
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
+
     protected $fillable = [
-        'idTeacher', 'classRoomID'
+      'id', 'cycle', 'cycle_classe', 'cycle_type'
     ];
 
 }

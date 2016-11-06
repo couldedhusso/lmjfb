@@ -15,7 +15,7 @@ class AnneeScolaire extends Migration
     {
         Schema::create('anneescolaire', function(Blueprint $table){
             $table->increments('id');
-            $table->string('academicyear', 45)->unique();
+            $table->string('academic_year', 45)->unique();
             $table->timestamps();
         });
     }

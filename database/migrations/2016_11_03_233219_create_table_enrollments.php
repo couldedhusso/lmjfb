@@ -15,8 +15,8 @@ class CreateTableEnrollments extends Migration
     {
       Schema::create('enrollments', function(Blueprint $table){
           $table->increments('id');
-          $table->string('anneescolaire_id');
-          $table->integer('classrooms_id')->unsigned();
+          $table->integer('anneescolaire_id')->unsigned();
+          $table->integer('classroom_id')->unsigned();
           $table->timestamps();
       });
     }

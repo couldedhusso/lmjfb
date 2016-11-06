@@ -3,18 +3,18 @@
 namespace LMJFB\Repository;
 
 use DB;
-use App\Student;
-use App\Teacher;
-use App\ProfPrincipal;
+use LMJFB\Entities\Student;
+use LMJFB\Entities\Teacher;
+use LMJFB\Entities\ProfPrincipal;
 use LMJFB\Repository;
 
 abstract  class DbRepository
 {
 
-  public function testFunction ()
-  {
-    return 'it works!';
-  }
+  // public function testFunction()
+  // {
+  //   return 'it works!';
+  // }
 
     // public function getcurrentAYaer(){
     //     return DB::table('anneeScolaire')->orderBy('academicYear', 'desc')

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,8 +13,8 @@ class AnneeScolaire extends Model
      *
      * @var string
      */
-    protected $table = 'anneeScolaire';
-    
+    protected $table = 'anneescolaire';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -22,17 +22,17 @@ class AnneeScolaire extends Model
      */
      // position == rang de l eleve
     protected $fillable = [
-       'academicYear'
+       'id','academic_year'
     ];
 
-    public function coursetest()
+    public function enrollment()
     {
-      return $this->hasMany('App\CourseTest');
+      return $this->hasMany('LMJFB\Entities\Enrollment');
     }
 
-    public function semestre()
+    public function trimestre()
     {
-      return $this->hasMany('App\Semestre');
+      return $this->hasMany('LMJFB\Entities\Trimestre');
     }
 
 

@@ -7,15 +7,16 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Collection;
 use Auth;
 use DB;
-use App\CourseTest;
-use App\Teacher;
-use App\ProfPrincipal;
+use LMJFB\Entities\CourseTest;
+use LMJFB\Entities\Teacher;
+use LMJFB\Entities\Classes_pp;
 
 use LMJFB\Repositories\DbClassroomRepositories;
 
 // TODO : mettre la table à jour
 class HomeController extends Controller
 {
+
     /**
      * Create a new controller instance.
      *
@@ -26,6 +27,7 @@ class HomeController extends Controller
     {
         $this->DBRepository = $repos ;
         $this->middleware('auth');
+
     }
 
     /**
@@ -35,33 +37,36 @@ class HomeController extends Controller
      */
     public function index()
     {
-        dd($this->DBRepository->getcurrentAYear());
+//dd($this->DBRepository->getcurrentAYear());
 
-        $dbData = $this->InitDataSession();
+        // $dbData = $this->InitDataSession();
+
+        $currentTrimestre = '1er trimestre';
 
         return view('/home', [
-                     'aYear' => $dbData['aYear']
-                    ,'semestre' => $dbData['semestre']
-                    ,'evaluations' => $dbData['evaluations']
-                    ,'classrooms' => $dbData['classrooms']
-                    ,'studentByteacher' => $dbData['studentByteacher']
-                    ,'currentAcademiqueYearStudent' => $dbData['currentAcademiqueYearStudent']
-                    ,'allTeacher'  =>  $dbData['allTeacher']
-                    ,'profdisciplines'  =>  $dbData['profdisciplines']
-                    ,'studentByclassroom'  =>  $dbData['studentByclassroom']
-                    ,'currentSemesterEval' => $dbData['currentSemesterEval']
+                     'aYear' => $this->DBRepository->getcurrentAYear()
+                    ,'trimestre' => $this->DBRepository->getTrimestreByName($currentTrimestre)
+                    ,'evaluations' => $this->DBRepository->getTrimestreByName($currentTrimestre)
+                    ,'classrooms' => $this->DBRepository->getClassrooms()
+                    ,'studentByteacher' => $this->DBRepository->getStudents()
+                    ,'currentAcademiqueYearStudent' => $this->DBRepository->getStudents()
+                    ,'allTeacher'  =>  $this->DBRepository->getTeachers()
+                    ,'profdisciplines'  =>  $this->DBRepository->getTeachersByCourse()
+                    ,'studentByclassroom'  =>  $this->DBRepository->getStudents()
+                    ,'currentTrimesterEval' => $this->DBRepository->getEvaluationsByTrimestres($currentTrimestre)
 
         ]);
     }
 
     public function search_engine(Request $request)
     {
+
        $table = Input::get('search-key');
-       $teacherList = $this->getTeacher();
-       $teacherListByCourses = $this->getTeacherByCourses();
-       $getCourses = $this->getAllCourses();
-       $classroomList = $this->getAllClassroom();
-       $getAcademicYear  = $this->getAcademicYear();
+       $teacherList = $this->DBRepository->getTeachers();
+       $teacherListByCourses = $this->DBRepository->getTeachersByCourse();
+       $getCourses = $this->DBRepository->getCourses();
+       $classroomList = $this->DBRepository->getClassrooms();
+       $getAcademicYear  = $this->DBRepository->getcurrentAYear();
 
        $results_search = collect([]);
 
@@ -83,12 +88,17 @@ class HomeController extends Controller
     public function search_results(Request $request)
     {
 
-      $teacherList = $this->getTeacher();
-      $teacherListByCourses = $this->getTeacherByCourses();
-      $getCourses = $this->getAllCourses();
-      $classroomList = $this->getAllClassroom();
-      $getAcademicYear  = $this->getAcademicYear();
+      // $teacherList = $this->getTeacher();
+      // $teacherListByCourses = $this->getTeacherByCourses();
+      // $getCourses = $this->getAllCourses();
+      // $classroomList = $this->getAllClassroom();
+      // $getAcademicYear  = $this->getAcademicYear();
 
+      $teacherList = $this->DBRepository->getTeachers();
+      $teacherListByCourses = $this->DBRepository->getTeachersByCourse();
+      $getCourses = $this->DBRepository->getCourses();
+      $classroomList = $this->DBRepository->getClassrooms();
+      $getAcademicYear  = $this->DBRepository->getcurrentAYear();
 
        $table = Input::get('search-key');
        $qd = Input::get('search');
@@ -127,21 +137,21 @@ class HomeController extends Controller
             //   }
             // }
             // dd($xvalue);
-            $searchedTeacher = DB::table('Course')
-                      ->join('Teacher', 'Course.courseID', '=','Teacher.courseID')
-                      ->join('users', 'users.id', '=','Teacher.idTeacher')
-                      ->where('users.userFirstName', $xvalue[0])
-                      ->where('users.userLastName', $xvalue[1])
-                      ->select('users.id','users.userFirstName', 'users.userLastName',
-                                'users.userContact', 'Course.courseName')
+            $searchedTeacher = DB::table('courses')
+                      ->join('teachers', 'courses.id', '=','teachers.course_id')
+                      ->join('users', 'users.id', '=','teachers.user_id')
+                      ->where('users.user_name', $xvalue[0])
+                      ->where('users.user_last_name', $xvalue[1])
+                      ->select('users.id','users.user_name', 'users.user_last_name',
+                                'users.user_contact', 'courses.course_name')
                       ->get();
         } else {
-              $searchedTeacher = DB::table('Course')
-                    ->join('Teacher', 'Course.courseID', '=','Teacher.courseID')
-                    ->join('users', 'users.id', '=','Teacher.idTeacher')
-                    ->where('Course.courseID', $params['classroom'] )
-                    ->select('users.id', 'users.userFirstName', 'users.userLastName',
-                              'users.userContact', 'Course.courseName')
+              $searchedTeacher = DB::table('courses')
+                    ->join('teachers', 'courses.id', '=','teachers.course_id')
+                    ->join('users', 'users.id', '=','teachers.user_id')
+                    ->where('courses.id', $params['classroom'] )
+                    ->select('users.id','users.user_name', 'users.user_last_name',
+                              'users.user_contact', 'courses.course_name')
                     ->distinct()->get();
         }
 
@@ -154,29 +164,30 @@ class HomeController extends Controller
 
             // $teacherCollection = $this->getTeacher();
             $foundStudent = [];
-
           //  dd($params);
 
             if ($params['search-by'] == 'matricule') {
 
-                $foundStudent  = DB::table('Classroom')
+                $foundStudent  = DB::table('classrooms')
                                     // ->join('Enrollment', 'Classroom.classRoomID', '='
                                     //                 ,'Enrollment.classRoomID')
-                                    ->join('Student', 'Classroom.classRoomID', '='
-                                                    ,'Student.classRoomID')
-                                    ->where('Student.studentMatricule',  $params['studentMatricule'])
+                                    ->join('students', 'classrooms.id', '='
+                                                    ,'students.classroom_id')
+                                    ->where('students.student_matricule',  $params['studentMatricule'])
                                     // ->where('Enrollment.academicYear',  $params['academicYear'])
-                                    ->select('Student.*', 'Classroom.ClassRoomName', 'Classroom.classRoomID')
+                                    ->select('students.*', 'classrooms.classroom_name', 'classrooms.id')
                                     ->distinct()->get();
             } else {
-                  $foundStudent = DB::table('Classroom')
+                  $foundStudent = DB::table('classrooms')
+
+
                                       // ->join('Enrollment', 'Classroom.classRoomID', '='
                                       //                 ,'Enrollment.classRoomID')
-                                      ->join('Student', 'Classroom.classRoomID', '='
-                                                      ,'Student.classRoomID')
-                                      ->where('Student.classRoomID',  $params['classroom'])
+                                      ->join('students', 'classrooms.id', '='
+                                                      ,'students.classroom_id')
+                                      ->where('students.classroom_id',  $params['classroom'])
                                       // ->where('Enrollment.academicYear',  $params['academicYear'])
-                                      ->select('Student.*', 'Classroom.ClassRoomName', 'Classroom.classRoomID')
+                                      ->select('students.*', 'classrooms.classroom_name', 'classrooms.id')
                                       ->distinct()->get();
             }
 
@@ -228,8 +239,7 @@ class HomeController extends Controller
     }
 
     public function delete_classroom($id){
-        DB::table('Classroom')->join('Student', 'Classroom.classRoomID', '=',
-        'Student.classRoomID')->where('Classroom.classRoomID', $id)->delete();
+        DB::table('students')->where('classroom_id', $id)->delete();
         return redirect()->action('HomeController@index');
     }
 
@@ -482,36 +492,40 @@ class HomeController extends Controller
 
       $user = DB::table('users')->where('id', $id)->first();
 
-      $courses= DB::table('Course')->select('Course.courseID',
-                                  'Course.courseName')->get();
+      $courses= DB::table('courses')->select('courses.id',
+                                  'courses.course_name')->get();
 
-      $teacher_courses= DB::table('Course')
-                          ->join('Teacher', 'Course.CourseID', '=',
-                          'Teacher.CourseID')
+      $teacher_courses= DB::table('courses')
+                          ->join('teachers', 'courses.id', '=',
+                          'teachers.course_id')
                           // ->join('CourseChild', 'Course.CourseID', '=',
                           // 'CourseChild.CourseID')
-                          ->where('Teacher.idTeacher', $id)
-                          ->select('Course.courseID', 'Course.courseName')->get();
+                          ->where('teachers.id', $id)
+                          ->select('courses.id', 'courses.course_name')->get();
 
 
-      $teacher_classroom = DB::table('Classroom')->join('Teacher', 'Classroom.classRoomID'
-                      ,'=', 'Teacher.classRoomID')->where('Teacher.idTeacher', $id)
-                      ->select('Classroom.classRoomID','Classroom.ClassRoomName')
+      $teacher_classroom = DB::table('classrooms')->join('teachers', 'classrooms.id'
+                      ,'=', 'teachers.classroom_id')->where('teachers.user_id', $id)
+                      ->select('classrooms.id','classrooms.classroom_name')
                       ->get();
 
-      $classrooms = DB::table('Classroom')->select('Classroom.classRoomID'
-                                    ,'Classroom.ClassRoomName')->get();
+      $classrooms = DB::table('classrooms')->select('classrooms.id'
+                                    ,'classrooms.classroom_name')->get();
 
 
 
-      $prof_pricinpal = DB::table('Classroom')->join('ProfPrincipal', 'Classroom.classRoomID'
-                     ,'=', 'ProfPrincipal.classRoomID')->where('ProfPrincipal.idTeacher', $id)
-                     ->select('Classroom.classRoomID',
-                     'Classroom.ClassRoomName',
-                     'ProfPrincipal.idTeacher')->get();
+      $prof_pricinpal = DB::table('classrooms')->join('classes_pp', 'classrooms.id'
+                     ,'=', 'classes_pp.classroom_id')->where('classes_pp.teacher_id', $id)
+                     ->select('classrooms.id',
+                     'classrooms.classroom_name',
+                     'classes_pp.teacher_id')->get();
+
+
+      $ppricinpal = DB::table('teachers')->where('user_id', $id)
+                                ->first();
 
       $isProfprinc = false;
-      if ($prof_pricinpal->count() >= 1) {
+      if ($ppricinpal->prof_principal == 'Oui') {
           $isProfprinc = true;
       }
 
@@ -531,18 +545,22 @@ class HomeController extends Controller
     public function get_student($classroomid, $id){
 
         // $aYear = $this->getAcademicYear();
+         $student = $this->DBRepository->getStudentById($id);
 
-        $classroom = $this->getAllClassroom();
+         $parent = $this->DBRepository->getStudentByParents($id);
 
-        $student = DB::table('Student')->join('Classroom', 'Classroom.classRoomID'
-                          ,'=', 'Student.classRoomID')
-                          ->where('Classroom.classRoomID', $classroomid)
-                          ->where('Student.studentMatricule', $id)
-                          ->first();
-        $parent = DB::table('Parent')->join('Student', 'Parent.parentID'
-                          ,'=', 'Student.studentParentID')
-                          ->where('Student.studentParentID', $student->studentParentID)
-                          ->first();
+         $classroom = $this->DBRepository->getClassrooms();
+
+        // $student = DB::table('Student')->join('Classroom', 'Classroom.classRoomID'
+        //                   ,'=', 'Student.classRoomID')
+        //                   ->where('Classroom.classRoomID', $classroomid)
+        //                   ->where('Student.studentMatricule', $id)
+        //                   ->first();
+        //
+        // $parent = DB::table('Parent')->join('Student', 'Parent.parentID'
+        //                   ,'=', 'Student.studentParentID')
+        //                   ->where('Student.studentParentID', $student->studentParentID)
+        //                   ->first();
 
         return view('Administration.update_student_by_id', [
             'student' => $student
@@ -571,102 +589,80 @@ class HomeController extends Controller
 
     public function liste_de_classe($id){
 
-      $aYear =  DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                      ->select('academicYear')->first();
-
-      $studentByclassroom = DB::table('Classroom')
-                                ->join('Enrollment', 'Enrollment.classRoomID', '=',
-                                'Classroom.classRoomID')
-                                ->join('Student', 'Classroom.classRoomID', '=','Student.classRoomID')
-                                ->where('Enrollment.academicYear', $aYear->academicYear)
-                                ->where('Classroom.classRoomID', $id)
-                                ->select('Student.*', 'Classroom.classRoomID', 'Classroom.ClassRoomName')
-                                ->distinct()->get();
-
-
+      $studentByclassroom = $this->DBRepository->getStudentsByClassroom($id);
 
       return view('Administration.sidebarSearch.liste_de_classe', [
         'studentByclassroom' => $studentByclassroom
         ]);
     }
 
-
-
     public function teacherUpdate(Request $request){
 
+
       $user = Input::get('users');
+
       $userupdate = DB::table('users')->where('id', $user['id'])
                         ->update($user);
 
-      $teacher = DB::table('Teacher')->where('idTeacher', $user['id'])
+      $teacher = DB::table('teachers')->where('user_id', $user['id'])
                                      ->first();
 
       $deleteclassroom  = Input::get('deletecassroom');
       $addclassroom  = Input::get('addclassroom');
       $deleteclassroompp = Input::get('deleteclassroompp');
       $addclassroompp = Input::get('addclassroompp');
-      $classroomidpp = Input::get('classroomidpp');
+      // $classroomidpp = Input::get('classroomidpp');
 
       // s il y a des classes à ajouter ou à supprimer
       if (count($addclassroom) >= 1) {
         foreach ($addclassroom as $key => $value) {
-           $add[] = Teacher::create([
-             'classRoomID' => $value
-            ,'idTeacher' => $teacher->idTeacher
-            ,'CourseID' => $teacher->courseID
+           $add = Teacher::create([
+             'classroom_id' => $value
+            ,'user_id' => $teacher->user_id
+            ,'course_id' => $teacher->course_id
           ]);
         }
       }
       elseif (count($deleteclassroom)>=1) {
           foreach ($deleteclassroom as $key => $value) {
-            $delTeacherClassroom = DB::table('Teacher')->where('idTeacher', $user['id'])
-                                           ->where('classRoomID', $value)
+            $delTeacherClassroom = DB::table('teachers')
+                                           ->where('user_id', $teacher->user_id)
+                                           ->where('classroom_id', $value)
                                            ->delete();
        }
     }
 
+    ///$count = $this->DBRepository->ispprincipal($teacher->user_id);
+
     // s il y a des classes à ajouter ou à supprimer à la table prof_pricinpal
     if (count($addclassroompp) >= 1) {
-      foreach ($addclassroompp as $key => $value) {
-         $add[] = ProfPrincipal::create([
-           'classRoomID' => $value
-          ,'idTeacher' => $teacher->idTeacher
-        ]);
-      }
-    } elseif (count($classroomidpp) >= 1) {
-        foreach ($classroomidpp as $key => $value) {
-           $add[] = ProfPrincipal::create([
-             'classRoomID' => $value
-            ,'idTeacher' => $teacher->idTeacher
+
+        foreach ($addclassroompp as $key => $value) {
+           $add = Classes_pp::create([
+             'classroom_id' => $value
+            ,'teacher_id' => $teacher->user_id
           ]);
         }
+
+        $action = 'add';
+        $this->DBRepository->ispprincipal($teacher->user_id, $action);
+
     }
 
     elseif (count($deleteclassroompp)>=1) {
         foreach ($deleteclassroompp as $key => $value) {
-          $delPpClassroom = DB::table('ProfPrincipal')->where('idTeacher', $user['id'])
-                                         ->where('classRoomID', $value)
+          $delPpClassroom = DB::table('classes_pp')->where('teacher_id', $user['id'])
+                                         ->where('classroom_id', $value)
                                          ->delete();
-
-
      }
+
+     $action = 'del';
+     $this->DBRepository->ispprincipal($teacher->user_id, $action);
   }
 
     return redirect()->action('HomeController@index');
 
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

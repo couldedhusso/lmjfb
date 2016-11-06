@@ -14,13 +14,11 @@
             @if(Auth::check())
               <a class="navbar-brand" href="{{ url('/home') }}">
                   {{-- {{ config('app.name', 'LMJF') }} --}}
-
-                  LMJF | Espace Numérique de Travail
+                  <span class="android-title mdl-layout-title android-title">LMJF | Espace Numérique de Travail</span>
               </a>
             @else
-              <a class="navbar-brand" href="{{ url('/') }}">
+              <a class="navbar-brand android-title mdl-layout-title android-title" href="{{ url('/login') }}">
                   {{-- {{ config('app.name', 'LMJF') }} --}}
-
                   LMJF | Espace Numérique de Travail
               </a>
             @endif
@@ -28,9 +26,9 @@
 
         <div class="collapse navbar-collapse" id="app-navbar-collapse">
             <!-- Left Side Of Navbar -->
-            <ul class="nav navbar-nav">
+            {{-- <ul class="nav navbar-nav">
                 &nbsp;
-            </ul>
+            </ul> --}}
 
             <!-- Right Side Of Navbar -->
             <ul class="nav navbar-nav navbar-right">
@@ -40,7 +38,7 @@
                     {{-- <li><a href="{{ url('/register') }}">Register</a></li> --}}
                 @else
                   <li><a href="#"><img class="ui avatar image" src="{{asset('img/users.png')}}">
-                      <span>{{ Auth::user()->userFirstName .' '.Auth::user()->userLastName }}</span></a>
+                      <span>{{ Auth::user()->user_name .' '.Auth::user()->user_last_name }}</span></a>
                   </li>
                   <li><a href="{{ url('/auth/logout') }}" onclick="event.preventDefault();
                            document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Se deconnecter</a></li>

@@ -65,7 +65,7 @@
         {{ csrf_field() }}
         <input type="hidden" name="search-key" value="Student">
         <input type="hidden" name="search[search-by]" value="matricule">
-        <input type="hidden" name="search[academicYear]" value="{{$getAcademicYear->academicYear}}">
+        <input type="hidden" name="search[academicYear]" value="{{$getAcademicYear->academic_year}}">
         <div class="fields" style="margin-bottom:5px">
             <input type="text" name="search[studentMatricule]" placeholder="Matricule">
         </div>
@@ -81,16 +81,16 @@
         {{ csrf_field() }}
         <input type="hidden" name="search-key" value="Student">
         <input type="hidden" name="search[search-by]" value="classroom">
-        <input type="hidden" name="search[academicYear]" value="{{$getAcademicYear->academicYear}}">
+        <input type="hidden" name="search[academicYear]" value="{{$getAcademicYear->academic_year}}">
 
         <div class="field">
           <br>
-         <label>Recherche par matières enseignées</label>
+         {{-- <label>Recherche par matières enseignées</label> --}}
           <select class="ui search dropdown" name="search[classroom]">
             <option value="">Selectionner la classe</option>
               @foreach($classroomList as $classroom)
-                  <option value="{{$classroom->classRoomID}}">
-                    {{$classroom->ClassRoomName}}
+                  <option value="{{$classroom->classroom_id}}">
+                    {{$classroom->classroom_name}}
                   </option>
               @endforeach
           </select>

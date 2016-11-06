@@ -12,79 +12,125 @@ class ClassroomSeeder extends Seeder
 
     public function run()
     {
-      $nbrClass = 5;
+
+      $cycle = DB::table('cycles')->where('cycle_classe','6ème')->first();
+      $nbrClass = 10;
+
       for ($i=1; $i <= $nbrClass*2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '6ème'.$i
+        DB::table('classrooms')->insert([
+          'classroom_name' => '6ème'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
+
+      $cycle = DB::table('cycles')->where('cycle_classe','5ème')->first();
 
       for ($i=1; $i <= $nbrClass; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '5ème'.$i
+        DB::table('classrooms')->insert([
+          'classroom_name' => '5ème'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
+
+      $cycle = DB::table('cycles')->where('cycle_classe','4ème')->first();
 
       for ($i=1; $i <= $nbrClass; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '4ème'.$i
+        DB::table('classrooms')->insert([
+          'classroom_name' => '4ème'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
+
+
+      $cycle = DB::table('cycles')->where('cycle_classe','3ème')->first();
 
       for ($i=1; $i <= $nbrClass; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '3ème'.$i
+        DB::table('classrooms')->insert([
+          'classroom_name' => '3ème'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '2ndA'.$i,
-          'typeClassRoom' => 'litteraire'
+
+      $nbrClass = 4;
+
+      $cycle = DB::table('cycles')->where('cycle_classe','2ndeA')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => '2ndeA'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '1èreA'.$i,
-          'typeClassRoom' => 'scientifique'
+
+      $cycle = DB::table('cycles')->where('cycle_classe','2ndeC')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => '2ndeC'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '1èreC'.$i,
-          'typeClassRoom' => 'scientifique'
+      $cycle = DB::table('cycles')->where('cycle_classe','1èreA')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => '1èreA'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => '1èreD'.$i,
-          'typeClassRoom' => 'scientifique'
+
+      $cycle = DB::table('cycles')->where('cycle_classe','1èreC')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => '1èreC'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => 'TleA'.$i,
-          'typeClassRoom' => 'litteraire'
+
+      $cycle = DB::table('cycles')->where('cycle_classe','1èreD')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => '1èreD'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => 'TleD'.$i,
-          'typeClassRoom' => 'scientifique'
+
+      $cycle = DB::table('cycles')->where('cycle_classe','TleA')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => 'TleA'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
 
-      for ($i=1; $i <= 2; $i++) {
-        DB::table('Classroom')->insert([
-          'ClassRoomName' => 'TleC'.$i,
-          'typeClassRoom' => 'scientifique'
+
+    $cycle = DB::table('cycles')->where('cycle_classe','TleD')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => 'TleD'.$i,
+          'cycle_id' => $cycle->id
         ]);
       };
+
+      $cycle = DB::table('cycles')->where('cycle_classe', 'TleC')->first();
+
+      for ($i=1; $i <= $nbrClass; $i++) {
+        DB::table('classrooms')->insert([
+          'classroom_name' => 'TleC'.$i,
+          'cycle_id' => $cycle->id
+        ]);
+      };
+
   }
 
 }

@@ -1,4 +1,4 @@
-<?php namespace App;
+<?php namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,29 +11,29 @@ class CourseGrade extends Model
      *
      * @var string
      */
-    protected $table = 'courseGrade';
+    protected $table = 'course_grades';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-       'studentMatricule', 'semestreID', 'TestID', 'Grade', 'Appreciation', 'student_id'
+       'student_id', 'trimestre_id', 'test_id', 'grade', 'appreciation'
     ];
 
-    public function semestre()
+    public function trimestre()
     {
-      return $this->belongsTo('App\Semestre');
+      return $this->belongsTo('LMJFB\Entities\Trimestre', 'trimestre_id');
     }
 
     public function student()
     {
-      return $this->belongsTo('App\Student', 'student_id');
+      return $this->belongsTo('LMJFB\Entities\Student', 'student_id');
     }
 
     public function coursetest()
     {
-      return $this->belongsTo('App\CourseTest');
+      return $this->belongsTo('LMJFB\Entities\CourseTest', 'test_id');
     }
 
     // public function coursechild()

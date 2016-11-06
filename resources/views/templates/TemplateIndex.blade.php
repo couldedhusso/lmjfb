@@ -76,7 +76,7 @@
                   @else
 
                     <li><a href="#"><img class="ui avatar image" src="{{asset('img/users.png')}}">
-                        <span>{{ Auth::user()->userFirstName .' '.Auth::user()->userLastName }}</span></a>
+                        <span>{{ Auth::user()->user_name .' '.Auth::user()->user_last_name }}</span></a>
                     </li>
                     <li><a href="{{ url('/auth/logout') }}" onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Se deconnecter</a></li>

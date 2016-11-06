@@ -25,7 +25,8 @@
         "psr-4": {
             "App\\": "app/",
             "Entities\\" : "app/Domain/Entities/",
-            "LMJFB\\" : "app/LMJFB"
+            "LMJFB\\" : "app/LMJFB",
+            "LMJFB\\Entities\\" : "app/Entities"
         }
     },
     "autoload-dev": {

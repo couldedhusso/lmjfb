@@ -17,8 +17,8 @@ class CreateTableTrimestres extends Migration
           $table->increments('id');
           $table->string('trimestre_description');
           $table->string('anneescolaire_id');
-          $table->date('start_date');
-          $table->date('end_date');
+          $table->date('start_date')->nullable();
+          $table->date('end_date')->nullable();
           $table->timestamps();
       });
     }

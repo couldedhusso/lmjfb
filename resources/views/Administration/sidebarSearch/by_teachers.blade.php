@@ -47,8 +47,8 @@
          <select class="ui search dropdown" name="search[classroom]">
            <option value="">Selectionner la matière</option>
              @foreach($getCourses as $courses)
-                 <option value="{{$courses->courseID}}">
-                   {{$courses->courseName}}
+                 <option value="{{$courses->id}}">
+                   {{$courses->course_name}}
                  </option>
              @endforeach
          </select>

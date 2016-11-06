@@ -34,16 +34,16 @@
      @foreach($studentByclassroom as $clstudent)
        <tr class="unread">
 
-           <td class="">{{$clstudent->ClassRoomName}}</td>
+           <td class="">{{$clstudent->classroom_name}}</td>
            <td >{{$clstudent->effectif}}</td>
            <td class="actions">
              <div class="btn-group pull-right">
                {{-- onclick="event.preventDefault();
                         document.getElementById('modifier-teacher').submit();" --}}
-                  <a href="{{url('liste_de_classe').'/'.$clstudent->classRoomID}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
+                  <a href="{{url('liste_de_classe').'/'.$clstudent->classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
                    ><i  class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Liste de la classe</a>
 
-                  <a href="{{url('delete_classroom').'/'.$clstudent->classRoomID}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                  <a href="{{url('delete_classroom').'/'.$clstudent->classroom_id}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
                   {{-- <a href="{{url('notes-des-evalautions')}}" class="btn btn-white-grey btn-sm" title="Saisir les notes"><i class="fa fa-plus"></i></a> --}}
               </div>
            </td>

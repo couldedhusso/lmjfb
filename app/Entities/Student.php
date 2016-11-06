@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +15,7 @@ class Student extends Model
      *
      * @var string
      */
-    protected $table = 'Student';
+    protected $table = 'students';
 
     /**
      * The attributes that are mass assignable.
@@ -24,9 +24,9 @@ class Student extends Model
      */
 
     protected $fillable = [
-       'studentMatricule', 'studentParentID', 'responsableStudent', 'contactresponsableStudent','classRoomID', 'studentName',
-       'studentLastName','studentBirthdate', 'studentSexe', 'studentBirthPlace',
-       'studentRegime', 'studentInterne', 'studentAffecte','studentRedoublant', 'id'
+       'id','student_matricule', 'classroom_id', 'parent_id', 'student_name','student_last_name', 'student_birthdate',
+       'student_birthplace','student_sexe', 'student_redoublant', 'student_affecte',
+       'responsable_student', 'contact_responsable_student', 'student_regime','student_interne', 'id'
     ];
 
 
@@ -60,7 +60,6 @@ class Student extends Model
     // }
     //
     //
-    // //today
     public function coursegrade()
     {
       return $this->hasMany(CourseGrade::class);
@@ -68,7 +67,12 @@ class Student extends Model
     //
     public function classroom()
     {
-      return $this->belongsTo('App\ClassRoom');
+      return $this->belongsTo('LMJFB\Entities\ClassRoom', 'classrooms_id');
+    }
+
+    public function parents()
+    {
+      return $this->belongsTo('LMJFB\Entities\Parents', 'parents_id');
     }
     //
     // public function parents()

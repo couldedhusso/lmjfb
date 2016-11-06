@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +26,6 @@ class Roles extends Model
 
   public function user()
   {
-     return $this->belongsTo("App\User");
+     return $this->belongsTo("LMJFB\Entities\User");
   }
 }

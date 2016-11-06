@@ -34,9 +34,9 @@
    <tbody>
      @foreach($allTeacher as $teacher)
        <tr class="unread">
-           <td class="">{{$teacher->userFirstName .' '.$teacher->userLastName}}</td>
-           <td >{{$teacher->userContact}}</td>
-           <td >{{$teacher->courseName}}</td>
+           <td class="">{{$teacher->user_name .' '.$teacher->user_last_name}}</td>
+           <td >{{$teacher->user_contact}}</td>
+           <td >{{$teacher->course_name}}</td>
            <td class="actions">
              <div class="btn-group pull-right">
                {{-- onclick="event.preventDefault();

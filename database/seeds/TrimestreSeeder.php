@@ -17,25 +17,22 @@ class TrimestreSeeder extends Seeder
     //  `endDate` VARCHAR(45) NOT NULL,
     public function run()
     {
-      DB::table('Semestre')->insert([
-        'semestreDescription' => '1er trimestre',
-        'academicYear' => '2016-2017',
-        'startDate' => '-',
-        'endDate' => '-'
+
+      $aYear = DB::table('anneescolaire')->first();
+
+      DB::table('trimestres')->insert([
+        'trimestre_description' => '1er trimestre',
+        'anneescolaire_id' => $aYear->id
       ]);
 
-      DB::table('Semestre')->insert([
-        'semestreDescription' => '2e trimestre',
-        'academicYear' => '2016-2017',
-        'startDate' => '-',
-        'endDate' => '-'
+      DB::table('trimestres')->insert([
+        'trimestre_description' => '2e trimestre',
+        'anneescolaire_id' => $aYear->id
       ]);
 
-      DB::table('Semestre')->insert([
-        'semestreDescription' => '3e trimestre',
-        'academicYear' => '2016-2017',
-        'startDate' => '-',
-        'endDate' => '-'
+      DB::table('trimestres')->insert([
+        'trimestre_description' => '3e trimestre',
+        'anneescolaire_id' => $aYear->id
       ]);
 
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +11,7 @@ class Enrollment extends Model
      *
      * @var string
      */
-    protected $table = 'Enrollment';
+    protected $table = 'enrollments';
 
     /**
      * The attributes that are mass assignable.
@@ -20,16 +20,16 @@ class Enrollment extends Model
      */
 
     protected $fillable = [
-        'academicYear', 'classRoomID'
+        'anneescolaire_id', 'classroom_id'
     ];
 
     public function anneescolaire()
     {
-      return $this->belongsTo('App\AnneeScolaire');
+      return $this->belongsTo('LMJFB\Entities\AnneeScolaire', 'anneescolaire_id');
     }
 
     public function classroom()
     {
-      return $this->belongsTo("App\ClassRoom");
+      return $this->belongsTo('LMJFB\Entities\ClassRoom', 'classroom_id');
     }
 }

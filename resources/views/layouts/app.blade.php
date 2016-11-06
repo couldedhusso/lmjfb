@@ -12,33 +12,23 @@
 
     <link href='http://fonts.googleapis.com/css?family=Roboto:300,400,700' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{asset('assets/bootstrap/css/bootstrap.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('assets/css/bootstrap-select.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('https://design.google.com/css/site.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('assets/css/jquery.slider.min.css')}}" type="text/css">
-    <link rel="stylesheet" href="{{asset('assets/css/owl.carousel.css')}}" type="text/css">
-
-
-
-    <link rel="stylesheet" href="{{asset('assets/css/fileinput.min.css')}}" type="text/css">
-
+    <link rel="stylesheet" href="{{asset('assets/css/multiple-select.css')}}" type="text/css">
     <link rel="stylesheet" href="{{asset('assets/css/style.css')}}" type="text/css">
-
-    <!-- creative-tim CSS     -->
-
-    <!-- Animation library for notifications   -->
-    <link href="{{asset('vendors/creatietim/css/animate.min.css')}}" rel="stylesheet"/>
-
-    <!--  Light Bootstrap Table core CSS    -->
-    <link href="{{asset('vendors/creatietim/css/light-bootstrap-dashboard.css')}}" rel="stylesheet"/>
 
     <!-- Semantic-ui core CSS     -->
     <link href="{{asset('assets/semantic/semantic.min.css')}}" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
-      <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css">
+      {{-- <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.indigo-pink.min.css"> --}}
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
-    <link href="//cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
-    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
+    {{-- <link href="//cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" />
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'> --}}
+
+    <!-- Page styles -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
+    <link rel="stylesheet" href="css/styles.css">
 
     <!-- Styles -->
     <link href="{{asset('/css/app.css')}}" rel="stylesheet">
@@ -176,12 +166,21 @@
         {{-- <a href="https://github.com/google/material-design-lite/blob/mdl-1.x/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">View Source<span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);"></span></span></a> --}}
     </div>
 
-    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+        <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
+        <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
+
+    {{-- <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
     <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script> --}}
+
+    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script type="text/javascript" src="{{asset('assets/js/multiple-select.js')}}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
-    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
     <!-- Semantic-ui core js     -->
     <script src="{{asset('assets/semantic/semantic.min.js')}}"></script>
@@ -192,6 +191,22 @@
         $('.ui.radio.checkbox').checkbox();
         $('.ui.dropdown').dropdown();
     </script>
+
+    <script>
+    $(function() {
+        $('#addclassroom').change(function() {
+            console.log($(this).val());
+        }).multipleSelect({
+            width: '100%'
+        });
+
+        $('#ms').change(function() {
+            console.log($(this).val());
+        }).multipleSelect({
+            width: '100%'
+        });
+    });
+   </script>
 
     <!-- Scripts -->
     {{-- <script src="/js/app.js"></script> --}}

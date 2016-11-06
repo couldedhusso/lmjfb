@@ -7,12 +7,26 @@
              &nbsp;Saisir les notes
            </a>
 
-           <button type="button" data-toggle="modal" data-target="#studentgrade" class="btn btn-white-grey btn-sm" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
+           <button type="button" data-toggle="modal" data-target="#studentgrade" class="btn btn-white-grey btn-sm show-modal" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
              &nbsp;importer les notes
            </button>
+
+           {{-- <button type="button" class="mdl-button show-modal">Show Modal</button> --}}
        </div>
   </div>
 </div>
+
+<dialog class="mdl-dialog">
+    <div class="mdl-dialog__content">
+      <p>
+        Allow this site to collect usage data to improve your experience?
+      </p>
+    </div>
+    <div class="mdl-dialog__actions mdl-dialog__actions--full-width">
+      <button type="button" class="mdl-button">Agree</button>
+      <button type="button" class="mdl-button close">Disagree</button>
+    </div>
+  </dialog>
 
 
 <!-- Modal -->
@@ -47,7 +61,7 @@
 
   <table class="ui orange table">
 
-  @if($currentSemesterEval->count() == 0)
+  @if($currentTrimesterEval->count() == 0)
     <tr class="unread">
       <th>classe</th>
       <th>Note sur</th>
@@ -62,18 +76,18 @@
       </tr>
    </thead>
    <tbody>
-     @foreach($currentSemesterEval as $test)
+     @foreach($currentTrimesterEval as $test)
        <tr class="unread">
-           <td class="">{{$test->ClassRoomName}}</td>
-           <td >{{$test->maxGradevalue}}</td>
+           <td class="">{{$test->classroom_name}}</td>
+           <td >{{$test->max_grade_value}}</td>
            <td class="actions">
              <div class="btn-group pull-right">
                {{-- onclick="event.preventDefault();
                         document.getElementById('modifier-teacher').submit();" --}}
-                  <a href="{{url('update_student_mark').'/'.$test->CoursetestID.'/'.$test->classRoomID}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
+                  <a href="{{url('update_student_mark').'/'.$test->id.'/'.$test->classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
                    ><i  class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
 
-                  <a href="{{url('delete_Coursetest').'/'.$test->CoursetestID}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                  <a href="{{url('delete_Coursetest').'/'.$test->id}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
                            <form id="supprimer-teacher" action="{{ url('/delete-evaluation') }}" method="POST" style="display: none;">
                                {{ csrf_field() }}

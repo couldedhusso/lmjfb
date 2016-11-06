@@ -51,8 +51,8 @@
                @foreach($results_search as $teacher)
                  <tr class="unread">
                      {{-- <td class="">{{$teacher->id}}</td> --}}
-                     <td class="">{{$teacher->userFirstName .' '.$teacher->userLastName}}</td>
-                     <td >{{$teacher->courseName}}</td>
+                     <td class="">{{$teacher->user_name .' '.$teacher->user_last_name}}</td>
+                     <td >{{$teacher->course_name}}</td>
                      <td class="actions">
                        <div class="btn-group pull-right">
                          {{-- onclick="event.preventDefault();
@@ -73,7 +73,6 @@
                @endforeach
              </tbody>
             @else
-
               <thead>
                  <tr>
                    <th>Nom & prenoms</th>
@@ -82,21 +81,21 @@
                  </tr>
               </thead>
               <tbody>
-                @foreach($results_search as $teacher)
+                @foreach($results_search as $student)
                   <tr class="unread">
                       {{-- <td class="">{{$teacher->id}}</td> --}}
-                      <td class="">{{$teacher->studentName .' '.$teacher->studentLastName}}</td>
-                      <td >{{$teacher->ClassRoomName}}</td>
+                      <td class="">{{$student->student_name .' '.$student->student_last_name}}</td>
+                      <td >{{$student->classroom_name}}</td>
                       <td class="actions">
                         <div class="btn-group pull-right">
-                             <a href="{{url('get_student').'/'.$teacher->classRoomID.'/'.$teacher->studentMatricule}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
+                             <a href="{{url('get_student').'/'.$student->classroom_id.'/'.$student->student_matricule}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
                               ><i  class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
 
-                             <a href="{{url('delete_student').'/'.$teacher->studentMatricule}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                             <a href="{{url('delete_student').'/'.$student->student_matricule}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
                                       <form id="supprimer-teacher" action="{{ url('/delete-teacher') }}" method="POST" style="display: none;">
                                           {{ csrf_field() }}
-                                          <input type="hidden" name="teacher_id" value="{{$teacher->studentMatricule}}">
+                                          <input type="hidden" name="teacher_id" value="{{$student->student_matricule}}">
                                       </form>
                              {{-- <a href="{{url('notes-des-evalautions')}}" class="btn btn-white-grey btn-sm" title="Saisir les notes"><i class="fa fa-plus"></i></a> --}}
                          </div>

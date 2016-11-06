@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace LMJFB\Entities;
 
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -13,7 +13,7 @@ class Teacher extends Model
      *
      * @var string
      */
-    protected $table = 'Teacher';
+    protected $table = 'teachers';
 
 
     /**
@@ -23,18 +23,24 @@ class Teacher extends Model
      */
 
     protected $fillable = [
-        'idTeacher', 'CourseID', 'classRoomID', 'pp'
+        'id', 'user_id', 'course_id', 'classroom_id', 'prof_principal'
     ];
 
     public function course()
     {
-      return  $this->belongsTo("App\Course");
+      return  $this->belongsTo("App\Course", 'course_id');
     }
 
     public function classroom()
     {
-      return  $this->belongsTo("App\ClassRoom");
+      return  $this->belongsTo("App\ClassRoom", 'classroom_id');
     }
+
+    public function users()
+    {
+      return  $this->belongsTo("App\User", 'user_id');
+    }
+
 
     // today
 
