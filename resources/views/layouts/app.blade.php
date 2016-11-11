@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="LMJFBouakeApp">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,6 +40,17 @@
         margin-right: auto;
     }
 
+    .contexttuel .ui.secondary.vertical.pointing.menu {
+          border-bottom-width: 0;
+          border-left-width: 2px;
+          border-left-style: solid;
+          border-left-color: rgba(34,36,38,.15);
+
+          border-right-width: 0px;
+          border-right-style: none;
+          border-rright-color:inherit;
+    }
+
     .ui.form, ui.button, .ui.buttons .button, .header  {
         font-size:inherit;
       }
@@ -56,23 +67,23 @@
 
 
         .mdl-tabs .mdl-tabs__panel .is-active{
-          border-bottom: 2px soliid rgba(231, 108, 17, 0.9);
+          border-bottom: 2px solid rgba(231, 108, 17, 0.9);
         }
 
-        .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+        .mdl-tabs__tab.active {
             color: rgba(231, 108, 17, 0.9);
-            border-bottom: 2px soliid rgba(231, 108, 17, 0.9);
+            border-bottom: 2px solid rgba(231, 108, 17, 0.9);
         }
 
         .mdl-tabs__tab .mdl-tabs__ripple-container .mdl-ripple {
             background: rgba(231, 108, 17, 0.9);
         }
 
-        .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active {
+        .mdl-tabs.is-upgraded .mdl-tabs__tab.active {
           color: rgba(231, 108, 17, 0.9);
         }
 
-    .mdl-tabs.is-upgraded .mdl-tabs__tab.is-active:after {
+    .mdl-tabs.is-upgraded .mdl-tabs__tab.active:after {
         height: 2px;
         width: 100%;
         display: block;
@@ -111,6 +122,22 @@
         .mdl-tabs.is-upgraded  .mdl-tabs__tab .header:active{
             text-decoration: none;
         }
+
+        .pagination>li>a, .pagination>li>span {
+          /*position: relative;
+          float: left;
+          padding: 6px 12px;
+          line-height: 1.6;
+          text-decoration: none;*/
+          color: rgba(0,0,0,.87);;
+          /*background-color: #fff;
+          border: 1px solid #ddd;
+          margin-left: -1px;*/
+      }
+
+      .pagination .active{
+        border-color: #e0e0e0;
+      }
 
       /*ui.button, .ui.buttons .button, .ui.buttons .or {
           font-size: 16px;
@@ -176,10 +203,14 @@
 
     <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script> --}}
     <script type="text/javascript" src="{{asset('assets/js/multiple-select.js')}}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script> --}}
+
+    <!-- Reference needed scripts. See scripts section above for details on
+    each script-->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
 
     <!-- Semantic-ui core js     -->
@@ -207,6 +238,9 @@
         });
     });
    </script>
+
+   <script type="text/javascript" src="{{asset('js/angular/angularApp.js')}}"></script>
+
 
     <!-- Scripts -->
     {{-- <script src="/js/app.js"></script> --}}

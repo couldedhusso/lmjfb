@@ -37,11 +37,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-//dd($this->DBRepository->getcurrentAYear());
-
-        // $dbData = $this->InitDataSession();
-
         $currentTrimestre = '1er trimestre';
+
+      //  dd($this->DBRepository->getEvaluationsByTrimestres($currentTrimestre));
+        return redirect('/Enseingnants');
 
         return view('/home', [
                      'aYear' => $this->DBRepository->getcurrentAYear()
@@ -49,7 +48,7 @@ class HomeController extends Controller
                     ,'evaluations' => $this->DBRepository->getTrimestreByName($currentTrimestre)
                     ,'classrooms' => $this->DBRepository->getClassrooms()
                     ,'studentByteacher' => $this->DBRepository->getStudents()
-                    ,'currentAcademiqueYearStudent' => $this->DBRepository->getStudents()
+                    ,'currentAcademiqueYearStudent' => $this->DBRepository->getAllStudents()
                     ,'allTeacher'  =>  $this->DBRepository->getTeachers()
                     ,'profdisciplines'  =>  $this->DBRepository->getTeachersByCourse()
                     ,'studentByclassroom'  =>  $this->DBRepository->getStudents()
@@ -57,6 +56,40 @@ class HomeController extends Controller
 
         ]);
     }
+
+
+    public function Enseingnants(){
+        return view('Administration.enseignants_panel');
+    }
+
+    public function Eleves(){
+        return view('Administration.eleves_panel');
+    }
+
+    public function Evaluations(){
+        return view('Administration.evaluations_panel');
+    }
+
+
+    public function getEnseingnants(){
+       return json_encode($this->DBRepository->getTeachers());
+    }
+
+    public function getStudentByClassroom(){
+
+       $id  = session('classroom_id');
+       return json_encode($this->DBRepository->getStudentsByClassroom($id));
+    }
+
+    public function getEleves(){
+       return json_encode($this->DBRepository->getStudents());
+    }
+
+    public function getEvaluations(){
+       return json_encode($this->DBRepository->getTeachers());
+    }
+
+
 
     public function search_engine(Request $request)
     {
@@ -435,48 +468,6 @@ class HomeController extends Controller
     }
 
 
-
-    public function update_student_mark($id, $classroomid){
-
-      $aYear = $this->getAcademicYear();
-      $semestre = DB::table('Semestre')->where('academicYear', '=',$aYear->academicYear)
-                      ->where('semestreDescription', '=', '1er trimestre')
-                      ->first();
-
-      $eval = DB::table('courseTest')
-      ->join('Classroom', 'courseTest.classRoomID','=','Classroom.classRoomID')
-      ->join('courseGrade', 'courseGrade.testID', '='
-      ,'courseTest.CoursetestID')
-      ->join('Semestre', 'courseGrade.semestreID', '='
-      ,'Semestre.semestreID')
-      ->where('Classroom.classRoomID', $classroomid)
-      ->where('courseTest.CoursetestID', $id)
-      ->where('Semestre.semestreID', $semestre->semestreID)
-      ->select('courseTest.CoursetestID', 'courseGrade.studentMatricule', 'courseGrade.Grade')
-      ->get();
-
-      $currentYearClassroom = DB::table('Classroom')
-                            ->join('Student', 'Classroom.classRoomID', '='
-                            ,'Student.classRoomID')
-                            ->join('Enrollment', 'Enrollment.classRoomID', '=', 'Enrollment.classRoomID')
-                            ->where('Enrollment.academicYear', $aYear->academicYear)
-                            ->where('Classroom.classRoomID', $classroomid)
-                            ->select('Student.*')
-                            ->distinct()->get();
-
-                            // dd($currentYearClassroom);
-
-     return view('Administration.update-eval-student', [
-       'testid' => $id,
-       'currentYearClassroom' => $currentYearClassroom,
-       'eval' => $eval,
-       'semestre'=> $semestre->semestreID
-     ]);
-
-
-    }
-
-
     public function get_teacher_by_id($id){
         // Teacher relation
           // - user -> ok
@@ -589,11 +580,16 @@ class HomeController extends Controller
 
     public function liste_de_classe($id){
 
-      $studentByclassroom = $this->DBRepository->getStudentsByClassroom($id);
+        session()->put('classroom_id', $id);
+        $classrom = DB::table('classrooms')->where('id', $id)->first();
 
-      return view('Administration.sidebarSearch.liste_de_classe', [
-        'studentByclassroom' => $studentByclassroom
+        return view('Administration.sidebarSearch.liste_de_classe', [
+            'classroom' => $classrom
         ]);
+
+        // return view('Administration.sidebarSearch.liste_de_classe', [
+        //     'studentByclassroom' => $studentByclassroom
+        // ]);
     }
 
     public function teacherUpdate(Request $request){

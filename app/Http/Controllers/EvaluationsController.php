@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\User;
 use Auth;
 use DB;
-use App\Enseingnant;
-use App\Student;
-use App\CourseTest;
-use App\CourseGrade;
+use LMJFB\Entities\Enseingnant;
+use LMJFB\Entities\Student;
+use LMJFB\Entities\CourseTest;
+use LMJFB\Entities\CourseGrade;
+
+use LMJFB\Repositories\DbClassroomRepositories;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
@@ -23,6 +26,18 @@ use Illuminate\Support\Facades\Input;
 
 class EvaluationsController extends Controller
 {
+
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    private $DBRepository ;
+    public function __construct(DbClassroomRepositories $repos)
+    {
+        $this->DBRepository = $repos ;
+    }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -63,7 +78,6 @@ class EvaluationsController extends Controller
   }
 
   public function saisie_des_notes(Request $request) {
-
 
 
       $reqData = Input::except('_token', 'name');
@@ -120,7 +134,50 @@ class EvaluationsController extends Controller
                       ->update(['Grade' => $value]);
       }
 
-      return redirect()->action('HomeController@index');
+      return redirect('/home');
+  }
+
+
+  public function update_student_mark($testid, $classroomid, $trimestreid){
+
+    dd($this->DBRepository->getTestsByClassroom($testid, $classroomid, $trimestreid));
+
+    $aYear = $this->getAcademicYear();
+    $semestre = DB::table('Semestre')->where('academicYear', '=',$aYear->academicYear)
+                    ->where('semestreDescription', '=', '1er trimestre')
+                    ->first();
+
+    $eval = DB::table('courseTest')
+    ->join('Classroom', 'courseTest.classRoomID','=','Classroom.classRoomID')
+    ->join('courseGrade', 'courseGrade.testID', '='
+    ,'courseTest.CoursetestID')
+    ->join('Semestre', 'courseGrade.semestreID', '='
+    ,'Semestre.semestreID')
+    ->where('Classroom.classRoomID', $classroomid)
+    ->where('courseTest.CoursetestID', $id)
+    ->where('Semestre.semestreID', $semestre->semestreID)
+    ->select('courseTest.CoursetestID', 'courseGrade.studentMatricule', 'courseGrade.Grade')
+    ->get();
+
+    $currentYearClassroom = DB::table('Classroom')
+                          ->join('Student', 'Classroom.classRoomID', '='
+                          ,'Student.classRoomID')
+                          ->join('Enrollment', 'Enrollment.classRoomID', '=', 'Enrollment.classRoomID')
+                          ->where('Enrollment.academicYear', $aYear->academicYear)
+                          ->where('Classroom.classRoomID', $classroomid)
+                          ->select('Student.*')
+                          ->distinct()->get();
+
+                          // dd($currentYearClassroom);
+
+   return view('Administration.update-eval-student', [
+     'testid' => $id,
+     'currentYearClassroom' => $currentYearClassroom,
+     'eval' => $eval,
+     'semestre'=> $semestre->semestreID
+   ]);
+
+
   }
 
 
@@ -212,26 +269,6 @@ class EvaluationsController extends Controller
 }
 
 
-private function getclassroomByName($classroom){
-  return  DB::table('Classroom')
-              ->select('Classroom.classRoomID','Classroom.ClassRoomName')
-              ->where('Classroom.ClassRoomName', $classroom)->first();
-}
-
-private function getcoursechildByName($discipline){
-  return  DB::table('CourseChild')
-              ->select('CourseChild.CourseChildID','CourseChild.courseID')
-              ->where('CourseChild.labelCourse', $discipline)->first();
-}
-
-private function getcurrentAYaer(){
-
-  return DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                            ->select('academicYear')
-                            ->first();
-}
-
-
 public function getAverageByCourse($classroom, $trimestre){
 
 
@@ -305,6 +342,27 @@ public function getAverageByCourse($classroom, $trimestre){
   })->download('xlsx');
 
 }
+
+
+private function getclassroomByName($classroom){
+  return  DB::table('Classroom')
+              ->select('Classroom.classRoomID','Classroom.ClassRoomName')
+              ->where('Classroom.ClassRoomName', $classroom)->first();
+}
+
+private function getcoursechildByName($discipline){
+  return  DB::table('CourseChild')
+              ->select('CourseChild.CourseChildID','CourseChild.courseID')
+              ->where('CourseChild.labelCourse', $discipline)->first();
+}
+
+private function getcurrentAYaer(){
+
+  return DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
+                            ->select('academicYear')
+                            ->first();
+}
+
 
 
 

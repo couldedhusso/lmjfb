@@ -27,9 +27,30 @@ abstract class DbRepository
 
      return DB::table('courses') ->join('teachers', 'courses.id', '='
            ,'teachers.course_id')->join('users', 'users.id', '='
-           ,'teachers.user_id')->select('users.*', 'courses.course_name')
+           ,'teachers.user_id')->join('classrooms', 'classrooms.id', '='
+           ,'teachers.classroom_id')
+           ->select('users.id','users.user_name', 'users.user_contact',
+           'users.user_last_name', 'courses.course_name', 'classrooms.classroom_name')
            ->distinct()->get();
    }
+
+
+      public function getTeachersByClassroomAndCourses(){
+
+        return DB::table('courses')->join('course_childs', 'courses.id', '='
+              ,'course_childs.course_id')->join('teachers', 'courses.id', '='
+              ,'teachers.course_id')->join('users', 'users.id', '='
+              ,'teachers.user_id')->join('classrooms', 'classrooms.id', '='
+              ,'teachers.classroom_id')
+              ->select(
+                        'users.id',
+                        'users.user_name',
+                        'users.user_contact',
+                        'users.user_last_name',
+                        'course_childs.label_course',
+                        'classrooms.classroom_name'
+            )->distinct()->get();
+      }
 
    public function getStudents(){
 
@@ -41,6 +62,16 @@ abstract class DbRepository
                 ->select(DB::raw('count(students.id) as effectif'), 'classrooms.id as classroom_id',
                 'classrooms.classroom_name')->groupBy('classrooms.id',
                 'classrooms.classroom_name')->distinct()->get();
+   }
+
+   public function getAllStudents(){
+
+    $aYear = $this->getcurrentAYear();
+
+    return DB::table('classrooms')->join('enrollments', 'enrollments.classroom_id', '=',
+                'classrooms.id')->join('students', 'classrooms.id', '=','students.classroom_id')
+                ->where('enrollments.anneescolaire_id', $aYear->id)
+                ->select('students.*')->distinct()->get();
    }
 
    public function getStudentById($id){
@@ -114,7 +145,7 @@ abstract class DbRepository
                 'tests.trimestre_id', '=', 'trimestres.id')
                 ->join('course_childs', 'course_childs.id', '=', 'tests.course_childs_id')
                 ->where('trimestres.id', '=', $trimestre->id)
-                ->select('tests.*','classrooms.*','tests.id','tests.max_grade_value')
+                ->select('tests.*','classrooms.*','tests.id','tests.max_grade_value', 'tests.trimestre_id')
                 ->get();
    }
 
@@ -135,6 +166,14 @@ abstract class DbRepository
       return DB::table('courses')->get();
    }
 
+   public function getCoursByName($course_name){
+      return DB::table('courses')->join('course_childs', 'courses.id',
+                      'course_childs.course_id')
+                      ->where('courses.course_name', $course_name)
+                      ->select('courses.*', 'course_childs.*')
+                      ->get();
+   }
+
    public function ispprincipal($id, $action){
 
       $teacher = DB::table('teachers')->where('user_id', $id) ;
@@ -150,15 +189,79 @@ abstract class DbRepository
    }
 
 
+   public function getTestsByClassroom($testid, $classroomid, $trimestreid){
+
+     $aYear = $this->getcurrentAYear();
+     $students = $this->getStudentsByClassroom($classroomid);
+     $eval = DB::table('course_grades')->where('test_id', $testid)
+                                      ->where('trimestre_id', $trimestreid)
+                                      ->get();
+
+      $courseGrades = collect([]);
+      foreach ($students as $student ) {
+      $grade = $eval->where('student_id', $student->id);
+      $courseGrades->push([
+          'student_id' => $student->id,
+          'student_name' => $student->student_name,
+          'student_last_name' => $student->student_last_name,
+          'grade' => $grade
+      ]);
+
+    }
+
+    return $courseGrades;
+
+   }
 
 
-  //  $profdisciplines = DB::table('courses')
-  //                        ->join('course_childs', 'course.id', '=','course_childs.course_id')
-  //                        ->join('teachers', 'course.id', '=','teachers.course_id')
-  //                        ->where('teachers.id', '=', $idTeacher)
-  //                        ->select('course_childs.labelCourse', 'course_childs.id')
-  //                        ->distinct()->get();
+   public function getCourseGradesByClassroom($classroomid, $trimestreid){
 
+
+     $aYear = $this->getcurrentAYear();
+     $students = $this->getStudentsByClassroom($classroomid);
+     $eval = DB::table('course_grades')->where('trimestre_id', $trimestreid)
+                                       ->get();
+
+      $courseGrades = collect([]);
+      foreach ($students as $student ) {
+        $grade = $eval->where('student_id', $student->id);
+        $courseGrades->push([
+            'student_id' => $student->id,
+            'student_name' => $student->student_name,
+            'student_last_name' => $student->student_last_name,
+            'grade' => $grade,
+        ]);
+
+      }
+
+      return $courseGrades;
+
+   }
+
+
+   public function getCourseGradesByCourse($course, $classroomid, $trimestreid){
+
+
+     $aYear = $this->getcurrentAYear();
+     $students = $this->getStudentsByClassroom($classroomid);
+     $eval = DB::table('course_grades')->where('trimestre_id', $trimestreid)
+                                       ->get();
+
+      $courseGrades = collect([]);
+      foreach ($students as $student ) {
+        $grade = $eval->where('student_id', $student->id);
+        $courseGrades->push([
+            'student_id' => $student->id,
+            'student_name' => $student->student_name,
+            'student_last_name' => $student->student_last_name,
+            'grade' => $grade,
+        ]);
+
+      }
+
+      return $courseGrades;
+
+   }
 
 
 

@@ -14,6 +14,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
+use Maatwebsite\Excel\Facades\Excel;
+use LMJFB\Repositories\DbClassroomRepositories;
+
+use PHPOffice\PHPExcel;
+// use PHPOffice\IOFactory\PHPExcel_IOFactory;
+
+
 class TeacherController extends Controller
 {
 
@@ -22,8 +29,12 @@ class TeacherController extends Controller
        *
        * @return void
        */
-      public function __construct()
+
+      private $DBRepository ;
+
+      public function __construct(DbClassroomRepositories $repos)
       {
+          $this->DBRepository = $repos ;
           $this->middleware('auth');
       }
 
@@ -155,42 +166,35 @@ class TeacherController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function listeProfesseur()
     {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        $enseignantsCollect = [];
+        $enseignants = $this->DBRepository->getTeachersByClassroomAndCourses();
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+        foreach ($enseignants as $value) {
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            array_push($enseignantsCollect, [
+
+               'Concatener' => $value->label_course.' '.$value->classroom_name,
+               'Matière/Sous-matière' => $value->label_course,
+               'Classe > Groupe' => $value->classroom_name,
+               'Professeur' => $value->user_name.' '.$value->user_last_name
+            ]);
+
+        }
+
+    //   dd($enseignantsCollect);
+        Excel::create('Gestion des performances', function($excel) use($enseignantsCollect) {
+
+            // Set the title
+            $excel->setTitle('DB PROF');
+            $excel->sheet('DB PROF', function($sheet) use($enseignantsCollect) {
+                $sheet->fromArray($enseignantsCollect);
+            });
+
+        })->download('xlsx');
+
+        return redirect('/home') ;
     }
 }
