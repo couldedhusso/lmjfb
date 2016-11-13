@@ -315,7 +315,7 @@ abstract class DbRepository
                  ->where('tests.id', $id)
                  ->select('classrooms.classroom_name','tests.max_grade_value',
                           'course_childs.label_course')
-                 ->get();
+                 ->first();
 
    }
 

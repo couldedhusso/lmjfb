@@ -339,20 +339,31 @@ public function getAverageByCourse($classroom, $trimestre){
 
 public function downloadGrade($testid, $classroomid, $trimestreid){
 
-    dd($this->DBRepository->getTestCourseById($testid));
+    $test = $this->DBRepository->getTestCourseById($testid);
 
-
-     $collection = $this->DBRepository
+    $collection = $this->DBRepository
                         ->getTestsByClassroom($testid, $classroomid, $trimestreid);
 
+    $studentgrade = [];
 
-    dd($collection);
+    foreach ($collection as  $student) {
+      $student = [
+            'Matricule'       =>$student->student_matricule,
+            'Nom et prenoms'  =>$student->student_name .' '.$student->student_last_name,
+            'Note'            =>$student->grade .'/'. $test->max_grade_value,
+            'Appreciation'    =>$student->appreciation,
+      ];
 
-    Excel::create('Notes', function($excel) use($collection) {
+      array_push($studentgrade, $student);
+    }
 
-        $excel->setTitle('Notes d évaluation');
-        $excel->sheet('Notes', function($sheet) use($collection) {
-        $sheet->fromArray($collection);
+    $title = "Notes d'évaluation de la" .$test->classroom_name;
+
+    Excel::create($title, function($excel) use($studentgrade, $test) {
+
+        $excel->setTitle('Notes');
+        $excel->sheet($test->label_course, function($sheet) use($studentgrade) {
+        $sheet->fromArray($studentgrade);
       });
 
     })->download('xlsx');
