@@ -70,11 +70,11 @@
                          <td class="actions">
                            <div class="btn-group pull-right">
 
-                               <a ng-href="liste/classe/@{{student.classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
-                                ><i  class="fa fa-pencil" aria-hidden="true"></i>
+                               <a ng-href="liste/classe/@{{student.classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Liste de classe"
+                                ><i  class="fa fa-list" aria-hidden="true"></i>
                                </a>
 
-                               <a ng-href="api/v1/Student/Liste/@{{student.classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Liste">
+                               <a ng-href="api/v1/Student/Liste/@{{student.classroom_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Exporter la liste">
                                   <i class="fa fa-file-excel-o" aria-hidden="true"> </i>
                                </a>
 

@@ -1,53 +1,90 @@
-@extends('layouts.app')
-@section('content')
-<div class="container">
-  <div class="row">
-    <div class="col-md-8">
-      <form class="form-inline" action="{{url('/update_mark')}}" method="post">
+@extends('home')
+@section('menu')
 
-                                       {{-- <input type="hidden" name="classRoomID" value="{{$classroom->classRoomID}}"> --}}
-                                       {{ csrf_field() }}
-                                       <div class="pull-right">
-                                          <input style="font-size:100%" class="ui primary button right floated" type="submit" name="name" value="Mettre à jour">
-                                       </div>
-                                       <br>
 
-                                       <div class="form-group">
-                                          {{-- <label for="pwd" class="pull-left">Enseingnant : {{$teacher->userFirstName.' '.$teacher->userLastName}}</label> --}}
+<div class="col-md-9 pull-left" style="padding:0px;">
+  <div class="col-md-12" style="margin-top:10px;">
+      <div class="row">
+        <form class="ui form form-inline" action="{{url('/update_mark')}}" method="post">
+          {{ csrf_field() }}
 
-                                          <input type="hidden" name="semestre" value="{{$semestre}}">
-                                          <input type="hidden" name="testid" value="{{$testid}}">
-                                       </div>
+          <input type="hidden" name="trimestre" value="{{$trimestre}}">
+          <input type="hidden" name="testid" value="{{$testid}}">
+          <input type="hidden" name="classromid" value="{{$classroomid}}">
 
-                                       &nbsp;&nbsp;
-                                       <table class="ui table">
-                                         <thead>
-                                            <tr>
-                                              <th>Matricule</th>
-                                              <th>Nom & prenoms</th>
-                                              <th>Note</th>
-                                            </tr>
-                                         </thead>
-                                         <tbody>
-                                             @foreach($currentYearClassroom as $classe)
-                                                 @foreach($eval as $note)
-                                                   @if($classe->studentMatricule == $note->studentMatricule)
-                                                     <tr class="read">
-                                                         <td width="20%" class="">{{$classe->studentMatricule}}</td>
-                                                         <td width="70%" class="">{{$classe->studentName." ".$classe->studentLastName}}</td>
-                                                         <td width="10%" class="">
-                                                           <input type="text" value="{{$note->Grade}}" name="notes[{{$classe->studentMatricule}}]">
-                                                         </td>
-                                                     </tr>
-                                                   @endif
-                                                @endforeach
-                                             @endforeach
-                                         </tbody>
-                                     </table>
-                                 </form>
-                             </div>
+        <div class="col-md-4">
+          <span class="pull-left" style="font-size:20px;">Notes d' évaluation </span>
+        </div>
 
-    </div>
-  </div>
+        <div class="col-md-8">
+
+              <div class="input-group btn-group pull-right">
+                 <input style="font-size:100%" class="ui primary button right floated" type="submit" name="name" value="Mettre à jour">
+              </div>
+
+          </div>
+
+          <div class="col-md-12">
+
+            <table class="ui orange table" style="margin-top:10px;">
+               <thead>
+                  <tr>
+                    <th>Matricule</th>
+                    <th>Nom et prenoms</th>
+                     <th>Note</th>
+                  </tr>
+               </thead>
+               <tbody
+               {{-- <tbody ng-repeat="grade in grades.slice(((currentPage-1)*itemsPerPage),
+                  ((currentPage)*itemsPerPage))|orderBy:'user_name' | filter:querySearch">
+
+                  <tr class="read">
+                      <td width="20%" class="">@{{grade.student_matricule}}</td>
+                      <td width="70%" class="">@{{grade.student_name}} @{{grade.student_name}}</td>
+                      <td width="10%" class="">
+                        <input type="text" value="@{{grade.grade}}" name="notes[@{{grade.student_id}}]">
+                      </td>
+                  </tr>
+               </tbody> --}}
+
+                 @foreach($eval as $classe)
+                           <tr class="read">
+                               <td width="20%" class="">{{$classe->student_matricule}}</td>
+                               <td width="70%" class="">{{$classe->student_name." ".$classe->student_name}}</td>
+                               <td width="10%" class="">
+                                 <input type="text" value="{{$classe->grade}}" name="notes[{{$classe->student_id}}]">
+                               </td>
+                           </tr>
+                   @endforeach
+               </tbody>
+           </table>
+           {{-- <pagination total-items="totalItems" ng-model="currentPage"  class="ui pagination menu" items-per-page="itemsPerPage" style="font-size:90%"></pagination> --}}
+
+          </div>
+
+      </form>
+
 </div>
+</div>
+</div>
+
+<div class="col-md-3 contexttuel">
+
+       <div class="ui secondary vertical pointing menu" style="width:100%; font-size:100%;">
+
+           <a ng-href="{{url('/Evaluations') }}" class="item"  style="margin-right:5px" title="Liste">
+              <i class="fa fa-arrow-left" aria-hidden="true"> </i>  retour à la liste d'évaluations
+           </a>
+
+          <a ng-href="/api/v1/download/grades/{{$testid}}/{{$classroomid}}/{{$trimestre}}" class="item" style="margin-right:5px" title=""><i class="fa fa-download" aria-hidden="true"></i>
+            &nbsp;Telecharger la liste
+          </a>
+
+          <button type="button" data-toggle="collapse" data-target="#natte" class="item" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+            &nbsp;Generer la natte de la <span>@{{classroom}}</span>
+          </button>
+
+     </div>
+</div>
+
 @endsection

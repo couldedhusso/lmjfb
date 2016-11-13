@@ -67,7 +67,14 @@ class HomeController extends Controller
     }
 
     public function Evaluations(){
-        return view('Administration.evaluations_panel');
+
+        $classrooms = $this->DBRepository->getClassrooms();
+        $trimestres = $this->DBRepository->getcurrentAYearTrimestres();
+
+        return view('Administration.evaluations_panel', [
+          'classrooms' => $classrooms,
+          'trimestres' => $trimestres
+        ]);
     }
 
 

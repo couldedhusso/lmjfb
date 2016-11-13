@@ -37,11 +37,10 @@
                              &nbsp; liste des enseignants
                            </a>  --}}
 
-
-                           {{-- <button  onclick="event.preventDefault();
+                           <button  onclick="event.preventDefault();
                                 document.getElementById('search-stud').submit()" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Recherche dans la base des élèves">
                                 <i class="fa fa-binoculars" aria-hidden="true"></i>
-                           </button> --}}
+                           </button>
                        </div>
                     </div>
 
@@ -92,8 +91,12 @@
 
                    <div class="ui secondary vertical pointing menu" style="width:100%; font-size:100%;">
 
+                     <a ng-href="{{url('/Eleves') }}" class="item"  style="margin-right:5px" title="Liste">
+                        <i class="fa fa-arrow-left" aria-hidden="true"> </i>  retour à la liste de classes
+                     </a>
+
                      <a ng-href="{{url('api/v1/Student/Liste').'/'.$classroom->id }}" class="item"  style="margin-right:5px" title="Liste">
-                        <i class="fa fa-file-excel-o" aria-hidden="true"> </i>  Importer la liste de classe
+                        <i class="fa fa-file-excel-o" aria-hidden="true"> </i>  Exporter cette liste
                      </a>
                   <div>
             </div>

@@ -123,15 +123,15 @@ class EvaluationsController extends Controller
 
   public function update_mark(Request $request){
       $testid = Input::get('testid');
-      $semestre = Input::get('semestre');
+      $trimestre = Input::get('trimestre');
       $notes = Input::get('notes');
 
       foreach ($notes as $key => $value) {
-            DB::table('courseGrade')
-                      ->where('studentMatricule', $key)
-                      ->where('semestreID', $semestre)
-                      ->where('testID', $testid)
-                      ->update(['Grade' => $value]);
+            DB::table('course_grades')
+                      ->where('student_id', $key)
+                      ->where('trimestre_id', $trimestre)
+                      ->where('test_id', $testid)
+                      ->update(['grade' => $value]);
       }
 
       return redirect('/home');
@@ -140,45 +140,37 @@ class EvaluationsController extends Controller
 
   public function update_student_mark($testid, $classroomid, $trimestreid){
 
-    dd($this->DBRepository->getTestsByClassroom($testid, $classroomid, $trimestreid));
+    $aYear = $this->DBRepository->getcurrentAYear();
 
-    $aYear = $this->getAcademicYear();
-    $semestre = DB::table('Semestre')->where('academicYear', '=',$aYear->academicYear)
-                    ->where('semestreDescription', '=', '1er trimestre')
-                    ->first();
+    session(['key-testid' => $testid,
+                  'key-classe' => $classroomid,
+                  'key-trimestre' => $trimestreid]);
 
-    $eval = DB::table('courseTest')
-    ->join('Classroom', 'courseTest.classRoomID','=','Classroom.classRoomID')
-    ->join('courseGrade', 'courseGrade.testID', '='
-    ,'courseTest.CoursetestID')
-    ->join('Semestre', 'courseGrade.semestreID', '='
-    ,'Semestre.semestreID')
-    ->where('Classroom.classRoomID', $classroomid)
-    ->where('courseTest.CoursetestID', $id)
-    ->where('Semestre.semestreID', $semestre->semestreID)
-    ->select('courseTest.CoursetestID', 'courseGrade.studentMatricule', 'courseGrade.Grade')
-    ->get();
 
-    $currentYearClassroom = DB::table('Classroom')
-                          ->join('Student', 'Classroom.classRoomID', '='
-                          ,'Student.classRoomID')
-                          ->join('Enrollment', 'Enrollment.classRoomID', '=', 'Enrollment.classRoomID')
-                          ->where('Enrollment.academicYear', $aYear->academicYear)
-                          ->where('Classroom.classRoomID', $classroomid)
-                          ->select('Student.*')
-                          ->distinct()->get();
+  $eval = $this->DBRepository->getTestsByClassroom($testid, $classroomid, $trimestreid);
+  // dd($eval);
 
                           // dd($currentYearClassroom);
 
    return view('Administration.update-eval-student', [
-     'testid' => $id,
-     'currentYearClassroom' => $currentYearClassroom,
+     'testid' => $testid,
      'eval' => $eval,
-     'semestre'=> $semestre->semestreID
+     'classroomid' => $classroomid,
+     'trimestre'=> $trimestreid
    ]);
 
-
   }
+
+  public function grades(){
+
+    $testid =  session('key-testid');
+    $classroomid =  session('key-classe');
+    $trimestreid =  session('key-trimestre');
+
+    return json_encode($this->DBRepository->getTestsByClassroom($testid,
+                                             $classroomid, $trimestreid));
+  }
+
 
 
 
@@ -341,6 +333,50 @@ public function getAverageByCourse($classroom, $trimestre){
 
   })->download('xlsx');
 
+}
+
+// TODO : retourne une liste vide
+
+public function downloadGrade($testid, $classroomid, $trimestreid){
+
+    dd($this->DBRepository->getTestCourseById($testid));
+
+
+     $collection = $this->DBRepository
+                        ->getTestsByClassroom($testid, $classroomid, $trimestreid);
+
+
+    dd($collection);
+
+    Excel::create('Notes', function($excel) use($collection) {
+
+        $excel->setTitle('Notes d évaluation');
+        $excel->sheet('Notes', function($sheet) use($collection) {
+        $sheet->fromArray($collection);
+      });
+
+    })->download('xlsx');
+}
+
+
+// public function downloadGrade($testid, $classroomid, $trimestreid){
+//
+//   // $aYear = $this->DBRepository->getcurrentAYear();
+//
+//
+//
+//   $eval = $this->DBRepository->getTestsByClassroom($testid, $classroomid, $trimestreid);
+//   dd($eval);
+//
+//
+// }
+
+
+
+public function getClassroomEvaluations($trimestre, $classroom){
+
+  return json_encode($this->DBRepository
+                     ->getGradesByTrimester($trimestre, $classroom));
 }
 
 

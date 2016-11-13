@@ -13,6 +13,8 @@
 
 // use Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
+
 use App\Semestre;
 use App\Roles;
 use App\Enseingnant;
@@ -287,7 +289,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('get_student/{classromid}/{id}', 'HomeController@get_student');
   Route::post('update_student_info', 'HomeController@update_student_info');
   Route::get('delete_student/{id}', 'HomeController@delete_student');
-  Route::get('update_student_mark/{testid}/{classromid}/{trimestre}', 'EvaluationsController@update_student_mark');
+  Route::get('modifier/note/evaluation/{testid}/{classromid}/{trimestre}', 'EvaluationsController@update_student_mark');
   Route::get('delete_classroom/{id}', 'HomeController@delete_classroom');
 
   Route::post('import-note-d-evaluations', 'EvaluationsController@notesStudents');
@@ -325,6 +327,15 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('/api/v1/eleves', 'HomeController@getEleves');
   Route::get('/api/v1/classe/liste', 'HomeController@getStudentByClassroom');
   Route::get('/api/v1/Student/Liste/{id}', 'StudentController@getStudentListe');
+
+  Route::get('/api/v1/download/grades/{test}/{classroom}/{trimester}', 'EvaluationsController@downloadGrade');
+
+
+  Route::get('/api/v1/grade', 'EvaluationsController@grades');
+
+  // Route::get('/api/v1/evaluations/{classroom}', 'EvaluationsController@getClassroomEvaluations');
+
+  Route::get('/api/v1/evaluations/{trimester}/{classroom}', 'EvaluationsController@getClassroomEvaluations');
 
 
 
