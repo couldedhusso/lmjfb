@@ -139,10 +139,114 @@
         border-color: #e0e0e0;
       }
 
-      /*ui.button, .ui.buttons .button, .ui.buttons .or {
-          font-size: 16px;
-      }*/
-    </style>
+      .android-content{
+        background-color: #F3F3F3;
+      }
+      #view-source {
+        position: fixed;
+        display: block;
+        right: 0;
+        bottom: 0;
+        margin-right: 40px;
+        margin-bottom: 40px;
+        z-index: 900;
+      }
+
+      .mdl-radio__inner-circle {
+        background: #f9ac0e;
+      }
+
+      .mdl-radio.is-checked .mdl-radio__outer-circle {
+        border: 2px solid rgba(0,0,0,.54);;
+      }
+
+      .android-title {
+        color: #f9ac0e;
+        font-weight: bolder;
+      }
+
+      .android-navigation .mdl-navigation__link:hover {
+          color: #f9ac0e;
+          border-bottom: 4px solid #f9ac0e;
+      }
+
+      .mdl-mega-footer--right-section a:hover{
+        color: #f9ac0e;
+      }
+
+      .android-drawer .mdl-layout-title {
+        position: relative;
+        background: #f9ac0e;
+        height: 160px;
+      }
+      .mdl-layout__drawer > .mdl-layout__title,
+      .mdl-layout__drawer > .mdl-layout-title {
+          line-height: 64px;
+          padding-left: 40px;
+          color: #fff;
+      }
+
+      .android-link {
+
+          color: #f9ac0e !important;
+      }
+
+      .mdl-layout__header-row {
+        padding: 0 40px 0 40px;
+     }
+
+     .mdl-layout__header-row {
+      display: -webkit-flex;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+      flex-direction: row;
+      -webkit-flex-wrap: nowrap;
+      -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+      -webkit-flex-shrink: 0;
+      -ms-flex-negative: 0;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      -webkit-align-self: stretch;
+      -ms-flex-item-align: stretch;
+      align-self: stretch;
+      -webkit-align-items: center;
+      -ms-flex-align: center;
+      align-items: center;
+      height: 64px;
+      margin: 0;
+      padding: 0 40px 0 80px;
+      color: #fff;
+  }
+
+    .mdl-layout__header {
+
+        background-color: nonw;
+        color: #fff;
+        box-shadow: 0;
+        transition-duration: .2s;
+        transition-timing-function: cubic-bezier(.4,0,.2,1);
+        transition-property: max-height,box-shadow;
+    }
+
+    .mdl-mega-footer {
+        padding: 16px 40px;
+        color: #9e9e9e;
+        background-color: #424242;
+    }
+
+    /*.devsite-user-avatar, .devsite-user-link, .devsite-user-signin {
+        -ms-flex: 0 0 auto;
+        flex: 0 0 auto;
+    }
+    img, video {
+        border: 0;
+        max-width: 100%;
+    }*/
+
+      </style>
 
     <!-- Scripts -->
     <script>
@@ -161,37 +265,25 @@
     <ul class="dropdown-menu dropdown-menu-right" style="min-width:0; background-color:transparent;">
         <li><a href="#" class="btn btn-danger btn-fab btn-raised"><i class="material-icons">clear</i></a></li>
     </ul> --}}
-    <div class="container">
-      <div class="row">
 
-        {{-- <div class="floating-action-button" data-toggle="modal" data-target="#boxSearch">
-            <div  class="ui vertical orange button " tabindex="0" style="font-size:inherit">
-                <div class="visible content">
-                  <i class="search icon"></i>
+
+    <div class="container-fluid">
+
+          <footer >
+
+              {{-- <div class="mdl-mega-footer--bottom-section">
+
+                <div class="mdl-mega-footer--middle-section">
+                  <p class="mdl-typography--font-light">Lycée Moderne Jeunes Filles Bouaké: © 2016</p>
                 </div>
-            </div>
-        </div> --}}
+              </div> --}}
 
+          </footer>
 
-
-        {{-- <a href="" target="_blank" id="view-source" class="  mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">
-          View Source
-          <span class="mdl-button__ripple-container">
-            <span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);">
-            </span>
-          </span>
-        </a> --}}
-      </div>
-    </div>
-    <footer class="footer">
-          <div class="container">
-
-          </div>
-    </footer>
-
-</div>
-        {{-- <a href="https://github.com/google/material-design-lite/blob/mdl-1.x/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">View Source<span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);"></span></span></a> --}}
-    </div>
+        </div>
+  </div>
+    {{-- <a href="https://github.com/google/material-design-lite/blob/mdl-1.x/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">View Source<span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);"></span></span></a> --}}
+    {{-- </div> --}}
 
 
         <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>

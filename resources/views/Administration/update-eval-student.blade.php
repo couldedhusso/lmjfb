@@ -80,9 +80,9 @@
             &nbsp;Telecharger la liste
           </a>
 
-          <button type="button" data-toggle="collapse" data-target="#natte" class="item" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+          {{-- <button type="button" data-toggle="collapse" data-target="#natte" class="item" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
             &nbsp;Generer la natte de la <span>@{{classroom}}</span>
-          </button>
+          </button> --}}
 
      </div>
 </div>

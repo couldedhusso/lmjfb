@@ -50,57 +50,72 @@ class StudentController extends Controller
     // ISSUE : TlA3 : probleme de matricule : certains eleves ont le meme numero matricule
     //                d'autre se retrouve dans deux classes
 
+
+
       Excel::load('storage/app/listes.xlsx', function($reader)
       {
 
         $reader->formatDates(true, 'd/m/Y');
         $results = $reader->all();
-
         $aYear = $this->DBRepository->getcurrentAYear();
 
-        foreach($results as $sheet)
-        {
-                $classroomname = $sheet->getTitle();
+        $studentCollect = collect([]);
 
-                $classroom = $this->getclassroomByName($classroomname);
+        //  dd(count($results));
 
-                $studEnrol = DB::table('enrollments')
-                      ->where('classroom_id', $classroom->id)->count();
+          for ($i=0; $i < count($results) ; $i++) {
 
-                if ($studEnrol == 0) {
-                    $newStudent = Enrollment::create([
-                        'anneescolaire_id' => $aYear->id,
-                        'classroom_id'  => $classroom->id
-                    ]);
-                }
+            $sheet  =  $results[$i];
 
-             foreach ($sheet as $row) {
+            $classroomname = $sheet->getTitle();
 
-                 $doublant = "Non";
-                 if ($row['red'] == "R"){
-                       $doublant = "Oui";
-                  }
+            if (true) {
 
-                 // save student in db
-                 if ($row['matricule'] != null) {
-                     $stud = [
-                            'student_matricule' => $row['matricule']
-                            ,'classroom_id' => $classroom->id
-                            ,'student_name' => $row['nom']
-                            ,'student_last_name' => $row['prenoms']
-                            ,'student_birthdate' => $row['date_naiss']
-                            ,'student_sexe' => 'F'
-                            ,'student_redoublant' => $doublant
-                      ];
+                  $classroom = $this->getclassroomByName($classroomname);
+                  $classe = $this->DBRepository->getStudentsByClassroom($classroom->id);
 
-                     $newStudent = Student::create($stud);
-               }
+                  if (count($classe) == 0) {
 
-             }
-         }
+                      $studEnrol = DB::table('enrollments')
+                            ->where('classroom_id', $classroom->id)->count();
+
+                      if ($studEnrol == 0) {
+                          $newStudent = Enrollment::create([
+                              'anneescolaire_id' => $aYear->id,
+                              'classroom_id'  => $classroom->id
+                          ]);
+                      }
+
+                      $collection = $sheet->each(function ($item, $key) use($classroom) {
+                            $doublant = "Non";
+                            if ($item['red'] == "R"){
+                                $doublant = "Oui";
+                            }
+
+                            if ($item['matricule'] !== null ){
+
+                              $stud = [
+                                     'student_matricule' => $item['matricule']
+                                     ,'classroom_id' => $classroom->id
+                                     ,'student_name' => $item['nom']
+                                     ,'student_last_name' => $item['prenoms']
+                                     ,'student_birthdate' => $item['date_naiss']
+                                     ,'student_sexe' => 'F'
+                                     ,'student_redoublant' => $doublant
+                               ];
+
+                               $newStudent = Student::create($stud);
+                            }
+                      });
+              }
+
+            }
+
+          }
+
       }, 'UTF-8');
 
-     return redirect('/home');
+      return redirect('/home');
   }
 
     /**
@@ -179,7 +194,6 @@ class StudentController extends Controller
       $studentByclassroom = $this->DBRepository->getStudentsByClassroom($id);
       $studCollect = collect([]);
       foreach ($studentByclassroom as  $value) {
-
             $student = [
               'Matricule'       => $value->student_matricule
               ,'Nom et prenoms' => $value->student_name.' '.$value->student_name

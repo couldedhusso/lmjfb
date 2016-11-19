@@ -1,6 +1,3 @@
-
-@extends('templates.masterpage')
-{{--
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -69,12 +66,12 @@
     </head>
     <body>
         <div class="flex-center position-ref full-height">
-            {{-- @if (Route::has('login'))
+           {{-- @if (Route::has('login'))
                 <div class="links">
                     <a href="{{ url('/login') }}">Login</a>
                     <a href="{{ url('/register') }}">Register</a>
                 </div>
-            @endif 
+            @endif --}}
 
             <div class="content">
                 <div class="title m-b-md">
@@ -95,7 +92,7 @@
             </div>
 
     </body>
-</html> --}}
+</html>
 
 {{-- @section('content')
 
@@ -113,4 +110,4 @@
       </div>
   </div>
 
-@endsection --}}
+@endsection --}} --}}

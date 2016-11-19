@@ -571,9 +571,10 @@ class HomeController extends Controller
 
       $student = Input::get('studentDatas');
       $parent = Input::get('studentRespoDatas');
-      // dd($student);
-      $update_student_info = DB::table('Student')->where('studentMatricule',
-                            $student['studentMatricule'])->update($student);
+    //  dd($student);
+
+      $update_student_info = DB::table('students')->where('student_matricule',
+                            $student['student_matricule'])->update($student);
 
       return redirect()->action('HomeController@index');
     }

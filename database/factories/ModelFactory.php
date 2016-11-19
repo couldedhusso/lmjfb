@@ -11,13 +11,28 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+
+use LMJFB\Entities\User;
+use LMJFB\Entities\Teacher;
+
+$factory->define(\App\User::class, function (Faker\Generator $faker) {
     static $password;
 
     return [
-        'name' => $faker->name,
+        'user_name' => $faker->name,
+        'user_last_name' => $faker->name,
+        'user_contact'  => $faker->e164PhoneNumber,
         'email' => $faker->unique()->safeEmail,
         'password' => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+
+$factory->define(Teacher::class, function (Faker\Generator $faker) {
+    return [
+        'user_id'      => $faker->randomDigit,
+        'course_id'    => $faker->randomDigit,
+        'classroom_id' => $faker->randomDigit,
     ];
 });

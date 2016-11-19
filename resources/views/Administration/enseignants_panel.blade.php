@@ -122,7 +122,7 @@
 
                    <div class="ui secondary vertical pointing menu" style="width:100%; font-size:100%;">
 
-                    <a href="{{url('ajouter-un-professeur')}}" class="item"  title=""><i class="fa fa-plus" aria-hidden="true"></i>
+                    <a href="{{url('Enregistrer/Enseingnant')}}" class="item"  title=""><i class="fa fa-plus" aria-hidden="true"></i>
                       &nbsp;Ajouter un enseingnant
                     </a>
                     <a ng-href='/api/v1/listeProfesseur' class="item" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>

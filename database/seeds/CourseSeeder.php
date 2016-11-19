@@ -53,6 +53,12 @@ class CourseSeeder extends Seeder
               ]);
             }
           }
+          else {
+            DB::table('course_childs')->insert([
+              'course_id' => $key,
+              'label_course' => $value,
+            ]);
+          }
         }
 
 

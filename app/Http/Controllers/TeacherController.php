@@ -110,6 +110,10 @@ class TeacherController extends Controller
           return redirect('/home');
 
       }
+
+
+
+
     /**
      * Store a newly created resource in storage.
      *

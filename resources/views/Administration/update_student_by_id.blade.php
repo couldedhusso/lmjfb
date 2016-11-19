@@ -17,38 +17,38 @@
                  <label>Données de l'élève </label>
                  <div class="fields">
                    <div class="six wide field">
-                     <input name="studentDatas[studentMatricule]" value="{{$student->student_matricule}}" type="text">
+                     <input name="studentDatas[student_matricule]" value="{{$student->student_matricule}}" type="text">
                    </div>
                    <div class="ten wide field">
-                     <input name="studentDatas[studentName]" value="{{$student->student_name}}" type="text">
+                     <input name="studentDatas[student_name]" value="{{$student->student_name}}" type="text">
                    </div>
                  </div>
 
                  <div class="fields">
                    <div class="ten wide field">
-                     <input name="studentDatas[studentLastName]" value="{{$student->student_last_name}}" type="text">
+                     <input name="studentDatas[student_last_name]" value="{{$student->student_last_name}}" type="text">
                    </div>
                    <div class="six wide field">
-                     <input name="studentDatas[studentBirthdate]" value="{{$student->student_birthdate}}" type="text">
+                     <input name="studentDatas[student_birthdate]" value="{{$student->student_birthdate}}" type="text">
                    </div>
                  </div>
                </div>
 
                <div class="fields">
                  <div class="fourteen wide field">
-                   <input name="studentDatas[studentBirthPlace]" value="{{$student->student_birthplace}}" type="text">
+                   <input name="studentDatas[student_birthplace]" value="{{$student->student_birthplace}}" type="text">
                  </div>
                  <div class="two wide field">
-                   <input name="studentDatas[studentSexe]" value="{{$student->student_sexe}}" value="F" type="text">
+                   <input name="studentDatas[student_sexe]" value="{{$student->student_sexe}}" value="F" type="text">
                  </div>
                </div>
 
                <div class="two fields">
                  <div class="field">
-                   <input name="studentDatas[studentRegime]" value="{{$student->student_regime}}" type="text">
+                   <input name="studentDatas[student_regime]" value="{{$student->student_regime}}" type="text">
                  </div>
                  <div class="field">
-                   <select name="studentDatas[studentAffecte]">
+                   <select name="studentDatas[student_affecte]">
                      <option value="">Affecté</option>
                          @if($student->student_affecte == "NON")
                            <option selected="NON" value="NON">
@@ -72,10 +72,10 @@
 
                <div class="fields">
                  <div class="eleven wide field">
-                   <input name="studentDatas[studentInterne]" value="{{$student->student_interne}}" type="text">
+                   <input name="studentDatas[student_interne]" value="{{$student->student_interne}}" type="text">
                  </div>
                  <div class="five wide field">
-                   <select name="studentDatas[studentRedoublant]">
+                   <select name="studentDatas[student_redoublant]">
                        <option value="">Redoublant</option>
 
                        @if($student->student_redoublant == "NON")
@@ -99,7 +99,7 @@
                </div>
 
                <div class="two fields">
-                 <select name="studentDatas[classRoomID]">
+                 <select name="studentDatas[classroom_id]">
                    @foreach($classrooms as $classroom)
                      @if(true)
                        <option selected="{{$classroom->classroom_name}}" value="{{$classroom->id}}">
@@ -120,16 +120,16 @@
                  <div class="two fields">
                    <div class="field">
                      <input type="hidden" name="studentRespoDatas[id]" value="{{$parent->id}}" >
-                     <input name="studentRespoDatas[nom]" value="{{$parent->parent_name}}" type="text">
+                     <input name="studentRespoDatas[parent_name]" value="{{$parent->parent_name}}" type="text">
                    </div>
                    <div class="field">
-                     <input name="studentRespoDatas[prenom]" value="{{$parent->parent_last_name}}" type="text">
+                     <input name="studentRespoDatas[parent_last_name]" value="{{$parent->parent_last_name}}" type="text">
                    </div>
                  </div>
 
                  <div class="two fields">
                    <div class="field">
-                     <input name="studentRespoDatas[contact]" value="{{$parent->parent_telephone}}" type="text">
+                     <input name="studentRespoDatas[parent_telephone]" value="{{$parent->parent_telephone}}" type="text">
                    </div>
                  </div>
 

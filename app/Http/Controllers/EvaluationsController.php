@@ -186,8 +186,7 @@ class EvaluationsController extends Controller
 
       $ar = [];
 
-      $aYear = DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                        ->select('academicYear')->first();
+      $aYear = $this->DBRepository->getcurrentAYear();
 
       foreach($results as $sheet)
       {
@@ -200,18 +199,13 @@ class EvaluationsController extends Controller
                 $note_maximale = $row['note_maximale'];
                 $id_du_prof = $row['id_du_prof'];
 
-                $students = DB::table('Student')->where('classRoomID',
-                                      $this->getclassroomByName($classe)->classRoomID)
-                                    ->select('id', 'studentMatricule')->get();
+                $classe_id = $this->DBRepository->getclassroomByName($classe)->id;
 
-
+                $students = DB::table('students')->where('classroom_id', $classe_id)
+                                      ->select('id', 'student_matricule')->get();
 
                 //recuperation du trimstre en fonction de l'an. scolaire
-                $trimestre = DB::table('Semestre')->join('anneeScolaire',
-                                       'anneeScolaire.academicYear'
-                                        , '=' , 'Semestre.academicYear')
-                                        ->where('semestreDescription',
-                                        $trimestreDescription)->first();
+                $trimestre = $this->DBRepository->getTrimestreByName($trimestreDescription);
 
             }
           } // fin de la fiche d evaluation
@@ -220,13 +214,13 @@ class EvaluationsController extends Controller
             $sheetname = $sheet->getTitle();
 
             $Test = CourseTest::create([
-                'teacherID' => $id_du_prof
-                ,'testName'  => $sheetname
-                ,'testDescription'  => $sheetname
-                ,'maxGradevalue'  => $note_maximale
-                ,'CourseChildID'  => $this->getcoursechildByName($discipline)->CourseChildID
-                ,'semestreID'  => $trimestre->semestreID
-                ,'classRoomID' => $this->getclassroomByName($classe)->classRoomID
+                // 'teacherID' => $id_du_prof
+                // ,'testName'  => $sheetname
+                'test_name'  => $sheetname
+                ,'max_grade_value'  => $note_maximale
+                ,'course_childs_id'  => $this->getcoursechildByName($discipline)->id
+                ,'trimestre_id'  => $trimestre->id
+                ,'classroom_id' => $this->DBRepository->getclassroomByName($classe)->id
             ]);
 
             foreach ($sheet as $row) {
@@ -234,17 +228,18 @@ class EvaluationsController extends Controller
 
               if ($row['matricule'] != "") {
 
-                 $student = DB::table('Student')->where('classRoomID',
-                                      $this->getclassroomByName($classe)->classRoomID)
-                                      ->where('studentMatricule', $row['matricule'])
+                 $classe_id = $this->DBRepository->getclassroomByName($classe)->id;
+
+                 $student = DB::table('students')->where('classroom_id', $classe_id)
+                                      ->where('student_matricule', $row['matricule'])
                                       ->first();
 
                   $grde = [
-                      'studentMatricule' => $row['matricule']
-                      ,'semestreID' => $trimestre->semestreID
-                      ,'TestID' => $Test->id
-                      ,'Grade' => $row['note'] // note obtenu par l eleve xxx
+                      'trimestre_id' => $trimestre->id
+                      ,'test_id' => $Test->id
+                      ,'grade' => $row['note'] // note obtenu par l eleve xxx
                       ,'student_id' => $student->id
+                      ,'appreciation' => '-'
                   ];
 
                  $coursegrade = CourseGrade::create($grde);
@@ -260,6 +255,7 @@ class EvaluationsController extends Controller
     return redirect('/home');
 }
 
+// TODO : refactoriser le code ci-après
 
 public function getAverageByCourse($classroom, $trimestre){
 
@@ -335,7 +331,6 @@ public function getAverageByCourse($classroom, $trimestre){
 
 }
 
-// TODO : retourne une liste vide
 
 public function downloadGrade($testid, $classroomid, $trimestreid){
 
@@ -370,19 +365,6 @@ public function downloadGrade($testid, $classroomid, $trimestreid){
 }
 
 
-// public function downloadGrade($testid, $classroomid, $trimestreid){
-//
-//   // $aYear = $this->DBRepository->getcurrentAYear();
-//
-//
-//
-//   $eval = $this->DBRepository->getTestsByClassroom($testid, $classroomid, $trimestreid);
-//   dd($eval);
-//
-//
-// }
-
-
 
 public function getClassroomEvaluations($trimestre, $classroom){
 
@@ -392,15 +374,15 @@ public function getClassroomEvaluations($trimestre, $classroom){
 
 
 private function getclassroomByName($classroom){
-  return  DB::table('Classroom')
-              ->select('Classroom.classRoomID','Classroom.ClassRoomName')
-              ->where('Classroom.ClassRoomName', $classroom)->first();
+  return  DB::table('classrooms')
+              ->select('classrooms.id','classrooms.classroom_name')
+              ->where('Classroom.classroom_name', $classroom)->first();
 }
 
 private function getcoursechildByName($discipline){
-  return  DB::table('CourseChild')
-              ->select('CourseChild.CourseChildID','CourseChild.courseID')
-              ->where('CourseChild.labelCourse', $discipline)->first();
+  return  DB::table('course_childs')
+              ->select('course_childs.id','course_childs.course_id')
+              ->where('course_childs.label_course', $discipline)->first();
 }
 
 private function getcurrentAYaer(){
@@ -409,8 +391,6 @@ private function getcurrentAYaer(){
                             ->select('academicYear')
                             ->first();
 }
-
-
 
 
 }

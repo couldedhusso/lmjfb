@@ -156,10 +156,10 @@
                      <button type="button" data-toggle="modal" data-target="#studentgrade" class="item" style="margin-right:5px" title=""><i class="fa fa fa-upload" aria-hidden="true"></i>
                       &nbsp;Charger des corrections
                     </button> --}}
-
+{{--
                     <button type="button" data-toggle="collapse" data-target="#natte" class="item" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
                       &nbsp;Generer la natte de la <span>@{{classroom}}</span>
-                    </button>
+                    </button> --}}
 
                     {{-- <div id="natte" class="collapse row" style="margin-left:5px">
                       <div class="col-md-10">
@@ -197,7 +197,7 @@
 
     <!-- Modal content-->
     <div class="modal-content">
-      <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/import-note-d-evaluations')}}" method="POST" enctype="multipart/form-data">
+      <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/api/upload/student/grades')}}" method="POST" enctype="multipart/form-data">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Import des notes d'évluations</h4>
@@ -218,43 +218,3 @@
 
   </div>
 </div>
-
-
-{{-- <div class="col-md-12" style="margin-bottom:10px;">
-  <div>
-      <span class="pull-left" style="font-size:20px;"></span>
-      <div class="btn-group pull-right">
-           <a href="{{url('saisir-les-notes/1')}}" class="btn btn-white-grey btn-sm" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
-             &nbsp;Saisir les notes
-           </a>
-
-           <button type="button" data-toggle="modal" data-target="#studentgrade" class="btn btn-white-grey btn-sm show-modal" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
-             &nbsp;importer les notes
-           </button>
-
-           {{-- <button type="button" class="mdl-button show-modal">Show Modal</button>
-       </div>
-  </div>
-</div> --}}
-
-
-{{--
-@foreach($currentTrimesterEval as $test)
-      <tr class="unread">
-          <td class="">{{$test->classroom_name}}</td>
-          <td >{{$test->max_grade_value}}</td>
-          <td class="actions">
-            <div class="btn-group pull-right">
-
-                 <a href="{{url('update_student_mark').'/'.$test->id.'/'.$test->classroom_id.'/'.$test->trimestre_id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
-                  ><i  class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
-
-                 <a href="{{url('delete_Coursetest').'/'.$test->id}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-
-                          <form id="supprimer-teacher" action="{{ url('/delete-evaluation') }}" method="POST" style="display: none;">
-                              {{ csrf_field() }}
-                          </form>
-             </div>
-          </td>
-        </tr>
-    @endforeach --}}

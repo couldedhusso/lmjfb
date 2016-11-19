@@ -225,7 +225,9 @@ Route::group(['middleware' => 'auth'], function () {
 
   /// url de l espace Admin
 
-  Route::get('ajouter-un-professeur', function () {
+  Route::get('Enregistrer/Enseingnant', function () {
+
+
       $classrooms = DB::select('select * from classrooms');
       $courses = DB::select('select * from courses');
 
@@ -251,7 +253,7 @@ Route::group(['middleware' => 'auth'], function () {
   });
 
 
-  Route::get('ajouter-un-eleve', function () {
+  Route::get('Enregistrer/Eleve', function () {
     //  $idTeacher = Auth::user()->id;
 
 
@@ -292,7 +294,7 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('modifier/note/evaluation/{testid}/{classromid}/{trimestre}', 'EvaluationsController@update_student_mark');
   Route::get('delete_classroom/{id}', 'HomeController@delete_classroom');
 
-  Route::post('import-note-d-evaluations', 'EvaluationsController@notesStudents');
+  Route::post('/api/upload/student/grades', 'EvaluationsController@notesStudents');
 
   Route::get('moyenne/{classromid}/{trimestre}', 'EvaluationsController@getAverageByCourse');
 
@@ -351,15 +353,6 @@ Route::get('/home/ListeEnseignant', 'HomeController@getEnseingnants');
 
 Route::get('/', function () {
 
-      // $listes = Storage::get('/listes.xlsx');
-      // $disk = Storage::disk('local');
-      // dd($disk);
-      // Excel::load('storage/app/listes.xlsx', function($reader) {
-      //
-      //     var_dump($reader);
-      //
-      // });
-
     return view('welcome');
 });
 
@@ -377,75 +370,75 @@ Route::get('dumiesStudents', function(){
 
 
 
-      // $test =  DB::table('course_grades')->where('test_id', 80)->delete();
-      // $test =  DB::table('course_grades')->where('test_id', 63)->delete();
+      $test =  DB::table('classrooms')->where('test_id', 80)->delete();
+      $test =  DB::table('course_grades')->where('test_id', 63)->delete();
       //
       // dd($test);
       // $test =   DB::table('courseTest')->where('semestreID', 1)->delete();
       // dd($test);
 
-      $disciplines = DB::table('course_childs')->get();
-      $faker = Faker\Factory::create();
+      // $disciplines = DB::table('course_childs')->get();
+      // $faker = Faker\Factory::create();
+      // //
+      // $students = DB::table('students')->where('classroom_id',34)->get();
+      // $num = $faker->randomElement([16, 27, 28]);
       //
-      $students = DB::table('students')->where('classroom_id',34)->get();
-      $num = $faker->randomElement([16, 27, 28]);
-
-
-      foreach ($disciplines as $discipline) {
-
-          $num = $faker->randomElement([16, 27, 28]);
-
-          for ($i=0; $i < 2 ; $i++) {
-            $Test = LMJFB\Entities\CourseTest::create([
-                'teacher_id' => $num
-                ,'test_name'  => 'evaluation'.$i+1
-                ,'test_description'  => 'evaluation'.$i
-                ,'max_grade_value'  => 10
-                ,'course_childs_id'  => $discipline->id
-                ,'trimestre_id'  => 1
-                ,'classroom_id' => 34
-            ]);
-
-            foreach ($students as $student) {
-              $grde = [
-                   'trimestre_id' => 1
-                  ,'test_id' => $Test->id
-                  ,'grade' => $faker->biasedNumberBetween($min = 0, $max = 10, $function = 'sqrt')
-                  ,'student_id' => $student->id
-                  ,'appreciation' => '-'
-              ];
-
-             $coursegrade = LMJFB\Entities\CourseGrade::create($grde);
-            }
-
-          }
-
-          for ($i=0; $i < 2 ; $i++) {
-            $Test = LMJFB\Entities\CourseTest::create([
-                'teacher_id' => $num
-                ,'test_name'  => 'evaluation'.$i+1
-                ,'test_description'  => 'evaluation'.$i
-                ,'max_grade_value'  => 20
-                ,'course_childs_id'  => $discipline->id
-                ,'trimestre_id'  => 1
-                ,'classroom_id' => 34
-            ]);
-
-            foreach ($students as $student) {
-              $grde = [
-                  'trimestre_id' => 1
-                  ,'test_id' => $Test->id
-                  ,'grade' => $faker->biasedNumberBetween($min = 0, $max = 20, $function = 'sqrt')
-                  ,'student_id' => $student->id
-                  ,'appreciation' => '-'
-              ];
-
-             $coursegrade = LMJFB\Entities\CourseGrade::create($grde);
-            }
-
-          }
-
-      }
+      //
+      // foreach ($disciplines as $discipline) {
+      //
+      //     $num = $faker->randomElement([16, 27, 28]);
+      //
+      //     for ($i=0; $i < 2 ; $i++) {
+      //       $Test = LMJFB\Entities\CourseTest::create([
+      //           'teacher_id' => $num
+      //           ,'test_name'  => 'evaluation'.$i+1
+      //           ,'test_description'  => 'evaluation'.$i
+      //           ,'max_grade_value'  => 10
+      //           ,'course_childs_id'  => $discipline->id
+      //           ,'trimestre_id'  => 1
+      //           ,'classroom_id' => 34
+      //       ]);
+      //
+      //       foreach ($students as $student) {
+      //         $grde = [
+      //              'trimestre_id' => 1
+      //             ,'test_id' => $Test->id
+      //             ,'grade' => $faker->biasedNumberBetween($min = 0, $max = 10, $function = 'sqrt')
+      //             ,'student_id' => $student->id
+      //             ,'appreciation' => '-'
+      //         ];
+      //
+      //        $coursegrade = LMJFB\Entities\CourseGrade::create($grde);
+      //       }
+      //
+      //     }
+      //
+      //     for ($i=0; $i < 2 ; $i++) {
+      //       $Test = LMJFB\Entities\CourseTest::create([
+      //           'teacher_id' => $num
+      //           ,'test_name'  => 'evaluation'.$i+1
+      //           ,'test_description'  => 'evaluation'.$i
+      //           ,'max_grade_value'  => 20
+      //           ,'course_childs_id'  => $discipline->id
+      //           ,'trimestre_id'  => 1
+      //           ,'classroom_id' => 34
+      //       ]);
+      //
+      //       foreach ($students as $student) {
+      //         $grde = [
+      //             'trimestre_id' => 1
+      //             ,'test_id' => $Test->id
+      //             ,'grade' => $faker->biasedNumberBetween($min = 0, $max = 20, $function = 'sqrt')
+      //             ,'student_id' => $student->id
+      //             ,'appreciation' => '-'
+      //         ];
+      //
+      //        $coursegrade = LMJFB\Entities\CourseGrade::create($grde);
+      //       }
+      //
+      //     }
+      //
+      // }
     //
     //
     //   // //

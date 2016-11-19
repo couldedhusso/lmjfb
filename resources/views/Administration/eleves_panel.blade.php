@@ -98,7 +98,7 @@
 
                    <div class="ui secondary vertical pointing menu" style="width:100%; font-size:100%;">
 
-                     <a href="{{url('ajouter-un-eleve')}}" class="item" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
+                     <a href="{{url('Enregistrer/Eleve')}}" class="item" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
                        &nbsp;Ajouter un élève
                      </a>
                     {{-- <a ng-href='/api/v1/listeProfesseur' class="item" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>

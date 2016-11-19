@@ -16,7 +16,7 @@ class ClassroomSeeder extends Seeder
       $cycle = DB::table('cycles')->where('cycle_classe','6ème')->first();
       $nbrClass = 10;
 
-      for ($i=1; $i <= $nbrClass*2; $i++) {
+      for ($i=1; $i <= $nbrClass; $i++) {
         DB::table('classrooms')->insert([
           'classroom_name' => '6ème'.$i,
           'cycle_id' => $cycle->id

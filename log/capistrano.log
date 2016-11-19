@@ -18626,3 +18626,21 @@ and the repository exists.
   INFO [0cf9ef38] Running /usr/bin/env echo "Branch master (at 28a8ff70aec862f91574aa83f817464ee3990f48) deployed as release 20161024095248 by couldedhusso" >> /home/ubuntu/remote/lmjf/revisions.log as ubuntu@54.209.46.204
  DEBUG [0cf9ef38] Command: cd /home/ubuntu/remote/lmjf/releases && /usr/bin/env echo "Branch master (at 28a8ff70aec862f91574aa83f817464ee3990f48) deployed as release 20161024095248 by couldedhusso" >> /home/ubuntu/remote/lmjf/revisions.log
   INFO [0cf9ef38] Finished in 0.405 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2016-11-14 00:42:13 +0300 cap staging deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [2b59d8fd] Running /usr/bin/env mkdir -p /tmp/lmjf.edu/ as ubuntu@54.209.46.204
+ DEBUG [2b59d8fd] Command: /usr/bin/env mkdir -p /tmp/lmjf.edu/
+  INFO [2b59d8fd] Finished in 4.451 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/lmjf.edu/git-ssh.sh 0.0%
+  INFO Uploading /tmp/lmjf.edu/git-ssh.sh 100.0%
+  INFO [260767b6] Running /usr/bin/env chmod +rx /tmp/lmjf.edu/git-ssh.sh as ubuntu@54.209.46.204
+ DEBUG [260767b6] Command: /usr/bin/env chmod +rx /tmp/lmjf.edu/git-ssh.sh
+  INFO [260767b6] Finished in 0.405 seconds with exit status 0 (successful).
+  INFO [86f472e5] Running /usr/bin/env git ls-remote --heads git@github.com:couldedhusso/lmjfb.edu.git as ubuntu@54.209.46.204
+ DEBUG [86f472e5] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/lmjf.edu/git-ssh.sh" ; /usr/bin/env git ls-remote --heads git@github.com:couldedhusso/lmjfb.edu.git )
+ DEBUG [86f472e5] 	ERROR: Repository not found.
+ DEBUG [86f472e5] 	fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
