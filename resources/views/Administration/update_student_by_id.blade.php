@@ -24,7 +24,7 @@
         <div class="col-md-7">
                <div class="field">
                  <!--<label style="font-size:17px;">Données de l'élève </label>-->
-                 <input type="hidden" name="studentDatas[student_id]" value="{{$student->id}}" type="text">
+                 <input type="hidden" name="studentDatas[id]" value="{{$student->id}}" type="text">
                  <div class="fields">
                    <div class="six wide field">
                      <input name="studentDatas[student_matricule]" value="{{$student->student_matricule}}" type="text">
@@ -109,19 +109,24 @@
                </div>
 
                <div class="two fields">
-                 <select name="studentDatas[classroom_id]">
+
+                
+                 <input name="studentDatas[classroom]" value="{{$classroom_classroom->classroom_name}}" type="text">
+                 
+                 <!--<select name="">
+
                    @foreach($classrooms as $classroom)
-                     @if(true)
-                       <option selected="{{$classroom->classroom_name}}" value="{{$classroom->id}}">
+                     @if($classroom_classroom)
+                       <option selected="{{$classroom_classroom->classroom_name}}" value="{{$classroom_classroom->id}}">
                          {{$classroom->classroom_name}}
                        </option>
-                     {{-- @else
+                     @else
                        <option value="{{$classroom->id}}">
                          {{$classroom->classroom_name}}
-                       </option> --}}
+                       </option> 
                      @endif
 
-                   @endforeach
+                   @endforeach-->
                   </select>
                </div>
                @if($parent != null)

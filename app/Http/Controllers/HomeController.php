@@ -552,6 +552,8 @@ class HomeController extends Controller
         // $aYear = $this->getAcademicYear();
          $student = $this->DBRepository->getStudentById($id);
 
+         $classroom_classroom = $this->DBRepository->getClassroomById($student->classroom_id);
+
          $parent = $this->DBRepository->getStudentByParents($id);
 
          $classroom = $this->DBRepository->getClassrooms();
@@ -560,6 +562,8 @@ class HomeController extends Controller
             'student' => $student
             ,'classrooms' => $classroom
             ,'parent' => $parent
+            ,'classroom_classroom' => $classroom_classroom
+              
       ]);
     }
 
@@ -567,10 +571,30 @@ class HomeController extends Controller
 
       $student = Input::get('studentDatas');
       $parent = Input::get('studentRespoDatas');
-    //  dd($student);
 
-      $update_student_info = DB::table('students')->where('student_matricule',
-                            $student['student_matricule'])->update($student);
+      $classrom_id =  $this->DBRepository->getClassroomByName($student["classroom"]);
+
+
+       $infos =[
+          "id" => $student["id"]
+          ,"student_matricule" => $student["student_matricule"]
+          ,"student_name" => $student["student_name"]
+          ,"student_last_name" =>$student["student_last_name"]
+          ,"student_birthdate" =>$student["student_birthdate"]
+          ,"student_birthplace" =>$student["student_birthplace"]
+          ,"student_sexe" =>$student["student_sexe"]
+          ,"student_regime" =>$student[ "student_regime"]
+          ,"student_affecte" =>$student["student_affecte"]
+          ,"student_interne" =>$student["student_redoublant"]
+          ,"student_redoublant" =>$student["student_redoublant"]
+          ,"classroom_id" => $classrom_id->id
+        ];
+
+   
+
+      $update_student_info = DB::table('students')->where('id',
+                            $student['id'])->update($infos);
+                          
 
       return redirect()->action('HomeController@index');
     }

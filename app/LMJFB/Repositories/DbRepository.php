@@ -275,6 +275,17 @@ abstract class DbRepository
            ->select('classrooms.*')->first();
    }
 
+   public function  getClassroomById($id){
+
+     $aYear = $this->getcurrentAYear();
+
+     return DB::table('classrooms') ->join('cycles', 'cycles.id', '='
+           ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
+           ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
+           ->where('classrooms.id', $id)
+           ->select('classrooms.*')->first();
+   }
+
    public function ispprincipal($id, $action){
 
       $teacher = DB::table('teachers')->where('user_id', $id) ;
