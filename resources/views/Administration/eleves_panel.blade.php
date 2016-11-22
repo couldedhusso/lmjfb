@@ -6,7 +6,9 @@
           <a href="{{url('/Enseingnants')}}" class="mdl-tabs__tab  header">Enseignants</a>
           <a href="{{url('/Eleves')}}" class="mdl-tabs__tab  header active">Elèves</a>
           <a href="{{url('/Evaluations')}}" class="mdl-tabs__tab  header">Evaluations</a>
+          <!--<a href="{{url('#')}}" class="mdl-tabs__tab  header">Bulletins de notes</a>-->
       </div>
+         
       <div class="row">
           <div class="mdl-tabs__panel is-active" id="enseignants-panel" ng-controller="StudentsController">
             <br>
@@ -88,8 +90,7 @@
                  </tbody>
               </table>
 
-              <pagination total-items="totalItems" ng-model="currentPage"  class="ui pagination menu" items-per-page="itemsPerPage" style="font-size:90%"></pagination>
-
+              <pagination total-items="totalClasse" ng-model="currentPage"  class="ui pagination menu" items-per-page="itemsPerPage" style="font-size:90%"></pagination>
 
               </div>
 

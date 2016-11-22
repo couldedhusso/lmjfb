@@ -64,8 +64,9 @@ class TeacherController extends Controller
 
           $reqdata = Input::except('ClassRoomID' ,'CourseID', 'name', '_token');
           $reqDataClassroom = Input::get('ClassRoomID');
-          $reqDataCourse = Input::get('CourseID');
+          $reqDataCourse = Input::get('course_id');
           $pp = Input::get('prof_principal');
+          // dd($reqdata);
 
           if ($reqdata['teacherEmail'] == "") {
              $email = $reqdata['teacherFirstName'].$reqdata['teacherLastName'].'@lmjf.com';
@@ -81,15 +82,19 @@ class TeacherController extends Controller
               'password' => bcrypt('lmjf'),
           ]);
 
+
           // grant Enseingnant role to user
           $user->roles()->attach(1);
+
+          foreach ($reqDataCourse as $course_id) {
+                 $user->courses()->attach($course_id);
+          }
 
           // mettre à jour la table Enseingnant
           foreach ($reqDataClassroom as $value) {
 
               $teacher = Teacher::create([
                  'user_id' => $user->id,
-                 'course_id' => $reqDataCourse,
                  'classroom_id' => $value,
                  'prof_principal' => $pp
              ]);
@@ -175,6 +180,8 @@ class TeacherController extends Controller
 
         $enseignantsCollect = [];
         $enseignants = $this->DBRepository->getTeachersByClassroomAndCourses();
+
+      //  dd($enseignants);
 
         foreach ($enseignants as $value) {
 

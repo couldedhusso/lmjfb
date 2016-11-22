@@ -196,7 +196,7 @@ class StudentController extends Controller
       foreach ($studentByclassroom as  $value) {
             $student = [
               'Matricule'       => $value->student_matricule
-              ,'Nom et prenoms' => $value->student_name.' '.$value->student_name
+              ,'Nom et prenoms' => $value->student_name.' '.$value->student_last_name
               ,'Date de naiss'  => $value->student_birthdate
               ,'Redoublant(e)'  => $value->student_redoublant
             ];

@@ -17,11 +17,12 @@
         <img class="ui small image" src="{{asset('img/Add_user_avatar.png')}}" id="divUpload" style="cursor:pointer; border:1px dashed">
      <input type="file" name="avatar" id="hidde-new-file" style="display: none">
     </div> --}}
-  <div class="col-md-7 col-sm-10">
+  <div class="col-md-7 col-sm-10" style="font-size:16px;">
+
+   <h3 class="ui dividing header" style="font-size:16px;">DONNEES DE L'ELEVE  </h3>
 
          <input type="hidden" name="studentDatas[anneeScolaire]" value="{{$aYear->academic_year}}">
          <div class="field">
-           <label>Données de l'élève </label>
            <div class="fields">
              <div class="six wide field">
                <input name="studentDatas[matricule]" placeholder="Matricule" type="text">
@@ -56,7 +57,7 @@
            </div>
            <div class="field">
              <select name="studentDatas[affecte]">
-               <option value="">Affecté</option>
+               <option value="">Affecté(e)</option>
                    <option value="NON">
                      NON
                    </option>
@@ -94,7 +95,10 @@
             </select>
          </div>
 
-          <h4 class="ui dividing header">Références du parent d'élève</h4>
+          <br>
+          <h3 class="ui dividing header" style="font-size:16px;">REFERENCES DU PARENT D'ELEVE </h3>
+
+          <!--<h4 class="ui dividing header">Références du parent d'élève</h4>-->
 
           <div class="two fields">
             <div class="field">
@@ -111,9 +115,14 @@
             </div>
           </div>
 
-         <div class="field">
-            <input class="ui primary button right floated" type="submit" name="name" value="Poster le formulaire">
-         </div>
+         <br><br>
+               <div class="btn-group pull-right">
+                  <input class="btn btn-primary" type="submit" name="name" value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+                  
+                 <a class="btn btn-warning" href="{{url('/home')}}" class="item" style="margin-right:5px" title="" style="font-weight:bold;">
+                       &nbsp;Annuler
+                  </a>
+               </div>
          <br><br>
 </div><!-- /.col-md-9 -->
 

@@ -47,7 +47,7 @@
                   </nav> --}}
 
                 <!-- Right Side Of Navbar -->
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right android-header">
                     <!-- Authentication Links -->
                     @if (Auth::guest())
                         <li><a  class="mdl-navigation__link mdl-typography--text-uppercase" href="{{ url('/login') }}">Se connecter</a></li>

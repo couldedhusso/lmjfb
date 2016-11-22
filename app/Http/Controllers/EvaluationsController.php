@@ -60,7 +60,6 @@ class EvaluationsController extends Controller
       );
 
       // dd($reqDataClassroom);
-
       // // add teacher to db
       $newTest = CoursTest::create($courseTest);
 
@@ -95,9 +94,6 @@ class EvaluationsController extends Controller
                               ->where('Student.classRoomID', $reqData['classroom'])
                               ->select('Classroom.ClassRoomName', 'Classroom.classRoomID', 'Student.*')
                               ->distinct()->get();
-
-
-
 
 
       for ($i=0; $i < $currentYearClassroom->count() ; $i++) {

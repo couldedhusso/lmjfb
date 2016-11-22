@@ -23,33 +23,87 @@ abstract class DbRepository
 
    }
 
+   /// ==== TODO : prevoir le cas des enseignants de l annee encours
+
+   public function getEnseignants(){
+      return DB::table('users')->join('course_user','course_user.user_id', '=', 'users.id')
+                               ->join('courses','course_user.course_id', '=', 'courses.id')
+                               ->select('users.id','users.user_name', 'users.user_contact',
+                                         'users.user_last_name', 'courses.course_name'
+                               )->get();
+
+                               
+   }
+
+   public function getCourseByTeacherId($id){
+      return DB::table('users')->join('course_user','course_user.user_id', '=', 'users.id')
+                               ->join('courses','course_user.course_id', '=', 'courses.id')
+                               ->where('course_user.user_id', $id)
+                               ->select('users.id','users.user_name', 'users.user_contact',
+                                         'users.user_last_name', 'courses.course_name', 'courses.id as courseid'
+                               )->get();
+
+                               
+   }
+
    public function getTeachers(){
 
-     return DB::table('courses') ->join('teachers', 'courses.id', '='
+
+
+      $teachers = DB::table('courses')->join('teachers', 'courses.id', '='
            ,'teachers.course_id')->join('users', 'users.id', '='
            ,'teachers.user_id')->join('classrooms', 'classrooms.id', '='
            ,'teachers.classroom_id')
            ->select('users.id','users.user_name', 'users.user_contact',
            'users.user_last_name', 'courses.course_name', 'classrooms.classroom_name')
            ->distinct()->get();
+
+           $id = [];
+           $teacherCollect = collect([]);
+
+           foreach ($teachers as $teacher) {
+             if (!in_array($teacher->id, $id)) {
+                array_push($id, $teacher->id);
+                $teacherCollect->push([
+                    'id' => $teacher->id,
+                    'user_name'=> $teacher->user_name,
+                    'user_contact'=> $teacher->user_contact,
+                    'user_last_name'=> $teacher->user_last_name,
+                    'course_name'=> $teacher->course_name,
+                    'classroom_name'=> $teacher->classroom_name
+                  ]);
+             }
+           }
+
+          // dd($teacherCollect);
+            return $teacherCollect;
    }
 
 
       public function getTeachersByClassroomAndCourses(){
 
-        return DB::table('courses')->join('course_childs', 'courses.id', '='
-              ,'course_childs.course_id')->join('teachers', 'courses.id', '='
-              ,'teachers.course_id')->join('users', 'users.id', '='
-              ,'teachers.user_id')->join('classrooms', 'classrooms.id', '='
-              ,'teachers.classroom_id')
-              ->select(
-                        'users.id',
-                        'users.user_name',
-                        'users.user_contact',
-                        'users.user_last_name',
-                        'course_childs.label_course',
-                        'classrooms.classroom_name'
-            )->distinct()->get();
+        // Tous les profs de l année académiques encours
+
+         $aYear = $this->getcurrentAYear();
+
+         $teachers = DB::table('users')->join('course_user','course_user.user_id', '=', 'users.id')
+                                    ->join('courses','course_user.course_id', '=', 'courses.id')
+                                    ->join('course_childs', 'courses.id', '=' ,'course_childs.course_id')
+                                    ->join('teachers', 'users.id', '=','teachers.user_id')
+                                    ->join('classrooms', 'classrooms.id', '=' ,'teachers.classroom_id')
+                                    ->join('enrollments', 'enrollments.classroom_id' ,'=', 'classrooms.id')
+                                    ->where('enrollments.anneescolaire_id', $aYear->id)
+
+                                    ->select(
+                                              'users.id',
+                                              'users.user_name',
+                                              'users.user_contact',
+                                              'users.user_last_name',
+                                              'course_childs.label_course',
+                                              'classrooms.classroom_name'
+                                    )->get();
+
+            return $teachers ;
       }
 
    public function getStudents(){
@@ -106,9 +160,10 @@ abstract class DbRepository
 
      return DB::table('courses') ->join('teachers', 'courses.id', '='
            ,'teachers.course_id')->join('users', 'users.id', '='
-           ,'teachers.user_id')->select('users.*', 'courses.course_name')
+           ,'teachers.user_id')->select('users.*', 'courses.course_name', 'courses.id as course')
            ->distinct()->get();
    }
+
 
    public function getTeachersByClassroom(){
 
@@ -117,6 +172,18 @@ abstract class DbRepository
         return DB::table('classrooms')->join('teachers', 'classrooms.id', '='
                  ,'teachers.classroom_id')->join('enrollments', 'enrollments.classroom_id'
                  ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
+                 ->select('classrooms.*')
+                 ->get();
+   }
+
+   public function getTeachersClassroom($id){
+
+        $aYear = $this->getcurrentAYear();
+
+        return DB::table('classrooms')->join('teachers', 'classrooms.id', '='
+                 ,'teachers.classroom_id')->join('enrollments', 'enrollments.classroom_id'
+                 ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
+                 ->where('teachers.user_id', $id)
                  ->select('classrooms.*')
                  ->get();
    }
@@ -130,6 +197,20 @@ abstract class DbRepository
            ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
            ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
            ->select('classrooms.*', 'enrollments.classroom_id', 'cycles.*')->get();
+   }
+
+
+   public function  getProfprincipalClassrooms($id){
+
+     $aYear = $this->getcurrentAYear();
+
+     return DB::table('classrooms') ->join('cycles', 'cycles.id', '='
+           ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
+           ,'=', 'classrooms.id')->join('classes_pp', 'classrooms.id' ,'=', 'classes_pp.classroom_id')
+            ->where('enrollments.anneescolaire_id', $aYear->id)
+            ->where('classes_pp.teacher_id', $id)
+            ->select('classrooms.*', 'enrollments.classroom_id', 'cycles.*')
+            ->distinct()->get();
    }
 
 

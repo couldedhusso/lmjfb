@@ -40,18 +40,15 @@ class Course extends Model
     //   return $this->belongTo('LMJFB\Entities\Cycle', );
     // }
 
-    public function coursechild()
+    // public function coursechild()
+    // {
+    //   return $this->hasMany('LMJFB\Entities\CourseChild');
+    // }
+
+    public function user()
     {
-      return $this->hasMany('LMJFB\Entities\CourseChild');
+        return $this->belongsTo("LMJFB\Entities\User");
     }
-
-    public function teacher()
-    {
-      return $this->hasMany('LMJFB\Entities\Teacher');
-    }
-
-
-
 
 
 }

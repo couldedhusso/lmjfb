@@ -3,7 +3,7 @@
 @section('section-content')
 
   <div class="container">
-    <div class="row">
+    <div class="row"  style="font-size:16px;">
 
       <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/addTeacher')}}" method="POST" enctype="multipart/form-data">
     <section id="my-properties">
@@ -13,11 +13,16 @@
             <img class="ui small image" src="{{asset('img/users.png')}}" id="divUpload" style="cursor:pointer; border:1px dashed">
          <input type="file" name="avatar" id="hidde-new-file" style="display: none">
         </div> --}}
+
+         
           <div class="col-md-7 col-sm-10">
             {{ csrf_field() }}
 
+             <h3 class="ui dividing header" style="font-size:16px;">DONNEES PERSONNELLES</h3>
+
+
              <div class="field">
-               <label>Nom & Prenoms </label>
+               <label>Nom et prenoms </label>
                <div class="two fields">
                  <div class="field">
                    <input name="teacherFirstName" placeholder="Nom" type="text">
@@ -50,12 +55,14 @@
                  </div>
                </div>
              </div> --}}
+             <br>
 
+            <h3 class="ui dividing header" style="font-size:16px;">DISCIPLINES</h3>
+           
              <div class="field">
                <div class="fields">
-                 <div class="eight wide field">
-                   <label>Discipline enseignée</label>
-                   <select name="CourseID">
+                 <div class="sixteen wide field">
+                   <select name="course_id[]" multiple>
                      @foreach($courses as $course)
                          <option value="{{$course->id}}">
                            {{$course->course_name}}
@@ -64,8 +71,18 @@
                     </select>
                  </div>
 
-                 <div  class="eight wide field">
-                   <label>Classes</label>
+               </div>
+             </div>
+
+
+            <br>
+
+            <h3 class="ui dividing header" style="font-size:16px;">CLASSES</h3>
+            
+
+             <div class="field">
+               <div class="fields">
+                 <div  class="sixteen wide field">
                    <select name="ClassRoomID[]" multiple>
                      @foreach($classrooms as $classroom)
                          <option value="{{$classroom->id}}">
@@ -81,9 +98,14 @@
                   <a  class="ui button active" href="#pp" class="btn btn-info" data-toggle="collapse">Est il professeur principal ?</a>
              </div> --}}
 
-             <div class="field">
+              <br>
+
+            <h3 class="ui dividing header" style="font-size:16px;">CLASSE(S) DU PROFESSEUR PRINCIPAL</h3>
+
+
+             <!--<div class="field">
                   <label>Professeur principal</label>
-             </div>
+             </div>-->
 
              <div class="field">
                <div class="field">
@@ -92,29 +114,42 @@
                      <label></label>
                    </div> --}}
 
-
-
-                  <div class="radio">
-                    <label><input type="radio" value="1" name="prof_principal">Oui</label>
-                  </div>
-                  <div class="radio">
-                    <label><input type="radio" value="0" name="prof_principal">Non</label>
+                  <div class="inline">
+                    <label>Le professeur est il professeur principal ?</label>
                   </div>
 
+                  <div class="radio-inline">
+                    <label><input type="radio" value="1" name="prof_principal" ng-model="classepp">Oui</label>
                   </div>
-                  <label>Selectionner ses classes</label>
-                  <select name="ClassRoomID-pp[]" multiple>
-                    @foreach($classrooms as $classroom)
-                        <option value="{{$classroom->id}}">
-                          {{$classroom->classroom_name}}
-                        </option>
-                    @endforeach
-                   </select>
+                  <div class="radio-inline">
+                    <label><input type="radio" value="0" name="prof_principal" ng-model="classepp">Non</label>
+                  </div>
+
+                  </div>
+
+                  <div ng-show="classepp == '1'">
+
+                    <label>Selectionner ses classes</label>
+                    <select name="ClassRoomID-pp[]" multiple>
+                      @foreach($classrooms as $classroom)
+                          <option value="{{$classroom->id}}">
+                            {{$classroom->classroom_name}}
+                          </option>
+                      @endforeach
+                    </select>
+                  
+                  </div>
+                  
              </div>
 
-             <div class="field">
-                <input class="android-link mdl-button mdl-js-button mdl-typography--text-uppercase pull-right" type="submit" name="name" value="Poster le formulaire">
-             </div>
+            <br><br>
+               <div class="btn-group pull-right">
+                  <input class="btn btn-primary" type="submit" name="name" value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+                  
+                 <a class="btn btn-warning" href="{{url('/home')}}" class="item" style="margin-right:5px" title="" style="font-weight:bold;">
+                       &nbsp;Annuler
+                  </a>
+               </div>
 
     </div><!-- /.col-md-9 -->
 

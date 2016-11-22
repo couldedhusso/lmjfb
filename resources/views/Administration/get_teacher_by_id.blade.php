@@ -2,7 +2,7 @@
 
 @section('section-content')
   <div class="container">
-    <div class="row">
+    <div class="row" style="font-size:16px;">
 
       <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/teacherUpdate')}}" method="POST" enctype="multipart/form-data">
           <section id="my-properties">
@@ -13,8 +13,12 @@
                   <div class="col-md-7 col-sm-10">
                     {{ csrf_field() }}
 
+
+                    <h3 class="ui dividing header" style="font-size:16px;">DONNEES PERSONNELLES </h3>
+                    <br>
+                     
                      <div class="field">
-                       <label>Nom & Prenoms </label>
+                       <label>Nom et prenoms </label>
                        <div class="two fields">
                             <div class="field">
                               <input name="users[user_name]" value="{{$user->user_name}}" type="text">
@@ -35,15 +39,62 @@
                                </div>
                        </div>
                      </div>
+                     <br>
 
-                     <h4 class="ui dividing header">Classes </h4>
-                     <div class="field">
 
-                       <table class="ui table">
+                      <h3 class="ui dividing header" style="font-size:16px;">DISCIPLINE(S) </h3>
+                     
+ 
+                     <div class="field" style="font-size:17px;">
+                      <!--<h4 class="ui dividing header">Classes </h4>-->
+
+                       <table >
+
+                         <tbody>
+                               @foreach($teacher_courses as $tcourses)
+                                <tr>
+                                      <td>
+                                        <div class="checkbox">
+                                         <label><input type="checkbox" name="deletecourse[]" value="{{$tcourses->courseid}}">
+                                           Selectionner  {{$tcourses->course_name }} afin de la retirer  </label>
+                                       </div>
+                                      </td>
+                                </tr>
+                              @endforeach
+                        </tbody>
+                     </table>
+
+                     </div>
+
+                       <div class="field">
+                   <div class="fields">
+
+                     <div class="sixteen wide field">
+                       <label> Ajouter de nouvelles discplines </label>
+                       <select name="addcourse[]" multiple>
+                         @foreach($courses as $course)
+                             <option value="{{$course->id}}">
+                               {{$course->course_name}}
+                             </option>
+                         @endforeach
+                        </select>
+                     </div>
+
+                   </div>
+                 </div>
+
+                      
+                     <h3 class="ui dividing header" style="font-size:16px;">CLASSE(S) </h3>
+                     
+ 
+                     <div class="field" style="font-size:17px;">
+                      <!--<h4 class="ui dividing header">Classes </h4>-->
+
+                       <table >
 
                          <tbody>
                                @foreach($teacher_classroom as $tclassrooms)
-                                <tr class="unread">
+                                <tr>
                                       <td style="width:30%">{{$tclassrooms->classroom_name}}</td>
                                       <td style="width:60%; padding-right:10px;">
                                         <div class="checkbox pull-right">
@@ -61,7 +112,7 @@
                  <div class="field">
                    <div class="fields">
 
-                     <div class="eight wide field">
+                     <div class="sixteen wide field">
                        <label> Ajouter de nouvelles classes </label>
                        <select name="addclassroom[]" multiple>
                          @foreach($classrooms as $classroom)
@@ -75,22 +126,24 @@
                    </div>
                  </div>
 
-                  <h4 class="ui dividing header">Professeur principal</h4>
+                  <!--<h4 class="ui dividing header">Professeur principal</h4>-->
 
                    @if($isProfprinc)
+                     <br>
+
+                     <h3 class="ui dividing header" style="font-size:16px;">CLASSE(S) DU PROFESSEUR PRINCIPAL</h3>
                      {{-- <input type="hidden" name="pp_new[pp_count]" value="{{$isProfprinc}}"> --}}
 
                      <div class="field">
-                        <table class="ui table">
+                        <table>
                          <tbody>
                                @foreach($prof_pricinpal as $ppclassrooms)
-                                <tr class="unread">
-                                      <td style="width:30%">{{$ppclassrooms->classroom_name}}</td>
-                                      <td style="width:60%; padding-right:10px;">
-                                        <div class="checkbox pull-right">
+                                <tr>
+                                      <td>
+                                        <div class="checkbox">
                                          <label><input type="checkbox" name="deleteclassroompp[]" value="{{$ppclassrooms->id}}">
-                                           Selectionner la {{$ppclassrooms->classroom_name }} pour la supprimer </label>
-                                       </div>
+                                           Selectionner la {{$ppclassrooms->classroom_name }} afin de la retirer de sa liste de classes </label>
+                                        </div>
                                       </td>
                                 </tr>
                               @endforeach
@@ -101,7 +154,7 @@
 
                      <div class="field">
                        <div class="fields">
-                         <div class="eight wide field">
+                         <div class="sixteen wide field">
                            <label>Ajouter de nouvelles classes</label>
                            <select name="addclassroompp[]" multiple>
                              @foreach($classrooms as $classroom)
@@ -118,7 +171,7 @@
                    @else
 
                      <div class="field">
-                          <a  class="ui button active" href="#pp" class="btn btn-info" data-toggle="collapse">Est il professeur principal ?</a>
+                          <a  class="ui button active" href="#pp" class="btn btn-info" data-toggle="collapse" style="font-size:16px;">Est il professeur principal ?</a>
                      </div>
 
                      <div id="pp" class="field collapse">
@@ -146,10 +199,18 @@
                            </select>
                      </div>
                    @endif
-                   <div class="field">
-                      <input class="ui primary button right floated" type="submit" name="name" value="Poster le formulaire">
-                   </div>
-                =</div><!-- /.col-md-9 -->
+
+                   <br>
+
+                    <div class="btn-group pull-right">
+                      <input class="btn btn-primary" type="submit" name="name" value="Poster les modifications" style="margin-right:5px;font-weight:bold;">
+                      <!--<input class="btn btn-warning" type="submit" name="name" value="Annuler" style="font-weight:bold;">-->
+
+                      <a class="btn btn-warning" href="{{url('/home')}}" class="item" style="margin-right:5px" title="" style="font-weight:bold;">
+                       &nbsp;Annuler
+                     </a>
+                  </div>
+                </div><!-- /.col-md-9 -->
         </div><!-- /.my-properties -->
         <!-- end My Properties -->
         </section><!-- /#my-properties -->

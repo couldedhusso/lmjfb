@@ -6,6 +6,7 @@
           <a href="{{url('/Enseingnants')}}" class="mdl-tabs__tab  header active">Enseignants</a>
           <a href="{{url('/Eleves')}}" class="mdl-tabs__tab  header">Elèves</a>
           <a href="{{url('/Evaluations')}}" class="mdl-tabs__tab  header">Evaluations</a>
+          <!--<a href="{{url('#')}}" class="mdl-tabs__tab  header">Bulletins de notes</a>-->
       </div>
       <div class="row">
           <div class="mdl-tabs__panel is-active" id="enseignants-panel" ng-controller="EnseingnantController">
@@ -16,7 +17,8 @@
               modal qui permet de modifier les infos du prof sur la meme page etc
               exporter les nattes et les notes d' une classe ...
 
-              TODO : Elèves :  Lier les students aux  classes, aux cycle et etc ...  faire une bare de recherche unique -> saisir la disciple ou la classe
+              TODO : Elèves :  Lier les students aux  classes, aux cycle et etc ... 
+               faire une bare de recherche unique -> saisir la disciple ou la classe
               modal qui permet de modifier les infos de l élève sur la meme page etc
               afficher les graphes(soon) ...
 
@@ -43,16 +45,19 @@
                         </form> --}}
 
 
-                           {{-- <a href="{{url('ajouter-un-professeur')}}" class="btn btn-white-grey btn-sm" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
+                           {{-- <a href="{{url('ajouter-un-professeur')}}" class="btn btn-white-grey btn-sm" style="margin-right:5px" 
+                               title=""><i class="fa fa-plus" aria-hidden="true"></i>
                              &nbsp;Ajouter un enseingnant
                            </a> --}}
 
-                           {{-- <a href="{{url('ajouter-un-professeur')}}" class="btn btn-white-green btn-sm" style="margin-right:5px" title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                           {{-- <a href="{{url('ajouter-un-professeur')}}" class="btn btn-white-green btn-sm" style="margin-right:5px" 
+                           title=""><i class="fa fa-file-excel-o" aria-hidden="true"></i>
                              &nbsp; liste des enseignants
                            </a>  --}}
 
                            <button onclick="event.preventDefault();
-                                     document.getElementById('search-teacher').submit()" class="btn btn-white-grey btn-sm" title="Recherche dans la base des professeurs"><i class="fa fa-binoculars"></i>
+                                     document.getElementById('search-teacher').submit()" class="btn btn-white-grey btn-sm" 
+                                     title="Recherche dans la base des professeurs"><i class="fa fa-binoculars"></i>
                            </button>
                        </div>
                     </div>
@@ -94,16 +99,20 @@
                                       document.getElementById('modifier-teacher').submit();" --}}
 
                               <a > </a>
-                                <a ng-href="update_teacher_info/@{{teacher.id}}" class="btn btn-white-grey btn-sm"  style="margin-right:5px" title="Modifier"
-                                 ><i  class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
+                                <a ng-href="update_teacher_info/@{{teacher.id}}" class="btn btn-white-grey btn-sm"  
+                                  style="margin-right:5px" title="Modifier"
+                                 ><i  class="fa fa-pencil" aria-hidden="true"></i></a>
 
-                                <a ng-href="delete_teacher/@{{teacher.id}}" class="btn btn-white-red btn-sm" title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <a ng-href="delete_teacher/@{{teacher.id}}" class="btn btn-white-red btn-sm" 
+                                           title="Supprimer"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 
-                                         {{-- <form id="supprimer-teacher" action="{{ url('/delete-teacher') }}" method="POST" style="display: none;">
+                                         {{-- <form id="supprimer-teacher" action="{{ url('/delete-teacher') }}" method="POST" 
+                                         style="display: none;">
                                              {{ csrf_field() }}
                                              <input type="hidden" name="teacher_id" value="{{$teacher->id}}">
                                          </form> --}}
-                                {{-- <a href="{{url('notes-des-evalautions')}}" class="btn btn-white-grey btn-sm" title="Saisir les notes"><i class="fa fa-plus"></i></a> --}}
+                                {{-- <a href="{{url('notes-des-evalautions')}}" class="btn btn-white-grey btn-sm" 
+                                title="Saisir les notes"><i class="fa fa-plus"></i></a> --}}
                             </div>
                          </td>
                        </tr>
@@ -112,7 +121,8 @@
                 {{-- @endif --}}
               </table>
 
-              <pagination total-items="totalItems" ng-model="currentPage"  class="ui pagination menu" items-per-page="itemsPerPage" style="font-size:90%"></pagination>
+              <pagination total-items="totalItems" ng-model="currentPage"  
+                    class="ui pagination menu" items-per-page="itemsPerPage" style="font-size:90%"></pagination>
 
 
               </div>
@@ -152,5 +162,4 @@
 
      </div>
 </div>
-
 @endsection

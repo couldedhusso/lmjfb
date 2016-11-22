@@ -1,0 +1,17 @@
+{
+  "name": "angular-material",
+  "homepage": "https://github.com/couldedhusso/lmjfb",
+  "authors": [
+    "couldedhusso <husseincoulibaly@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

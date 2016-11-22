@@ -20,6 +20,7 @@ use App\Roles;
 use App\Enseingnant;
 use Maatwebsite\Excel\Facades\Excel;
 
+
 Route::group(['middleware' => 'auth'], function () {
 
   ////=========== espace prof.
@@ -276,6 +277,8 @@ Route::group(['middleware' => 'auth'], function () {
 
   Route::get('saisir-les-notes/{step}', 'HomeController@saisie_note');
 
+  // Route::get('profs', 'HomeController@profs');
+
 
   // mes post
   Route::post('update_teacher_data', function(){
@@ -299,8 +302,8 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('moyenne/{classromid}/{trimestre}', 'EvaluationsController@getAverageByCourse');
 
 
-  Route::get('delete_Coursetest/{id}', function($id){
-      $deltest = DB::table('courseTest')->where('CoursetestID', $id)->delete();
+  Route::get('/api/delete/{id}', function($id){
+      $deltest = DB::table('tests')->where('id', $id)->delete();
       return redirect()->action('HomeController@index');
   });
 
@@ -369,9 +372,13 @@ Route::get('dumiesStudents', function(){
     //  $test =  DB::table('tests')->where('trimestre_id', 1)->delete();
 
 
+    // ALTER TABLE `dblmjfb`.`teachers` 
+    // CHANGE COLUMN `course_id` `course_id` INT(10) NULL ;
 
-      $test =  DB::table('classrooms')->where('test_id', 80)->delete();
-      $test =  DB::table('course_grades')->where('test_id', 63)->delete();
+
+
+    //   $test =  DB::table('classrooms')->where('test_id', 80)->delete();
+    //   $test =  DB::table('course_grades')->where('test_id', 63)->delete();
       //
       // dd($test);
       // $test =   DB::table('courseTest')->where('semestreID', 1)->delete();

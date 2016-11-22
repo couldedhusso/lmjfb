@@ -6,6 +6,7 @@
           <a href="{{url('/Enseingnants')}}" class="mdl-tabs__tab  header">Enseignants</a>
           <a href="{{url('/Eleves')}}" class="mdl-tabs__tab  header">Elèves</a>
           <a href="{{url('/Evaluations')}}" class="mdl-tabs__tab  header active">Evaluations</a>
+          <!--<a href="{{url('#')}}" class="mdl-tabs__tab  header">Bulletins de notes</a>-->
       </div>
       <div class="row">
           <div class="mdl-tabs__panel" ng-controller="EvaluationsController">
@@ -109,7 +110,7 @@
                                   <i  class="fa fa-pencil" aria-hidden="true"></i>
                                 </a>
 
-                                <a ng-href="delete_teacher/@{{teacher.id}}" class="btn btn-white-red btn-sm" title="Supprimer">
+                                <a ng-href="/api/delete/@{{tests.id}}" class="btn btn-white-red btn-sm" title="Supprimer">
                                   <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </a>
 
@@ -189,9 +190,6 @@
 </div>
 </div>
 
-
-@endsection
-
 <div id="studentgrade" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -218,3 +216,8 @@
 
   </div>
 </div>
+
+
+@endsection
+
+

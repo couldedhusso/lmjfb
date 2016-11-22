@@ -1,20 +1,30 @@
-@extends('templates.TemplateIndex')
+@extends('home')
 
-@section('section-content')
+@section('menu')
   <div class="container">
-    <div class="row">
+    <div class="row" style="font-size:16px;">
       <form class="ui form" action="/update_student_info" method="POST" enctype="multipart/form-data">
         {{ csrf_field() }}
       <section id="my-properties">
-        <div class="my-properties">
+        <div class="">
           {{-- <div class="col-md-2 col-sm-10 pull-right">
               <label class="text-center">Photo de profile</label>
               <img class="ui small image" src="{{asset('img/Add_user_avatar.png')}}" id="divUpload" style="cursor:pointer; border:1px dashed">
            <input type="file" name="avatar" id="hidde-new-file" style="display: none">
           </div> --}}
-        <div class="col-md-7 col-sm-10">
+
+
+      
+         <div class="col-md-7">
+               <span class="pull-left" style="font-size:20px;">Données de l'élève </span>
+         </div>
+
+         <br>
+          
+        <div class="col-md-7">
                <div class="field">
-                 <label>Données de l'élève </label>
+                 <!--<label style="font-size:17px;">Données de l'élève </label>-->
+                 <input type="hidden" name="studentDatas[student_id]" value="{{$student->id}}" type="text">
                  <div class="fields">
                    <div class="six wide field">
                      <input name="studentDatas[student_matricule]" value="{{$student->student_matricule}}" type="text">
@@ -134,10 +144,15 @@
                  </div>
 
                @endif
+               
 
                <br><br>
-               <div class="field">
-                  <input class="ui primary button right floated" type="submit" name="name" value="Poster le formulaire">
+               <div class="btn-group pull-right">
+                  <input class="btn btn-primary" type="submit" name="name" value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+                  
+                 <a class="btn btn-warning" href="{{url('/home')}}" class="item" style="margin-right:5px" title="" style="font-weight:bold;">
+                       &nbsp;Annuler
+                  </a>
                </div>
                <br><br>
       </div><!-- /.col-md-9 -->
@@ -150,5 +165,8 @@
       <!-- end My Properties -->
     </div>
   </div>
+
+
+
 
 @endsection

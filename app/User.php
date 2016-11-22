@@ -33,6 +33,11 @@ class User extends Authenticatable
        return $this->belongsToMany("LMJFB\Entities\Roles");
     }
 
+    public function courses()
+    {
+       return $this->belongsToMany("LMJFB\Entities\Course");
+    }
+
     public function hasRole($name){
       foreach ($this->roles as  $role) {
         if ($role->name == $name) return true;

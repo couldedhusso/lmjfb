@@ -9,6 +9,7 @@ use Auth;
 use DB;
 use LMJFB\Entities\CourseTest;
 use LMJFB\Entities\Teacher;
+use LMJFB\Entities\User;
 use LMJFB\Entities\Classes_pp;
 
 use LMJFB\Repositories\DbClassroomRepositories;
@@ -29,6 +30,16 @@ class HomeController extends Controller
         $this->middleware('auth');
 
     }
+
+    public function profs(){
+       $profs = $this->DBRepository->getTeachersByCourse();
+
+       foreach($profs as $prof){
+       
+           $user = User::find($prof->id);
+           $user->courses()->attach($prof->course);
+       }
+    } 
 
     /**
      * Show the application dashboard.
@@ -79,7 +90,8 @@ class HomeController extends Controller
 
 
     public function getEnseingnants(){
-       return json_encode($this->DBRepository->getTeachers());
+       return json_encode($this->DBRepository->getEnseignants());
+
     }
 
     public function getStudentByClassroom(){
@@ -490,33 +502,26 @@ class HomeController extends Controller
 
       $user = DB::table('users')->where('id', $id)->first();
 
-      $courses= DB::table('courses')->select('courses.id',
-                                  'courses.course_name')->get();
+      // $courses= DB::table('courses')->select('courses.id',
+      //                             'courses.course_name')->get();
 
-      $teacher_courses= DB::table('courses')
-                          ->join('teachers', 'courses.id', '=',
-                          'teachers.course_id')
-                          // ->join('CourseChild', 'Course.CourseID', '=',
-                          // 'CourseChild.CourseID')
-                          ->where('teachers.id', $id)
-                          ->select('courses.id', 'courses.course_name')->get();
+     $teacher_courses=$this->DBRepository->getCourseByTeacherId($id);
+    
+     $teacher_classroom =  $this->DBRepository->getTeachersClassroom($id);
 
+     $classrooms =  $this->DBRepository->getClassrooms();
 
-      $teacher_classroom = DB::table('classrooms')->join('teachers', 'classrooms.id'
-                      ,'=', 'teachers.classroom_id')->where('teachers.user_id', $id)
-                      ->select('classrooms.id','classrooms.classroom_name')
-                      ->get();
+     $prof_pricinpal =  $this->DBRepository->getProfprincipalClassrooms($id);
+     $courses =  $this->DBRepository->getCourses();
 
-      $classrooms = DB::table('classrooms')->select('classrooms.id'
-                                    ,'classrooms.classroom_name')->get();
+   
 
 
-
-      $prof_pricinpal = DB::table('classrooms')->join('classes_pp', 'classrooms.id'
-                     ,'=', 'classes_pp.classroom_id')->where('classes_pp.teacher_id', $id)
-                     ->select('classrooms.id',
-                     'classrooms.classroom_name',
-                     'classes_pp.teacher_id')->get();
+      // $prof_pricinpal = DB::table('classrooms')->join('classes_pp', 'classrooms.id'
+      //                ,'=', 'classes_pp.classroom_id')->where('classes_pp.teacher_id', $id)
+      //                ->select('classrooms.id',
+      //                'classrooms.classroom_name',
+      //                'classes_pp.teacher_id')->distinct()->get();
 
 
       $ppricinpal = DB::table('teachers')->where('user_id', $id)
@@ -526,6 +531,8 @@ class HomeController extends Controller
       if ($ppricinpal->prof_principal == 'Oui') {
           $isProfprinc = true;
       }
+
+      // dd($prof_pricinpal);
 
 
       return view('Administration.get_teacher_by_id', [
@@ -548,17 +555,6 @@ class HomeController extends Controller
          $parent = $this->DBRepository->getStudentByParents($id);
 
          $classroom = $this->DBRepository->getClassrooms();
-
-        // $student = DB::table('Student')->join('Classroom', 'Classroom.classRoomID'
-        //                   ,'=', 'Student.classRoomID')
-        //                   ->where('Classroom.classRoomID', $classroomid)
-        //                   ->where('Student.studentMatricule', $id)
-        //                   ->first();
-        //
-        // $parent = DB::table('Parent')->join('Student', 'Parent.parentID'
-        //                   ,'=', 'Student.studentParentID')
-        //                   ->where('Student.studentParentID', $student->studentParentID)
-        //                   ->first();
 
         return view('Administration.update_student_by_id', [
             'student' => $student
@@ -605,6 +601,10 @@ class HomeController extends Controller
 
       $user = Input::get('users');
 
+      $getuser= DB::table('users')->where('id', $user['id'])->first();
+      //dd( $getuser);
+          
+
       $userupdate = DB::table('users')->where('id', $user['id'])
                         ->update($user);
 
@@ -613,9 +613,36 @@ class HomeController extends Controller
 
       $deleteclassroom  = Input::get('deletecassroom');
       $addclassroom  = Input::get('addclassroom');
+
+      $deletecourse  = Input::get('deletecourse');
+      $addcourse  = Input::get('addcourse');
+
       $deleteclassroompp = Input::get('deleteclassroompp');
       $addclassroompp = Input::get('addclassroompp');
       // $classroomidpp = Input::get('classroomidpp');
+
+
+
+       if (count($addcourse) >= 1) {
+
+        foreach ($addcourse as  $value) {
+          
+           DB::table('course_user')->insert(
+              ['user_id' => $getuser->id, 'course_id' => $value]
+          );
+        }
+     }
+
+
+     if (count($deletecourse) >= 1) {
+
+        foreach ($deletecourse as $value) {
+           DB::table('course_user')->where('user_id',$getuser->id)
+                                   ->where('course_id', $value)
+                                   ->delete();
+        }
+
+    }
 
       // s il y a des classes à ajouter ou à supprimer
       if (count($addclassroom) >= 1) {

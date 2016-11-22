@@ -28,7 +28,10 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://code.getmdl.io/1.2.1/material.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Angular Material style sheet -->
+   <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+   <link rel="stylesheet" href="css/styles.css">
 
     <!-- Styles -->
     <link href="{{asset('/css/app.css')}}" rel="stylesheet">
@@ -39,6 +42,29 @@
         margin-left: auto;
         margin-right: auto;
     }
+
+
+
+    .animate-if {
+    background:white;
+    padding:10px;
+    }
+
+    .animate-if.ng-enter, .animate-if.ng-leave {
+    transition:all cubic-bezier(0.250, 0.460, 0.450, 0.940) 0.5s;
+    }
+
+    .animate-if.ng-enter,
+    .animate-if.ng-leave.ng-leave-active {
+    opacity:0;
+    }
+
+    .animate-if.ng-leave,
+    .animate-if.ng-enter.ng-enter-active {
+    opacity:1;
+    }
+
+
 
     .contexttuel .ui.secondary.vertical.pointing.menu {
           border-bottom-width: 0;
@@ -256,10 +282,13 @@
     </script>
 </head>
 <body>
+
     <div id="app">
         @include('Includes.navbar')
 
         @yield('content')
+
+
         {{-- <div class="btn-group dropup floating-action-button">
     <button type="button" class="btn btn-info btn-fab btn-raised dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons">save</i></button>
     <ul class="dropdown-menu dropdown-menu-right" style="min-width:0; background-color:transparent;">
@@ -267,21 +296,20 @@
     </ul> --}}
 
 
-    <div class="container-fluid">
 
-          <footer >
+     <!-- Angular Material requires Angular.js Libraries -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
 
-              {{-- <div class="mdl-mega-footer--bottom-section">
+  <!-- Angular Material Library -->
+  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+  
 
-                <div class="mdl-mega-footer--middle-section">
-                  <p class="mdl-typography--font-light">Lycée Moderne Jeunes Filles Bouaké: © 2016</p>
-                </div>
-              </div> --}}
 
-          </footer>
 
-        </div>
-  </div>
+
     {{-- <a href="https://github.com/google/material-design-lite/blob/mdl-1.x/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">View Source<span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);"></span></span></a> --}}
     {{-- </div> --}}
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{-- <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -73,7 +73,7 @@
                 </div>
             @endif --}}
 
-            <div class="content">
+           {{-- <div class="content">
                 <div class="title m-b-md">
                     LMJF DE BOUAKE
                 </div>
@@ -94,7 +94,7 @@
     </body>
 </html>
 
-{{-- @section('content')
+ @section('content')
 
   <div class="content">
       <div class="title m-b-md">
@@ -110,4 +110,6 @@
       </div>
   </div>
 
-@endsection --}} --}}
+@endsection --}} 
+
+@extends('masterpages.index')

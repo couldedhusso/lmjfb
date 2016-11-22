@@ -26,6 +26,10 @@
     {{-- <link href="//cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css" media="all" rel="stylesheet" type="text/css" /> --}}
     <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,300|Material+Icons' rel='stylesheet' type='text/css'>
 
+     <!-- Styles -->
+    <link href="{{asset('/css/app.css')}}" rel="stylesheet">
+
+
     <title>LMJF | Espace Admin. </title>
 
     <!-- Scripts -->
@@ -252,97 +256,29 @@
 
 </head>
 
-<body class="page-sub-page page-profile page-account" id="page-top">
+<body>
 <!-- Wrapper -->
-<div class="wrapper">
+<div id="app">
 
-  <nav class="navbar navbar-default navbar-static-top">
-      <div class="container-fluid">
-          <div class="navbar-header">
-
-              <!-- Collapsed Hamburger -->
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                  <span class="sr-only">Toggle Navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-
-              <!-- Branding Image -->
-              <a class="navbar-brand android-title mdl-layout-title android-title" href="{{ url('/home') }}">
-                  {{-- {{ config('app.name', 'LMJF') }} --}}
-
-                  LMJF | Espace Numérique de Travail
-              </a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="app-navbar-collapse">
-              <!-- Left Side Of Navbar -->
-              <ul class="nav navbar-nav">
-                  &nbsp;
-              </ul>
-
-              <!-- Right Side Of Navbar -->
-              <ul class="nav navbar-nav navbar-right">
-                  <!-- Authentication Links -->
-                  @if (Auth::guest())
-                      <li><a href="{{ url('/login') }}">Se connecter</a></li>
-                      {{-- <li><a href="{{ url('/register') }}">Register</a></li> --}}
-                  @else
-
-                    <li><a href="#"><img class="ui avatar image" src="{{asset('img/users.png')}}">
-                        <span>{{ Auth::user()->user_name .' '.Auth::user()->user_last_name }}</span></a>
-                    </li>
-                    <li><a href="{{ url('/auth/logout') }}" onclick="event.preventDefault();
-                             document.getElementById('logout-form').submit();"><span class="glyphicon glyphicon-log-out"></span> Se deconnecter</a></li>
-                             <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                 {{ csrf_field() }}
-                             </form>
-
-                      {{-- <li class="dropdown">
-                          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                              {{ Auth::user()->userFirstName .' '.Auth::user()->userLastName }} <span class="caret"></span>
-                          </a>
-
-                          <ul class="dropdown-menu" role="menu">
-                              <li>
-                                  <a href="{{ url('/logout') }}"
-                                      onclick="event.preventDefault();
-                                               document.getElementById('logout-form').submit();">
-                                      Se deconnecter
-                                  </a>
-
-                                  <form id="logout-form" action="{{ url('/logout') }}" method="POST" style="display: none;">
-                                      {{ csrf_field() }}
-                                  </form>
-                              </li>
-                          </ul>
-                      </li> --}}
-
-                  @endif
-              </ul>
-          </div>
-      </div>
-  </nav>
-
-
+  @include('Includes.navbar')
 
     <!-- Page Content -->
     <div id="page-content" style="position:inherit !important;">
-        <!-- Breadcrumb -->
+        <!-- Breadcrumb 
         <div class="container">
             <ol class="breadcrumb" style="padding:0 !important; background-color:inherit !important;">
                 <li><a href="{{url('/home')}}">Acceuil</a></li>
                 <li><a href="#">Espace Administrateur</a></li>
             </ol>
-        </div>
+        </div> -->
         <!-- end Breadcrumb -->
 
         <div class="container">
             <div class="row">
                 @yield('section-content')
           </div>
-    </div>
+        </div>
+        
   </div>
     <!-- end Page Content -->
     {{-- <!-- Page Footer -->

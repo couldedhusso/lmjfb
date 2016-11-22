@@ -1,12 +1,15 @@
 // (function(){
  'use stric';
 
-  var LMJFBouakeApp = angular.module('LMJFBouakeApp', ['ui.bootstrap', 'ngResource']);
+  var LMJFBouakeApp = angular.module('LMJFBouakeApp', [ 'ui.bootstrap',
+                                                        'ngResource', 
+                                                        'ngMaterial'
+                                                      ]);
 
 
   //
   LMJFBouakeApp.config(['$interpolateProvider', '$locationProvider', '$resourceProvider',
-      function($interpolateProvider, $locationProvider, $resourceProvider) {
+      function($interpolateProvider, $locationProvider, $resourceProvider, mdIconProvider) {
 
           // $interpolateProvider.startSymbol('{>');
           // $interpolateProvider.endSymbol('<}');
@@ -15,7 +18,9 @@
           $resourceProvider.defaults.stripTrailingSlashes = false;
 
           $locationProvider.html5Mode({ enabled: true,   requireBase: false });
+
       }
+    
   ]);
 
 
@@ -89,7 +94,7 @@
 
       $http.get(url).then(function(response, status) {
              $scope.students = response.data;
-             $scope.totalItems = $scope.students.length;
+             $scope.totalClasse = $scope.students.length;
 
       }).then(function(response) {
               // console.log(response);
@@ -102,7 +107,7 @@
       $scope.liste = [];
       $http.get(url).then(function(response, status) {
              $scope.liste = response.data;
-             console.log($scope.liste);
+            //  console.log($scope.liste);
              $scope.totalItems = $scope.liste.length;
 
       }).then(function(response) {
@@ -112,7 +117,7 @@
 
 
       $scope.currentPage = 1;
-      $scope.itemsPerPage = 20;
+      $scope.itemsPerPage = 10;
 
       $scope.setPage = function (pageNo) {
         $scope.currentPage = pageNo;
