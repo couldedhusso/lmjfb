@@ -43,6 +43,83 @@ class StudentController extends Controller
         $this->DBRepository = $repos ;
     }
 
+    public function classroomSeeder(){
+
+            
+        Excel::load('storage/app/LISTE_DEFINITIVE.xlsx', function($reader)
+        {
+
+            $reader->formatDates(true, 'd/m/Y');
+            $results = $reader->all();
+
+            $beforUpdate = collect([]);
+            $afterUpdate = collect([]);
+
+
+            for ($i=0; $i < count($results) ; $i++) {
+                $sheet  =  $results[$i];
+ 
+                 $classroomname = $sheet->getTitle();
+
+
+                 $classroom = $this->getclassroomByName($classroomname);
+
+                 $collection = $sheet->each(function ($item, $key) use($classroom, $classroomname) {
+
+                           // dd($item);
+
+                            $str = '6ème';
+                           
+                            if ($item['matricule'] !== null ){
+
+                              $doublant = "";
+                              if ($item['red'] == "R"){
+                                    $doublant = "R";
+                              }
+
+
+                              $stud = [
+                                     'student_matricule' => $item['matricule']
+                                     ,'classroom_id' => $classroom->id
+                                     ,'student_name' => $item['nom']
+                                     ,'student_last_name' => $item['prenoms']
+                                     ,'student_birthdate' => $item['date_naiss']
+                                     ,'student_sexe' => 'F'
+                                     ,'student_redoublant' => $doublant
+                                     ,'student_birthplace' => $item['lieu_de_naiss']
+                                     , 'serie'  => ($item['serie'] != null) ? $item['serie'] : '-'
+                               ];
+
+                              /// $beforUpdate = DB::table('students')->where('student_matricule', $item['matricule'])->first();
+
+                               if ($item['lv'] != null ){
+                                    $upd_cls = DB::table('classrooms')->where('id', $classroom->id)->update(['LV' => $item['lv']]);
+                               }
+
+                            //    if ($beforUpdate->classroom_id != $classroom->id){
+                            //         dd($beforUpdate);
+                            //    }
+
+                               $newStudent = DB::table('students')->where('student_matricule', $item['matricule'])->update($stud);
+                            }
+                      });
+
+            }
+
+
+        }, 'UTF-8');
+
+
+      
+       return redirect('/home');
+       
+    }
+
+    public function findStudent($beforUpd, $afterUpd){
+            $arr = [$beforUpd, $afterUpd];
+            dump($arr);
+    }
+
 
     public function seed_classroom()
     {
@@ -52,7 +129,7 @@ class StudentController extends Controller
 
 
 
-      Excel::load('storage/app/listes.xlsx', function($reader)
+      Excel::load('storage/app/LISTE_DEFINITIVE.xlsx', function($reader)
       {
 
         $reader->formatDates(true, 'd/m/Y');
@@ -87,14 +164,14 @@ class StudentController extends Controller
                       }
 
                       $collection = $sheet->each(function ($item, $key) use($classroom) {
-                            $doublant = "Non";
-                            if ($item['red'] == "R"){
-                                $doublant = "Oui";
-                            }
+                            $doublant = "";
+                              if ($item['red'] == "R"){
+                                    $doublant = "R";
+                              }
 
                             if ($item['matricule'] !== null ){
 
-                              $stud = [
+                                $stud = [
                                      'student_matricule' => $item['matricule']
                                      ,'classroom_id' => $classroom->id
                                      ,'student_name' => $item['nom']
@@ -102,6 +179,7 @@ class StudentController extends Controller
                                      ,'student_birthdate' => $item['date_naiss']
                                      ,'student_sexe' => 'F'
                                      ,'student_redoublant' => $doublant
+                                     ,'student_birthplace' => $item['lieu_de_naiss']
                                ];
 
                                $newStudent = Student::create($stud);

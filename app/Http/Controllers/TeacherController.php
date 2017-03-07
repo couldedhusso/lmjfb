@@ -8,6 +8,8 @@ use LMJFB\Entities\Classes_pp;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use DB;
+
 use Validator;
 
 use Illuminate\Http\Request;
@@ -62,57 +64,97 @@ class TeacherController extends Controller
       protected function create(Request $request)
       {
 
-          $reqdata = Input::except('ClassRoomID' ,'CourseID', 'name', '_token');
-          $reqDataClassroom = Input::get('ClassRoomID');
-          $reqDataCourse = Input::get('course_id');
-          $pp = Input::get('prof_principal');
-          // dd($reqdata);
+        $reqdata = Input::except('classrooms_id' ,'courses_id', 'name', '_token');
+        $reqDataClassroom = Input::get('classrooms_id');
+        $reqDataCourse = Input::get('courses_id');
 
-          if ($reqdata['teacherEmail'] == "") {
-             $email = $reqdata['teacherFirstName'].$reqdata['teacherLastName'].'@lmjf.com';
-          }else {
-            $email = $reqdata['teacherEmail'];
+
+        if(empty($reqDataCourse) && empty($reqDataClassroom) ){
+
+              $message = 'Veuillez selectionner la(les) discipline(s) et  la(les) classe(s)  du professeur.';
+
+              session()->flash('Notification', $message);
+              return redirect('Enregistrer/Enseignant')->withInput();
+         }
+
+         else if(empty($reqDataCourse) ) {
+
+              $message = 'Veuillez selectionner la(les) discipline(s) du professeur.';
+
+              session()->flash('Notification', $message);
+              return redirect('Enregistrer/Enseignant')->withInput();
+          }
+          
+          else if(empty($reqDataClassroom)){
+
+              $message = 'Veuillez selectionner la(les) classea(s) du professeur.';
+
+              session()->flash('Notification', $message);
+              return redirect('Enregistrer/Enseignant')->withInput(
+                  Enregistrer/Enseignant
+              );
+          }
+          
+          else{
+
+                $pp = Input::get('prof_principal');
+                // dd($reqdata);
+
+                if ($reqdata['teacherEmail'] == "") {
+                    $generatedEmailAddress = $this->GeraHash(30);
+                    
+                    $email = $generatedEmailAddress.'@lmjf.com';
+                   
+                }else {
+                    $email = $reqdata['teacherEmail'];
+                }
+
+                $user = User::create([
+                    'user_name' => $reqdata['teacherFirstName'],
+                    'user_last_name' => $reqdata['teacherLastName'],
+                    'user_contact' => $reqdata['teacherContact'],
+                    'email' => $email,
+                    'password' => bcrypt('lmjf'),
+                ]);
+
+
+                // grant Enseignant role to user
+                $user->roles()->attach(1);
+
+                
+
+                foreach ($reqDataCourse as $course_id) {
+                       // $user->courses()->attach($course_id);
+
+                        DB::table('course_user')->insert(
+                        ['user_id' => $user->id, 'course_id' => $course_id]
+                      );
+                }
+
+                // mettre à jour la table Enseignant
+                foreach ($reqDataClassroom as $value) {
+
+                    $teacher = Teacher::create([
+                        'user_id' => $user->id,
+                        'classroom_id' => $value,
+                        'prof_principal' => $pp
+                    ]);
+                }
+
+
+                if ($pp) {
+
+                    foreach (Input::get('ClassRoomID-pp') as $value) {
+
+                    $profprincipal = Classes_pp::create([
+                        'teacher_id' => $user->id,
+                        'classroom_id' => $value
+                    ]);
+                }}
+              
           }
 
-          $user = User::create([
-              'user_name' => $reqdata['teacherFirstName'],
-              'user_last_name' => $reqdata['teacherLastName'],
-              'user_contact' => $reqdata['teacherContact'],
-              'email' => $email,
-              'password' => bcrypt('lmjf'),
-          ]);
-
-
-          // grant Enseingnant role to user
-          $user->roles()->attach(1);
-
-          foreach ($reqDataCourse as $course_id) {
-                 $user->courses()->attach($course_id);
-          }
-
-          // mettre à jour la table Enseingnant
-          foreach ($reqDataClassroom as $value) {
-
-              $teacher = Teacher::create([
-                 'user_id' => $user->id,
-                 'classroom_id' => $value,
-                 'prof_principal' => $pp
-             ]);
-          }
-
-          if ($pp) {
-
-            foreach (Input::get('ClassRoomID-pp') as $value) {
-
-              $profprincipal = Classes_pp::create([
-                 'teacher_id' => $user->id,
-                 'classroom_id' => $value
-             ]);
-            }
-
-          }
-
-          return redirect('/home');
+           return redirect('/home');   
 
       }
 
@@ -167,6 +209,24 @@ class TeacherController extends Controller
 
         return redirect('/home');
 
+    }
+
+    public function GeraHash($qtd){
+        //Under the string $Caracteres you write all the characters you want 
+        // to be used to randomly generate the code.
+        // http://php.net/manual/ru/function.rand.php
+
+        $Caracteres = 'ABC234GHIJKLMOPabcdefghijQRSTUVXWYZklmopqrstuvxwyz01DEF56789';
+        $QuantidadeCaracteres = strlen($Caracteres);
+        $QuantidadeCaracteres--;
+
+        $Hash=NULL;
+            for($x=1;$x<=$qtd;$x++){
+                $Posicao = rand(0,$QuantidadeCaracteres);
+                $Hash .= substr($Caracteres,$Posicao,1);
+            }
+
+        return $Hash; 
     }
 
     /**

@@ -1,3 +1,4 @@
+{{-- @extends('templates.TemplateIndex') --}}
 @extends('templates.TemplateIndex')
 
 @section('section-content')
@@ -5,7 +6,8 @@
   <div class="container">
     <div class="row"  style="font-size:16px;">
 
-      <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/addTeacher')}}" method="POST" enctype="multipart/form-data">
+      <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/addTeacher')}}"
+            role="form" method="POST" enctype="multipart/form-data">
     <section id="my-properties">
       <div class="my-properties">
         {{-- <div class="col-md-2 col-sm-10 pull-right">
@@ -25,10 +27,10 @@
                <label>Nom et prenoms </label>
                <div class="two fields">
                  <div class="field">
-                   <input name="teacherFirstName" placeholder="Nom" type="text">
+                   <input name="teacherFirstName" placeholder="Nom" type="text" value="{{ old('teacherFirstName') }}">
                  </div>
                  <div class="field">
-                   <input name="teacherLastName" placeholder="Prenoms" type="text">
+                   <input name="teacherLastName" placeholder="Prenoms" type="text" value="{{ old('teacherLastName') }}">
                  </div>
                </div>
              </div>
@@ -36,10 +38,10 @@
                <label>Contacts</label>
                <div class="fields">
                  <div class="ten wide field">
-                   <input name="teacherEmail" placeholder="Email" type="text">
+                   <input name="teacherEmail" placeholder="Email" type="text" value="{{ old('teacherEmail') }}">
                  </div>
                  <div class="six wide field">
-                   <input name="teacherContact" placeholder="Telephone" type="text">
+                   <input name="teacherContact" placeholder="Telephone" type="text" value="{{ old('teacherContact') }}">
                  </div>
                </div>
              </div>
@@ -62,7 +64,7 @@
              <div class="field">
                <div class="fields">
                  <div class="sixteen wide field">
-                   <select name="course_id[]" multiple>
+                   <select name="courses_id[]" multiple>
                      @foreach($courses as $course)
                          <option value="{{$course->id}}">
                            {{$course->course_name}}
@@ -83,7 +85,7 @@
              <div class="field">
                <div class="fields">
                  <div  class="sixteen wide field">
-                   <select name="ClassRoomID[]" multiple>
+                   <select name="classrooms_id[]" multiple>
                      @foreach($classrooms as $classroom)
                          <option value="{{$classroom->id}}">
                            {{$classroom->classroom_name}}

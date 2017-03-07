@@ -2,78 +2,117 @@
 
 @section('section-content')
 
+  <div class="container" ng-controller="EvaluationsController">
+    <div class="row"  style="font-size:16px;">
 
+      <form class="ui form" style="margin-left:auto;margin-right:auto"  action="{{url('/api/v1/post/grades')}}"
+        role="form" method="POST">
+        <section id="my-properties">
+        <div class="my-properties">
 
-<form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/gradeStudent')}}" method="POST" enctype="multipart/form-data">
-<section id="my-properties">
-  <div class="my-properties">
+          <input type="hidden" name="grade[trimestre_id]" value="{{$newTest->trimestre_id}}">
+          <input type="hidden" name="grade[test_id]" value="{{$newTest->id}}">
+         
+          <div class="col-md-7 col-sm-10">
+            {{ csrf_field() }}
 
-  @if($step == 1)
-    <div class="col-md-12">
-      <div class="ui ordered steps">
-        <div class="active step">
-          <div class="content">
-            <div class="title">Evaluation</div>
-            <div class="description">Saisir les informations de l'évaluation</div>
+             <h3 class="ui dividing header" style="font-size:16px;">REFERENCE DU TEST </h3>
 
-          </div>
-        </div>
-        <div class="active step">
-          <div class="content">
-            <div class="title">Matière</div>
-            <div class="description">Selectionner le professeur et la discipline </div>
-          </div>
-        </div>
-        <div class="active step">
-          <div class="content">
-            <div class="title">Note</div>
-            <div class="description">Saisir les notes</div>
-          </div>
-        </div>
-      </div>
-      
-      {{ csrf_field() }}
-      <input type="hidden" name="step" value="2">
+             <div class="field">
 
-         <div class="fields">
+              
+               <div class="fields">
+               
+                 <div class="six wide field">
+                    <label>Trimestre </label>
+                    <input type="text" value="{{$trimestre->trimestre_description}}" readonly>    
+                 </div>
 
-           <div class="five wide field">
-             <label>Periode </label>
-             <input name="note[periode]" value="{{$semestre->semestreID}}" type="hidden">
-             <input name="note[testDescription]" value="-" type="hidden">
-             <input name="semestre" readonly value="{{$semestre->semestreDescription}}" type="text">
-           </div>
+                 
+                 <div class="seven wide field">
+                   <label>Nom de l'évaluation </label>
+                   <input type="text" value="{{$newTest->test_name}}" readonly >
+                 </div>
 
-           <div class="five wide field">
-             <label>Valeur maximale de l'évaluation </label>
-             <input name="note[valmaxi]" type="text" required>
-           </div>
-
-         </div>
-
-        <div class="fields">
-               <div class="ten wide field">
-                 <label>classe</label>
-                 <select name="note[classroom]" required>
-                   @foreach($currentYearClassroom as $classroom)
-                       <option value="{{$classroom->classRoomID}}">
-                         {{$classroom->ClassRoomName}}
-                       </option>
-                   @endforeach
-                  </select>
+                 
+                 <div class="three wide field">
+                    <label>Valeur max.</label>
+                    <input  type="text" value="{{$newTest->max_grade_value}}" readonly >
+                 </div>
                </div>
-          </div>
+             </div>
 
-          <div class="field">
-              <input class="ui primary button left floated" type="submit" name="name" value="Matière">
-          </div>
-         </div>
-    @elseif($step == 2)
-        @include('Administration.saisie_note_step_2')
-    @endif
+             <div class="field">
+              
+               <div class="fields">
+                 <div class="six wide field">
+                    <label>Classe</label>
+                    <input  type="text" value="{{$classroom->classroom_name}}" readonly >
+                
+                 </div>
 
+                 <div class="ten wide field">
+                      <label>Discipline</label>
+                      <input type="text" value="{{$course_childs}}" readonly>    
+                    </select>
+                 </div>
+               </div>
+             </div>
+
+             <br>
+
+            <h3 class="ui dividing header" style="font-size:16px;">LISTE DE CLASSE </h3>
+           
+             
+            <div class="fields">
+               <div class="sixteen wide field" style="font-size:14px;">
+
+                    <table class="ui table">
+
+                                     {{-- <table class="table table-hover table-mail"> --}}
+                                       <thead class="unread">
+                                          <tr>
+                                            <th>Matricule</th>
+                                            <th>Nom et prenoms</th>
+                                            <th>Note</th>
+                                          </tr>
+                                       </thead>
+                                       <tbody>
+
+                                           @foreach($students as $student)
+                                            {{--@foreach($classe->Student as $stud) --}}
+                                               <tr>
+                                                   <td width="20%" class="">{{$student->student_matricule}}</td>
+                                                   <td width="65%" class="">{{$student->student_name.' '.$student->student_last_name}} </td>
+                                                   <td width="15%" class="">
+                                          
+                                                     <input type="number" min="0" max="{{$newTest->max_grade_value}}" name="studentsGrade[{!!$student->id!!}]" required>
+                                                   </td>
+                                               </tr>
+                                             @endforeach 
+                                       </tbody>
+                                   </table>
+                   
+                </div>
+            </div>
+         
+            <br><br>
+               <div class="btn-group pull-right">
+                  <input class="btn btn-primary" type="submit" name="name" value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+                  
+                 <a class="btn btn-warning" href="{{url('/Evaluations')}}" class="item" style="margin-right:5px" title="" style="font-weight:bold;">
+                       &nbsp;Annuler
+                  </a>
+               </div>
+
+    </div><!-- /.col-md-9 -->
 
     </div><!-- /.my-properties -->
-  </section><!-- /#my-properties -->
-</form>
+    <!-- end My Properties -->
+    </section><!-- /#my-properties -->
+    </form>
+    <!-- end My Properties -->
+
+    </div>
+  </div>
 @endsection

@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use schoolManagementPlatform\Domain\Entities\EmpRole;
 use Illuminate\Support\Facades\DB;
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -21,9 +22,13 @@ class DatabaseSeeder extends Seeder
       //  $this->call(TrimestreSeeder::class);
         // $this->call(CycleSeeder::class);
         // $this->call(CourseSeeder::class);
-       $this->call(ClassroomSeeder::class);
+      //  $this->call(ClassroomSeeder::class);
     //   $this->call(CourseChildSeeder::class);
 
+      //  $this->call(CoefficientSeeder::class);
+
+
+      $this->call(UpdateDBSeeder::class);
 
     }
 }

@@ -22,7 +22,12 @@ class Cycle extends Model
      */
 
     protected $fillable = [
-      'id', 'cycle', 'cycle_classe', 'cycle_type'
+      'id', 'cycle', 'cycle_classe', 'cycle_type', 'cycle_serie'
     ];
+
+    // public function coursecoefficient()
+    // {
+    //   return $this->hasMany('LMJFB\Entities\CourseCoefficient');
+    // }
 
 }

@@ -41,4 +41,9 @@ class CourseChild extends Model
       return $this->hasMany('LMJFB\Entities\AverageGrade');
     }
 
+    public function coursecoefficient()
+    {
+      return $this->hasMany('LMJFB\Entities\CourseCoefficient');
+    }
+
 }

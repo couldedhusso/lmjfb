@@ -48,10 +48,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+
         $currentTrimestre = '1er trimestre';
 
       //  dd($this->DBRepository->getEvaluationsByTrimestres($currentTrimestre));
-        return redirect('/Enseingnants');
+        return redirect('/Enseignants');
 
         return view('/home', [
                      'aYear' => $this->DBRepository->getcurrentAYear()
@@ -69,22 +70,34 @@ class HomeController extends Controller
     }
 
 
-    public function Enseingnants(){
+    public function Enseignants(){
+       // DB::table('tests')->truncate();
+       // DB::table('course_grades')->truncate();
+       
+
         return view('Administration.enseignants_panel');
     }
 
     public function Eleves(){
+
+        // $message = 'Hi LMJFB';
+
+        // Toastr::info($message, $title = null, $options = []);
         return view('Administration.eleves_panel');
     }
 
     public function Evaluations(){
 
+     
+        $course_childs = $this->DBRepository->getCourseChilds();
         $classrooms = $this->DBRepository->getClassrooms();
+
         $trimestres = $this->DBRepository->getcurrentAYearTrimestres();
 
         return view('Administration.evaluations_panel', [
           'classrooms' => $classrooms,
-          'trimestres' => $trimestres
+          'trimestres' => $trimestres,
+          'course_childs' => $course_childs
         ]);
     }
 
@@ -401,26 +414,25 @@ class HomeController extends Controller
 
     public function saisie_note($step){
 
-      $aYear =  DB::table('anneeScolaire')->orderBy('academicYear', 'desc')
-                              ->select('academicYear')
-                              ->first();
+      $aYear  = $this->DBRepository->getcurrentAYear();
 
-      $semestre = DB::table('Semestre')->where('academicYear', '=', $aYear->academicYear)
-                            ->where('semestreDescription', '=', '1er trimestre')
-                            ->first();
+      $trimestre_description = '1er trimestre';
 
-      $currentYearClassroom = DB::table('Classroom')
-                            ->join('Student', 'Classroom.classRoomID', '='
-                            ,'Student.classRoomID')
-                            ->join('Enrollment', 'Enrollment.classRoomID', '=', 'Enrollment.classRoomID')
-                            ->where('Enrollment.academicYear', $aYear->academicYear)
-                            ->select('Classroom.ClassRoomName', 'Classroom.classRoomID')->distinct()->get();
+      $trimestre = $this->DBRepository->getcurrentAYearTrimestre($trimestre_description);
+
+      $currentYearClassroom = '';
+      // $currentYearClassroom = DB::table('cl')
+      //                       ->join('Student', 'Classroom.classRoomID', '='
+      //                       ,'Student.classRoomID')
+      //                       ->join('Enrollment', 'Enrollment.classRoomID', '=', 'Enrollment.classRoomID')
+      //                       ->where('Enrollment.academicYear', $aYear->academic_year)
+      //                       ->select('Classroom.ClassRoomName', 'Classroom.classRoomID')->distinct()->get();
 
       if ($step == 1) {
          return view('Administration.saisie_notes', [
            'step' => $step,
            'currentYearClassroom' => $currentYearClassroom,
-           'semestre' => $semestre
+           'semestre' => $trimestre
          ]);
       }elseif ($step == 2) {
         # code...

@@ -1,6 +1,6 @@
 <?php namespace LMJFB\Repositories;
 use DB;
-use LMJFB\Domain\IClassroomRepository;
+use LMJFB\Domain\ClassroomRepository;
 //implements IClassroomRepository 
 class DbClassroomRepositories extends DbRepository {
 

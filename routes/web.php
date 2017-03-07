@@ -17,8 +17,15 @@ use Illuminate\Support\Facades\Input;
 
 use App\Semestre;
 use App\Roles;
-use App\Enseingnant;
+use App\Enseignant;
 use Maatwebsite\Excel\Facades\Excel;
+use LMJFB\Entities\Cycle;
+
+use LMJFB\Entities\CourseCoefficient;
+
+/** Include PHPExcel */
+//use PHPOffice;
+use PHPOffice\IOFactory;
 
 
 Route::group(['middleware' => 'auth'], function () {
@@ -226,7 +233,7 @@ Route::group(['middleware' => 'auth'], function () {
 
   /// url de l espace Admin
 
-  Route::get('Enregistrer/Enseingnant', function () {
+  Route::get('Enregistrer/Enseignant', function () {
 
 
       $classrooms = DB::select('select * from classrooms');
@@ -257,17 +264,9 @@ Route::group(['middleware' => 'auth'], function () {
   Route::get('Enregistrer/Eleve', function () {
     //  $idTeacher = Auth::user()->id;
 
-
-
       $aYear =  DB::table('anneescolaire')->orderBy('academic_year', 'desc')
                               ->select('academic_year')
                               ->first();
-
-
-
-      // $semestre = DB::table('Semestre')->where('academicYear', '=', $aYear->academicYear)
-      //                       ->where('semestreDescription', '=', '1er trimestre')
-      //                       ->first();
 
       $classrooms = DB::select('select * from classrooms');
 
@@ -275,7 +274,9 @@ Route::group(['middleware' => 'auth'], function () {
       // return view('Admin.student-registration', compact('studentsCollection'));
   });
 
-  Route::get('saisir-les-notes/{step}', 'HomeController@saisie_note');
+  Route::get('saisir/notes/{step}', 'HomeController@saisie_note');
+
+  Route::get('saisir/notes', 'EvaluationsController@getStudentGrade');
 
   // Route::get('profs', 'HomeController@profs');
 
@@ -340,13 +341,18 @@ Route::group(['middleware' => 'auth'], function () {
 
   // Route::get('/api/v1/evaluations/{classroom}', 'EvaluationsController@getClassroomEvaluations');
 
+  Route::post('/api/v1/evaluations', 'EvaluationsController@saisieNotes');
+
   Route::get('/api/v1/evaluations/{trimester}/{classroom}', 'EvaluationsController@getClassroomEvaluations');
+  Route::get('/api/v1/liste/{classroom}', 'EvaluationsController@getClassroom');
+
+  Route::post('/api/v1/post/grades', 'EvaluationsController@gradeStudent');
 
 
 
   // ==== menu ===============
 
-  Route::get('/Enseingnants', 'HomeController@Enseingnants');
+  Route::get('/Enseignants', 'HomeController@Enseignants');
   Route::get('/Eleves', 'HomeController@Eleves');
   Route::get('/Evaluations', 'HomeController@Evaluations');
 
@@ -356,6 +362,7 @@ Route::get('/home/ListeEnseignant', 'HomeController@getEnseingnants');
 
 Route::get('/', function () {
 
+
     return view('welcome');
 });
 
@@ -364,9 +371,155 @@ Route::get('/load_classes', 'StudentController@seed_classroom');
 Auth::routes();
 Route::get('/home', 'HomeController@index');
 
+Route::get('/classroom-update', 'StudentController@classroomSeeder');
+
+Route::get('/maths-grades', 'EvaluationsController@getStudentMathsGrade');
+
+
 ///url for dummies datas
 
-Route::get('dumiesStudents', function(){
+// Route::get('reset-table', function(){
+//     DB::table('tests')->truncate(); 
+//     DB::table('course_grades')->truncate();
+    
+// });
+
+Route::get('charger-les-moyennes', function(){
+
+
+
+           //// --- TODO : MAJ des poids des differents tests
+
+                //    $tests =  DB::table('tests')->get();
+                //    foreach ($tests  as $key => $value) {
+
+                //         if (20 == $value->max_grade_value){
+                //             $val = 1;
+                //         }elseif (10 == $value->max_grade_value) {
+                //             $val = 0.5;
+                //         }
+
+                //         DB::table('tests')->where('id', $value->id)->update(['poids' => $val]) ;
+                //    }
+
+            //// ---
+
+
+    // $C1 = [  "Expression écrite" => 1,  "Expression orale" => 1,
+    //          "Orthographe" => 1, "ANGLAIS" => 1, "ALLEMAND" => 1, "ESPAGNOL" => 1,
+    //          "HISTOIRE-GÉOGRAPHIE" => 1,  "MATHÉMATIQUES" => 1, 
+    //          "PHYSIQUE - CHIMIE" => 1, "SCIENCES DE LA VIE ET DE LA TERRE" => 1, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1 ,"MUSIQUE" => 1, "Education des Droits de l\'Homme" => 1];
+
+
+    //  $sdeC = [ "FRANÇAIS" => 3, "ANGLAIS" => 3, "HISTOIRE-GÉOGRAPHIE" => 2, 
+    //           "MATHÉMATIQUES" => 5, "PHYSIQUE - CHIMIE" => 4, 
+    //           "SCIENCES DE LA VIE ET DE LA TERRE" => 2, "ARTS PLASTIQUES" => 1, 
+    //           "EDUCATION PHYSIQUE ET SPORTIVE" => 1, "CONDUITE" => 1] ;
+
+    // // $sdeA1 = [ "FRANÇAIS" => 4, "ANGLAIS" => 3, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    // //           "MATHÉMATIQUES" => 3, "PHYSIQUE - CHIMIE" => 2,
+    // //           "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    // //           "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    // //           "CONDUITE" => 1 ,"MUSIQUE" => 1] ;
+
+    // $seconde_A1 = [ "FRANÇAIS" => 4, "ANGLAIS" => 3, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //           "MATHÉMATIQUES" => 3, "PHYSIQUE - CHIMIE" => 2,
+    //           "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //           "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //           "CONDUITE" => 1] ;	
+
+
+    //  $seconde_A2 = ["FRANÇAIS" => 4, "ANGLAIS" => 3, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //                 "MATHÉMATIQUES" => 3, "PHYSIQUE - CHIMIE" => 2, "ALLEMAND" => 3, "ESPAGNOL" => 3,
+    //                 "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //                 "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //                 "CONDUITE" => 1 ,"MUSIQUE" => 1] ;
+	
+
+
+    //  $prD = [ "FRANÇAIS" => 3, "ANGLAIS" => 2, "HISTOIRE-GÉOGRAPHIE" => 2, 
+    //          "MATHÉMATIQUES" => 4, "PHYSIQUE - CHIMIE" => 4, "SCIENCES DE LA VIE ET DE LA TERRE" => 4, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1, "PHILOSOPHIE" => 2] ;
+
+    //  $prC = ["FRANÇAIS" => 3, "ANGLAIS" => 2, "PHILOSOPHIE" => 2, "HISTOIRE-GÉOGRAPHIE" => 2, 
+    //          "MATHÉMATIQUES" => 5,  "PHYSIQUE - CHIMIE" => 5, "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1] ;
+
+
+
+    // $premiere_A1 = ["FRANÇAIS" =>4, "ANGLAIS" => 4, "PHILOSOPHIE" => 3, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //          "ALLEMAND" => 3, "ESPAGNOL" => 3, "MATHÉMATIQUES" => 2, 
+    //          "PHYSIQUE - CHIMIE" => 1, "SCIENCES DE LA VIE ET DE LA TERRE" => 1, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1, "MUSIQUE" => 1] ;
+
+    
+
+
+    //  $premiere_A2 = ["FRANÇAIS" => 4, "ANGLAIS" => 4, "PHILOSOPHIE" => 3, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //          "ALLEMAND" => 1, "ESPAGNOL" => 1, "MATHÉMATIQUES" => 3, 
+    //          "PHYSIQUE - CHIMIE" => 2, "SCIENCES DE LA VIE ET DE LA TERRE" => 1, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1,  "MUSIQUE" => 1] ;
+
+
+
+    //  $tleA1 = ["FRANÇAIS" => 4, "ANGLAIS" => 4, "PHILOSOPHIE" => 5, "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //          "ALLEMAND" => 3, "ESPAGNOL" => 3, "MATHÉMATIQUES" => 2, 
+    //          "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1,  "MUSIQUE" => 1] ;
+
+
+    //  $tleA2 = ["FRANÇAIS" => 4, "ANGLAIS" => 4 , "PHILOSOPHIE" => 5 , "HISTOIRE-GÉOGRAPHIE" => 3, 
+    //          "ALLEMAND" => 3, "ESPAGNOL" => 3, "MATHÉMATIQUES" => 2, 
+    //          "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1, "MUSIQUE" => 1] ;
+
+
+
+    //  $tleC = ["FRANÇAIS" =>3, "ANGLAIS" => 1, "PHILOSOPHIE" => 2, "HISTOIRE-GÉOGRAPHIE" => 2, 
+    //           "MATHÉMATIQUES" => 5, "PHYSIQUE - CHIMIE" => 5, "SCIENCES DE LA VIE ET DE LA TERRE" => 2, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1,  "MUSIQUE" => 1] ;
+
+
+    //  $tleD = ["FRANÇAIS" => 3, "ANGLAIS" => 1, "PHILOSOPHIE" => 2, "HISTOIRE-GÉOGRAPHIE" => 2, 
+    //          "MATHÉMATIQUES" => 4, "PHYSIQUE - CHIMIE" => 4, "SCIENCES DE LA VIE ET DE LA TERRE" => 4, 
+    //          "ARTS PLASTIQUES" => 1, "EDUCATION PHYSIQUE ET SPORTIVE" => 1, 
+    //          "CONDUITE" => 1,  "MUSIQUE" => 1] ;
+
+
+
+    $objPHPExc = new PHPExcel();
+    $sheet = $objPHPExc->getActiveSheet();
+
+    dd($sheet);
+
+    
+
+//     $inputFileName = Storage::url('app/Nattes.xlsx');
+
+//     //$objPHPExcel = PHPExcel_IOFactory::load($inputFileName);
+
+//     $objPHPExcel = Excel::load($inputFileName, function($reader){
+//            $reader->formatDates(true, 'd/m/Y');
+//            $reader->ignoreEmpty();
+//            $results = $reader->all();
+
+//            dd($results);
+//     });
+//     $sheetData = $objPHPExcel->getActiveSheet()->toArray(null, true, true, true);
+
+//     dd($sheetData);
+
+
+
 
       // it_creates_at_least_hundred_fake_users
     //  $test =  DB::table('tests')->where('trimestre_id', 1)->delete();

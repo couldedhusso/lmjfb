@@ -23,6 +23,14 @@ abstract class DbRepository
 
    }
 
+  public function getTrimestreById($id){
+     $aYear = $this->getcurrentAYear();
+
+     return DB::table('trimestres')->where('anneescolaire_id', '=',$aYear->id)
+                     ->where('id', '=', $id)
+                     ->first();
+   }
+
    /// ==== TODO : prevoir le cas des enseignants de l annee encours
 
    public function getEnseignants(){
@@ -196,7 +204,7 @@ abstract class DbRepository
      return DB::table('classrooms') ->join('cycles', 'cycles.id', '='
            ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
            ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
-           ->select('classrooms.*', 'enrollments.classroom_id', 'cycles.*')->get();
+           ->select('classrooms.*', 'enrollments.classroom_id as classroom_id', 'cycles.*')->get();
    }
 
 
@@ -256,12 +264,28 @@ abstract class DbRepository
       return DB::table('courses')->get();
    }
 
+   public function getCourseChilds(){
+      return DB::table('course_childs')->get();
+   }
+
    public function getCoursByName($course_name){
       return DB::table('courses')->join('course_childs', 'courses.id',
                       'course_childs.course_id')
                       ->where('courses.course_name', $course_name)
                       ->select('courses.*', 'course_childs.*')
                       ->get();
+   }
+
+   public function getCourseChildeById($id){
+      return DB::table('course_childs')->where('course_childs.id', $id)
+                      ->select('course_childs.*')
+                      ->first();
+   }
+
+   public function getCourseById($id){
+      return DB::table('courses')->where('courses.id', $id)
+                      ->select('courses.*')
+                      ->first();
    }
 
    public function  getClassroomByName($classroom){
@@ -272,7 +296,7 @@ abstract class DbRepository
            ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
            ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
            ->where('classrooms.classroom_name', $classroom)
-           ->select('classrooms.*')->first();
+           ->select('classrooms.*', 'cycles.cycle_classe' )->first();
    }
 
    public function  getClassroomById($id){
@@ -283,7 +307,8 @@ abstract class DbRepository
            ,'classrooms.cycle_id')->join('enrollments', 'enrollments.classroom_id'
            ,'=', 'classrooms.id')->where('enrollments.anneescolaire_id', $aYear->id)
            ->where('classrooms.id', $id)
-           ->select('classrooms.*')->first();
+           ->select('classrooms.*','cycles.cycle_classe')
+           ->first();
    }
 
    public function ispprincipal($id, $action){
@@ -317,7 +342,7 @@ abstract class DbRepository
                  ->distinct()->get();
 
 
-  //  dd($courseGrades);
+   /// dd($courseGrades);
 
     return $courseGrades;
 

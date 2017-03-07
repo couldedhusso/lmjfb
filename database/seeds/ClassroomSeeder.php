@@ -10,6 +10,9 @@ class ClassroomSeeder extends Seeder
      * @return void
      */
 
+
+    ///  TODO : refactoriser la logique des classes
+
     public function run()
     {
 

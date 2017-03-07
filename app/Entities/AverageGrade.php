@@ -1,7 +1,4 @@
-
-<?php
-
-namespace LMJFB\Entities;
+<?php namespace LMJFB\Entities;
 
 use Illuminate\Database\Eloquent\Model;
 

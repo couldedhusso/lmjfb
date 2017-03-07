@@ -1,6 +1,22 @@
 @extends('home')
 @section('menu')
 
+    <div class="row">
+        <div class="col-md-9">    
+                @if(Session::has("Notification"))
+                    <div class="ui warning  message">
+                      <i class="close icon"></i>
+                      <div class="content">
+                          <div class="header">
+                           Erreur de saisie
+                         </div>
+                         <p> {{Session::get("Notification")}} </p>
+                      </div>
+                    </div>  
+                @endif
+                </div>
+        </div>
+    </div>
   <div class="mdl-tabs">
       <div class="mdl-tabs__tab-bar">
           <a href="{{url('/Enseingnants')}}" class="mdl-tabs__tab  header">Enseignants</a>
@@ -144,9 +160,13 @@
                       &nbsp; Liste des enseignants
                     </a> --}}
 
-                    {{-- <a href="{{url('saisir-les-notes/1')}}" class="item" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
+                    <!-- <a data-toggle="modal" data-target="#saisie_des_notes" class="item" style="margin-right:5px" title=""><i class="fa fa-plus" aria-hidden="true"></i>
                       &nbsp;Saisir les notes
-                    </a> --}}
+                    </a> -->
+
+                    <button type="button" data-toggle="modal" data-target="#saisienotes" class="item" style="margin-right:5px" title=""><i class="fa fa fa-plus" aria-hidden="true"></i>
+                       &nbsp;Saisir les notes
+                    </button>
 
                     <button type="button" data-toggle="modal" data-target="#studentgrade" class="item" style="margin-right:5px" title=""><i class="fa fa fa-upload" aria-hidden="true"></i>
                       &nbsp;importer les notes
@@ -206,10 +226,102 @@
 
         </div>
         <div class="modal-footer">
-          <div class="field">
-              <input class="ui button right floated" type="submit" name="name" value="Matière" style="font-size:100%">
-          </div>
+          <div class="btn-group pull-right">
+                  <input class="btn btn-primary" type="submit"  value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+                  
+                  <button type="button"class="btn btn-warning" data-dismiss="modal" style="margin-right:5px" title="" style="font-weight:bold;"> &nbsp;Annuler</button>
+
+               </div>
           {{-- <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> --}}
+        </div>
+      </form>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- modal pour la saisie des notes -->
+
+<div id="saisienotes" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <form class="ui form" style="margin-left:auto;margin-right:auto" action="{{url('/api/v1/evaluations')}}" method="POST">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+           <h3 class="ui header" style="font-size:16px;">REFERENCE DU TEST </h3>
+        </div>
+        <div class="modal-body">
+            {{ csrf_field() }}
+
+             <div class="field">
+               <div class="fields">
+               
+                 <div class="six wide field">
+                    <label>Trimestre </label>
+                 
+                    <select name="test[trimestre_id]" required>
+                        <option value="" disable></option>
+                        @foreach($trimestres as  $trimestre)
+                           {{-- /// =====  ne pas afficher le 3e trimestre --}}
+                           @if($trimestre->trimestre_description != '3e trimestre')
+                               <option value="{{$trimestre->id}}">{{$trimestre->trimestre_description}}</option>
+                           @endif
+                        @endforeach
+                      </select>
+                 </div>
+
+                 
+                 <div class="seven wide field">
+                   <label>Nom de l'évaluation </label>
+                   <input name="test[test_name]"  type="text" >
+                 </div>
+
+                 
+                 <div class="three wide field">
+                    <label>Valeur max.</label>
+                    <input  name="test[max_grade_value]" type="text" required>
+                 </div>
+               </div>
+             </div>
+
+             <div class="field">
+              
+               <div class="fields">
+                 <div class="six wide field">
+                    <label>Classe</label>
+                    <select name="test[classroom_id]" ng-model="classroom" ng-change="getStudentListe(classroom)" required>
+                         <option value=""></option>
+                        @foreach($classrooms as  $classroom)
+                           <option value="{{$classroom->classroom_id}}">{{$classroom->classroom_name}}</option>
+                        @endforeach
+                    </select>
+                 </div>
+
+                 <div class="ten wide field">
+                      <label>Discipline</label>
+                     <select name="test[course_childs_id]" required>
+                        <option value=""></option>
+                        @foreach($course_childs as  $course)
+                           <option value="{{$course->id}}">{{$course->label_course}}</option>
+                        @endforeach  
+                    </select>
+                 </div>
+               </div>
+             </div>
+
+
+        </div>
+        <div class="modal-footer">
+               <div class="btn-group pull-right">
+
+                  <input class="btn btn-primary" type="submit" value="Poster le formulaire" style="margin-right:5px;font-weight:bold;">
+
+                  <button type="button"class="btn btn-warning" data-dismiss="modal" style="margin-right:5px" title="" style="font-weight:bold;"> &nbsp;Annuler</button>
+
+               </div>
         </div>
       </form>
     </div>

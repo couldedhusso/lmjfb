@@ -112,4 +112,9 @@
 
 @endsection --}} 
 
-@extends('masterpages.index')
+{{-- @extends('masterpages.app') --}}
+
+
+@extends('templates.TemplateIndex')
+
+

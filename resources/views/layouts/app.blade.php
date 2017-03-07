@@ -33,6 +33,9 @@
    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
    <link rel="stylesheet" href="css/styles.css">
 
+   <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet">
+
+
     <!-- Styles -->
     <link href="{{asset('/css/app.css')}}" rel="stylesheet">
 
@@ -288,15 +291,6 @@
 
         @yield('content')
 
-
-        {{-- <div class="btn-group dropup floating-action-button">
-    <button type="button" class="btn btn-info btn-fab btn-raised dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="material-icons">save</i></button>
-    <ul class="dropdown-menu dropdown-menu-right" style="min-width:0; background-color:transparent;">
-        <li><a href="#" class="btn btn-danger btn-fab btn-raised"><i class="material-icons">clear</i></a></li>
-    </ul> --}}
-
-
-
      <!-- Angular Material requires Angular.js Libraries -->
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
   <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
@@ -308,40 +302,44 @@
   
 
 
+  <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
+  <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
 
+  
 
-    {{-- <a href="https://github.com/google/material-design-lite/blob/mdl-1.x/templates/text-only/" target="_blank" id="view-source" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-color--accent mdl-color-text--accent-contrast" data-upgraded=",MaterialButton,MaterialRipple">View Source<span class="mdl-button__ripple-container"><span class="mdl-ripple is-animating" style="width: 255.952px; height: 255.952px; transform: translate(-50%, -50%) translate(70px, 17px);"></span></span></a> --}}
-    {{-- </div> --}}
+   <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
 
-
-        <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
-        <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script>
-
-    {{-- <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-    <script type="text/javascript" src="{{asset('assets/js/jquery-2.1.0.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('assets/bootstrap/js/bootstrap.min.js')}}"></script> --}}
-
-    <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script>
-
-    {{-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script> --}}
-    <script type="text/javascript" src="{{asset('assets/js/multiple-select.js')}}"></script>
-
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script> --}}
-
+    
     <!-- Reference needed scripts. See scripts section above for details on
     each script-->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.js"></script>
-    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.js"></script>
+  <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
 
     <!-- Semantic-ui core js     -->
-    <script src="{{asset('assets/semantic/semantic.min.js')}}"></script>
+  <script src="{{asset('assets/semantic/semantic.min.js')}}"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    
 
-    <script type="text/javascript">
+  <script type="text/javascript">
         $('select.dropdown').dropdown();
         $('.ui.checkbox').checkbox();
         $('.ui.radio.checkbox').checkbox();
         $('.ui.dropdown').dropdown();
+
+        $("#divUpload").on("click", function() {
+		   $('#hidde-new-file').click();
+		});
+
+        $('.message .close')
+        .on('click', function() {
+            $(this)
+            .closest('.message')
+            .transition('fade');
+        });
+
+        $('.message').delay(4000).fadeOut();
     </script>
 
     <script>
@@ -362,9 +360,7 @@
 
    <script type="text/javascript" src="{{asset('js/angular/angularApp.js')}}"></script>
 
+   {!! Toastr::render() !!}
 
-    <!-- Scripts -->
-    {{-- <script src="/js/app.js"></script> --}}
-        {{-- <script defer src="https://code.getmdl.io/1.2.1/material.min.js"></script> --}}
 </body>
 </html>

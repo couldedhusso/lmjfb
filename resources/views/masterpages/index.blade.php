@@ -28,9 +28,7 @@
                 <md-button ng-click="$mdOpenMenu()">
                      Actions
                 </md-button>
-
-
-                
+ 
                 <!-- Individual menu options and buttons-->
                 <md-menu-content width="4">
                     <md-menu-item>

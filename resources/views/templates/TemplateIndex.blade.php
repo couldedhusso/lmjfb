@@ -274,6 +274,19 @@
         <!-- end Breadcrumb -->
 
         <div class="container">
+          <div class="row"> 
+            <div class="col-md-7">    
+                @if(Session::has("Notification"))
+                    <div class="ui negative message">
+                    <i class="close icon"></i>
+                    <div class="header">
+                        Erreur de saisie
+                    </div>
+                   <p> {{Session::get("Notification")}} </p>
+                    </div>  
+                @endif
+                </div>
+            </div>
             <div class="row">
                 @yield('section-content')
           </div>
@@ -358,6 +371,15 @@
 		$("#divUpload").on("click", function() {
 		   $('#hidde-new-file').click();
 		});
+
+        $('.message .close')
+        .on('click', function() {
+            $(this)
+            .closest('.message')
+            .transition('fade');
+        });
+
+        $('.message').delay(4000).fadeOut();
 </script>
 
 

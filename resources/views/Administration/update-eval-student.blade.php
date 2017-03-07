@@ -40,7 +40,7 @@
 
                   <tr class="read">
                       <td width="20%" class="">@{{grade.student_matricule}}</td>
-                      <td width="70%" class="">@{{grade.student_name}} @{{grade.student_name}}</td>
+                      <td width="70%" class="">@{{grade.student_name}} @{{grade.student_last_name}}</td>
                       <td width="10%" class="">
                         <input type="text" value="@{{grade.grade}}" name="notes[@{{grade.student_id}}]">
                       </td>
@@ -50,9 +50,9 @@
                  @foreach($eval as $classe)
                            <tr class="read">
                                <td width="20%" class="">{{$classe->student_matricule}}</td>
-                               <td width="70%" class="">{{$classe->student_name." ".$classe->student_name}}</td>
-                               <td width="10%" class="">
-                                 <input type="text" value="{{$classe->grade}}" name="notes[{{$classe->student_id}}]">
+                               <td width="65%" class="">{{$classe->student_name." ".$classe->student_last_name}}</td>
+                               <td width="15%" class="">
+                                 <input type="number" value="{{$classe->grade}}" max="{{$testcourse->max_grade_value}}" name="notes[{{$classe->student_id}}]">
                                </td>
                            </tr>
                    @endforeach

@@ -20,7 +20,7 @@ class CourseTest extends Model
      // maxGradevalue == note optenue
     protected $fillable = [
        'id', 'trimestre_id', 'course_childs_id','classroom_id', 'max_grade_value',
-        'test_name'
+        'test_name', 'poids'
     ];
 
     public function coursechild()

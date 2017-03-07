@@ -20,7 +20,7 @@ class CourseSeeder extends Seeder
         $courses = [
           '1' => 'FRANÇAIS', '2' => 'ANGLAIS', '3'=> 'HISTOIRE-GÉOGRAPHIE',
           '4' => 'ALLEMAND', '5' => 'ESPAGNOL', '6' => 'PHILOSOPHIE',
-          '7' => 'MATHÉMATIQUES', '8' => 'PHYSIQUE - CHIMIE',
+          '7' => 'MATHÉMATIQUES', '8' => 'PHYSIQUE-CHIMIE',
           '9' => 'SCIENCES DE LA VIE ET DE LA TERRE',
           '10' => 'EDUCATION PHYSIQUE ET SPORTIVE',
           '11' => 'MUSIQUE', '12' => 'CONDUITE', '13' => 'EDUCATION DES DROITS DE L\'HOMME'

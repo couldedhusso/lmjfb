@@ -1,4 +1,4 @@
-// (function(){
+(function(){
  'use stric';
 
   var LMJFBouakeApp = angular.module('LMJFBouakeApp', [ 'ui.bootstrap',
@@ -32,6 +32,11 @@
       });
   }]);
 
+  LMJFBouakeApp.factory('ListeStudentByClassroomService',['$resource', function($resource){
+      var url  = '/api/v1/liste/:classroom';
+      return $resource(url , { classroom: 'classroom'});
+  }]);
+
 
   LMJFBouakeApp.factory('GradeService',['$resource', function($resource){
 
@@ -47,8 +52,7 @@
 
     $http.get(url).then(function(response, status) {
            $scope.teachers = response.data;
-           console.log(response);
-
+           // console.log(response);
            $scope.totalItems = $scope.teachers.length;
 
     }).then(function(response) {
@@ -125,47 +129,69 @@
 
   }]);
   //
-  LMJFBouakeApp.controller("EvaluationsController", ['$scope', '$http', 'EvaluationsService', 'GradeService', function($scope,  $http,
-     EvaluationsService , GradeService) {
+  LMJFBouakeApp.controller("EvaluationsController", ['$scope', '$http', 
+     'EvaluationsService', 'GradeService', function($scope,  $http,
+      EvaluationsService , GradeService) {
 
 
-    $scope.grades = {};
-    GradeService.query().$promise.then(function(data){ $scope.grades = data;
-      $scope.totalGradeItems = $scope.grades.length;
-      console.log(data);},
-      function(error){console.log(error); });
+      $scope.grades = {};
+      GradeService.query().$promise.then(function(data)
+      { 
+        $scope.grades = data;
+        $scope.totalGradeItems = $scope.grades.length;
+        console.log(data);
+      },
+      function(error){});
 
 
 
-    $scope.showListeClassroom = new Boolean(false);
+      $scope.showListeClassroom = new Boolean(false);
 
-    $scope.trimestersValue = function(trimestre){
-        if (trimestre == '1er trimestre') {
-            return  true;
-        } else if (trimestre == '2e trimestre') {
-             return  true;
-        }
-    }
+      $scope.trimestersValue = function(trimestre){
+          if (trimestre == '1er trimestre') {
+              return  true;
+          } else if (trimestre == '2e trimestre') {
+              return  true;
+          }
+      }
 
-    $scope.getCourseTests = function(trimestre, classroom){
+      $scope.getCourseTests = function(trimestre, classroom){
 
-        $scope.evaluations = {};
-        EvaluationsService.query({trimester: $scope.trimestre, classroom:$scope.classroom})
-         .$promise.then(function(data){ $scope.evaluations = data;
-           $scope.totalItems = $scope.evaluations.length;
-           console.log(data);},
-          function(error){console.log(error); });
-     }
+          $scope.evaluations = {};
+          EvaluationsService.query({trimester: $scope.trimestre, classroom:$scope.classroom})
+          .$promise.then(function(data){ $scope.evaluations = data;
+            $scope.totalItems = $scope.evaluations.length;
+            console.log(data);},
+            function(error){console.log(error); });
+      }
 
-    $scope.currentPage = 1;
-    $scope.itemsPerPage = 10;
 
-    $scope.setPage = function (pageNo) {
-      $scope.currentPage = pageNo;
-    };
+      $scope.getStudentListe = function(classroom){
+
+        console.log('got liste');
+
+          // $scope.liste_student = {};
+          // ListeStudentByClassroomService.query({classroom:$scope.classroom})
+          // .$promise.then(function(data){ 
+          //   $scope.liste_student = data;
+          //   console.log(data); 
+
+          //  },
+          //  function(error){console.log(error); });
+      }
+
+
+
+
+      $scope.currentPage = 1;
+      $scope.itemsPerPage = 10;
+
+      $scope.setPage = function (pageNo) {
+        $scope.currentPage = pageNo;
+      };
 
 
 
   }]);
 
-// });
+ })();
